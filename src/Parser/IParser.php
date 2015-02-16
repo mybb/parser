@@ -3,14 +3,18 @@
 interface IParser
 {
     /**
-     * @param $message
-     * @param $allowHTML
-     * @return string
+     * Parse a message into a HTML string ready for display.
+     *
+     * @param string $message   The message to parse.
+     * @param bool   $allowHTML Whether to allow HTML in the message.
+     *
+     * @return string The parsed string.
      */
     public function parse($message, $allowHTML);
 
     /**
      * @param $message
+     *
      * @return string
      */
     public function parsePlain($message);
@@ -73,7 +77,7 @@ interface IParser
     /**
      * @param bool $on
      */
-    public function useNofollow($on = true);
+    public function useNoFollow($on = true);
 
     /**
      * @param $format

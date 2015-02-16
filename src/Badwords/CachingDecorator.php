@@ -13,7 +13,7 @@ class CachingDecorator implements IBadwordRepository
 
     /**
      * @param IBadwordRepository $decorated
-     * @param CacheRepository $cache
+     * @param CacheRepository    $cache
      */
     public function __construct(IBadwordRepository $decorated, CacheRepository $cache)
     {
@@ -30,6 +30,7 @@ class CachingDecorator implements IBadwordRepository
             $badwords = $this->decoratedRepository->getAllAsArray();
             $this->cache->forever('parser.badwords', $badwords);
         }
+
         return $badwords;
     }
 }

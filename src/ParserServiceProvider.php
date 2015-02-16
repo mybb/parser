@@ -1,10 +1,10 @@
 <?php namespace MyBB\Parser;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\ServiceProvider;
 use MyBB\Parser\Badwords\CachingDecorator;
-use MyBB\Parser\Smilies\CachingDecorator as SmilieCachingDecorator;
 use MyBB\Parser\Parser\CustomCodes\CachingDecorator as CodeCachingDecorator;
+use MyBB\Parser\Smilies\CachingDecorator as SmilieCachingDecorator;
 
 class ParserServiceProvider extends ServiceProvider
 {
@@ -26,6 +26,7 @@ class ParserServiceProvider extends ServiceProvider
             function () {
                 $config = \HTMLPurifier_Config::createDefault();
                 $config->set('Core.Encoding', 'UTF-8');
+
                 return new \HTMLPurifier($config);
             }
         );
@@ -35,6 +36,7 @@ class ParserServiceProvider extends ServiceProvider
             function (Application $app) {
                 $repository = $app->make('MyBB\Parser\Badwords\BadwordRepository');
                 $cache = $app->make('Illuminate\Contracts\Cache\Repository');
+
                 return new CachingDecorator($repository, $cache);
             }
         );
@@ -44,18 +46,20 @@ class ParserServiceProvider extends ServiceProvider
             function (Application $app) {
                 $repository = $app->make('MyBB\Parser\Smilies\SmilieRepository');
                 $cache = $app->make('Illuminate\Contracts\Cache\Repository');
+
                 return new SmilieCachingDecorator($repository, $cache);
             }
         );
 
         // Bind the CustomMyCode Repository to the BBCode Parser
         $this->app->when('MyBB\Parser\Parser\Bbcode')
-            ->needs('MyBB\Parser\Parser\CustomCodes\ICustomCodeRepository')
-            ->give(function (Application $app) {
-                $repository = $app->make('MyBB\Parser\Parser\CustomCodes\CustomMyCodeRepository');
-                $cache = $app->make('Illuminate\Contracts\Cache\Repository');
-                return new CodeCachingDecorator($repository, $cache);
-            });
+                  ->needs('MyBB\Parser\Parser\CustomCodes\ICustomCodeRepository')
+                  ->give(function (Application $app) {
+                      $repository = $app->make('MyBB\Parser\Parser\CustomCodes\CustomMyCodeRepository');
+                      $cache = $app->make('Illuminate\Contracts\Cache\Repository');
+
+                      return new CodeCachingDecorator($repository, $cache);
+                  });
     }
 
     /**
@@ -68,7 +72,7 @@ class ParserServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'parser');
 
         $this->publishes([
-            __DIR__ . '/../resources/migrations/' => base_path('/database/migrations')
-        ], 'migrations');
+                             __DIR__ . '/../resources/migrations/' => base_path('/database/migrations')
+                         ], 'migrations');
     }
 }

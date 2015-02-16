@@ -13,7 +13,7 @@ class CachingDecorator implements ICustomCodeRepository
 
     /**
      * @param ICustomCodeRepository $decorated
-     * @param CacheRepository $cache
+     * @param CacheRepository       $cache
      */
     public function __construct(ICustomCodeRepository $decorated, CacheRepository $cache)
     {
@@ -31,6 +31,7 @@ class CachingDecorator implements ICustomCodeRepository
             $smilies = $this->decoratedRepository->getParsableCodes();
             $this->cache->forever('parser.codes', $smilies);
         }
+
         return $smilies;
     }
 }

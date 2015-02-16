@@ -22,15 +22,6 @@ class BadwordRepository implements IBadwordRepository
     /**
      * @return array
      */
-    private function get()
-    {
-        $db = $this->app->make('db');
-        return $db->table('parser_badwords')->get(['find', 'replace']);
-    }
-
-    /**
-     * @return array
-     */
     public function getAllAsArray()
     {
         $badwords = $this->get();
@@ -38,6 +29,17 @@ class BadwordRepository implements IBadwordRepository
         foreach ($badwords as $badword) {
             $prepared[$badword->find] = $badword->replace;
         }
+
         return $prepared;
+    }
+
+    /**
+     * @return array
+     */
+    private function get()
+    {
+        $db = $this->app->make('db');
+
+        return $db->table('parser_badwords')->get(['find', 'replace']);
     }
 }

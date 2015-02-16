@@ -9,7 +9,9 @@
   "license": "LGPL3",
   "require": {
     "illuminate/support": "~5.0",
-    "ezyang/htmlpurifier": "~4.6"
+    "ezyang/htmlpurifier": "~4.6",
+    "illuminate/database": "~5.0",
+    "league/commonmark": "0.6.*@dev"
   },
   "autoload": {
     "psr-4": {

@@ -2,11 +2,9 @@
 
 namespace MyBB\Parser;
 
+use MyBB\Parser\Badwords\IBadwordRepository;
 use MyBB\Parser\Parser\IParser;
 use MyBB\Parser\Smilies\ISmilieRepository;
-use MyBB\Parser\Badwords\IBadwordRepository;
-use Psy\Exception\RuntimeException;
-
 
 class MessageFormatter
 {
@@ -23,23 +21,27 @@ class MessageFormatter
     /** @var Integer */
     private $minsearchword = 3;
 
-    const ENABLE_SMILIES = 'enable_smilies';
-    const ENABLE_MYCODE = 'enable_mycode';
-    const ALLOW_HTML = 'allow_html';
+    const ENABLE_SMILIES  = 'enable_smilies';
+    const ENABLE_MYCODE   = 'enable_mycode';
+    const ALLOW_HTML      = 'allow_html';
     const FILTER_BADWORDS = 'filter_badwords';
-    const FILTER_CDATA = 'filter_cdata';
-    const ME_USERNAME = 'me_username';
-    const HIGHLIGHT = 'highlight';
-    const NL2BR = 'nl2br';
+    const FILTER_CDATA    = 'filter_cdata';
+    const ME_USERNAME     = 'me_username';
+    const HIGHLIGHT       = 'highlight';
+    const NL2BR           = 'nl2br';
 
     /**
-     * @param IParser $parser
-     * @param \HTMLPurifier $htmlPurifier
-     * @param ISmilieRepository $smilies
+     * @param IParser            $parser
+     * @param \HTMLPurifier      $htmlPurifier
+     * @param ISmilieRepository  $smilies
      * @param IBadwordRepository $badwords
      */
-    public function __construct(IParser $parser, \HTMLPurifier $htmlPurifier, ISmilieRepository $smilies, IBadwordRepository $badwords)
-    {
+    public function __construct(
+        IParser $parser,
+        \HTMLPurifier $htmlPurifier,
+        ISmilieRepository $smilies,
+        IBadwordRepository $badwords
+    ) {
         $this->parser = $parser;
         $this->htmlPurifier = $htmlPurifier;
         $this->smilies = $smilies;
@@ -49,23 +51,24 @@ class MessageFormatter
     /**
      * Parse the message with the given options
      *
-     * @param $message
+     * @param       $message
      * @param array $options
+     *
      * @return string
      */
     public function parse($message, array $options = [])
     {
         $options = array_merge([
-            static::ENABLE_SMILIES => true,
-            static::ENABLE_MYCODE => true,
-            static::ALLOW_HTML => false,
-            static::FILTER_BADWORDS => true,
-            static::FILTER_CDATA => false,
-            static::ME_USERNAME => "",
-            static::HIGHLIGHT => "",
-            static::NL2BR => true,
-        ],
-            $options
+                                   static::ENABLE_SMILIES => true,
+                                   static::ENABLE_MYCODE => true,
+                                   static::ALLOW_HTML => false,
+                                   static::FILTER_BADWORDS => true,
+                                   static::FILTER_CDATA => false,
+                                   static::ME_USERNAME => "",
+                                   static::HIGHLIGHT => "",
+                                   static::NL2BR => true,
+                               ],
+                               $options
         );
 
         if ($options[static::FILTER_BADWORDS]) {
@@ -98,10 +101,14 @@ class MessageFormatter
         $message = $this->fixJavascript($message);
 
         if (!empty($options[static::ME_USERNAME])) {
-            $message = preg_replace('#(>|^|\r|\n)/me ([^\r\n<]*)#i', "\\1<span style=\"color: red;\">* {$options[static::ME_USERNAME]} \\2</span>", $message);
+            $slapUsername = preg_quote($options[static::ME_USERNAME], '#');
+            $message = preg_replace('#(>|^|\r|\n)/me ([^\r\n<]*)#i',
+                                    "\\1<span style=\"color: red;\">* {$slapUsername} \\2</span>", $message);
             $slap = trans('parser::parser.slap');
             $withTrout = trans('parser::parser.withTrout');
-            $message = preg_replace('#(>|^|\r|\n)/slap ([^\r\n<]*)#i', "\\1<span style=\"color: red;\">* {$options[static::ME_USERNAME]} {$slap} \\2 {$withTrout}</span>", $message);
+            $message = preg_replace('#(>|^|\r|\n)/slap ([^\r\n<]*)#i',
+                                    "\\1<span style=\"color: red;\">* {$slapUsername} {$slap} \\2 {$withTrout}</span>",
+                                    $message);
         }
 
         if ($options[static::ENABLE_SMILIES]) {
@@ -119,19 +126,21 @@ class MessageFormatter
         if ($options[static::NL2BR]) {
             $message = nl2br($message);
             // Fix up new lines and block level elements
-            $message = preg_replace("#(</?(?:html|head|body|div|p|form|table|thead|tbody|tfoot|tr|td|th|ul|ol|li|div|p|blockquote|cite|hr)[^>]*>)\s*<br />#i", "$1", $message);
-            $message = preg_replace("#(&nbsp;)+(</?(?:html|head|body|div|p|form|table|thead|tbody|tfoot|tr|td|th|ul|ol|li|div|p|blockquote|cite|hr)[^>]*>)#i", "$2", $message);
+            $message = preg_replace("#(</?(?:html|head|body|div|p|form|table|thead|tbody|tfoot|tr|td|th|ul|ol|li|div|p|blockquote|cite|hr)[^>]*>)\s*<br />#i",
+                                    "$1", $message);
+            $message = preg_replace("#(&nbsp;)+(</?(?:html|head|body|div|p|form|table|thead|tbody|tfoot|tr|td|th|ul|ol|li|div|p|blockquote|cite|hr)[^>]*>)#i",
+                                    "$2", $message);
         }
 
         // Allow iframes to media sites. Doing it here to make sure they are set in any case
         $this->htmlPurifier->config->set('HTML.SafeIframe', true);
-        $this->htmlPurifier->config->set('URI.SafeIframeRegexp', '#(dailymotion.com|facebook.com|liveleak.com|metacafe.com|myspace.com|vimeo.com|yahoo.com|youtube.com)#');
+        $this->htmlPurifier->config->set('URI.SafeIframeRegexp',
+                                         '#(dailymotion.com|facebook.com|liveleak.com|metacafe.com|myspace.com|vimeo.com|yahoo.com|youtube.com)#');
         // Used by veoh
         $this->htmlPurifier->config->set('HTML.SafeObject', true);
         $this->htmlPurifier->config->set('Output.FlashCompat', true);
 
         return $this->htmlPurifier->purify($message);
-        //return $message;
     }
 
     /**
@@ -139,16 +148,19 @@ class MessageFormatter
      * However due some historic reasons not all codes are properly removed
      *
      * @param $message
+     *
      * @return string
      */
     public function parsePlain($message)
     {
         $message = $this->filterHtml($message);
+
         return $this->htmlPurifier->purify($this->parser->parsePlain($message));
     }
 
     /**
      * @param $message
+     *
      * @return string
      */
     private function replaceSmilies($message)
@@ -161,9 +173,11 @@ class MessageFormatter
 
         // TODO: this is mycode but it's not the parser! Should be changed as we plan to also support markdown
         // First we take out any of the tags we don't want parsed between (url= etc)
-        preg_match_all("#\[(url(=[^\]]*)?\]|quote=([^\]]*)?\])|(http|ftp)(s|)://[^\s]*#i", $message, $bad_matches, PREG_PATTERN_ORDER);
+        preg_match_all("#\[(url(=[^\]]*)?\]|quote=([^\]]*)?\])|(http|ftp)(s|)://[^\s]*#i", $message, $bad_matches,
+                       PREG_PATTERN_ORDER);
         if (count($bad_matches[0]) > 0) {
-            $message = preg_replace("#\[(url(=[^\]]*)?\]|quote=([^\]]*)?\])|(http|ftp)(s|)://[^\s]*#si", "<mybb-bad-sm>", $message);
+            $message = preg_replace("#\[(url(=[^\]]*)?\]|quote=([^\]]*)?\])|(http|ftp)(s|)://[^\s]*#si",
+                                    "<mybb-bad-sm>", $message);
         }
 
         $message = strtr($message, $smilies);
@@ -184,6 +198,7 @@ class MessageFormatter
 
     /**
      * @param $message
+     *
      * @return string
      */
     private function filterHtml($message)
@@ -191,12 +206,14 @@ class MessageFormatter
         $message = preg_replace("#&(?!\#[0-9]+;)#si", "&amp;", $message); // fix & but allow unicode
         $message = str_replace("<", "&lt;", $message);
         $message = str_replace(">", "&gt;", $message);
+
         return $message;
     }
 
     /**
-     * @param $message
+     * @param      $message
      * @param bool $stripTags
+     *
      * @return string
      */
     public function filterBadwords($message, $stripTags = false)
@@ -221,11 +238,13 @@ class MessageFormatter
         if ($stripTags) {
             $message = strip_tags($message);
         }
+
         return $message;
     }
 
     /**
      * @param $message
+     *
      * @return string
      */
     private function filterCdata($message)
@@ -235,6 +254,7 @@ class MessageFormatter
 
     /**
      * @param $message
+     *
      * @return string
      */
     private function fixJavascript($message)
@@ -269,6 +289,7 @@ class MessageFormatter
     /**
      * @param $message
      * @param $highlight
+     *
      * @return string
      */
     private function highlight($message, $highlight)
@@ -279,11 +300,13 @@ class MessageFormatter
         if (is_array($this->highlight_cache) && !empty($this->highlight_cache)) {
             $message = preg_replace(array_keys($this->highlight_cache), $this->highlight_cache, $message);
         }
+
         return $message;
     }
 
     /**
      * @param $terms
+     *
      * @return array|bool
      */
     private function build_highlight_array($terms)
@@ -360,20 +383,23 @@ class MessageFormatter
             $replacement = "<span class=\"highlight\" style=\"padding-left: 0px; padding-right: 0px;\">$1</span>";
             $highlight_cache[$find] = $replacement;
         }
+
         return $highlight_cache;
     }
 
     /**
-     * Set the minimum length needed to highlight a word
+     * Set the minimum length needed to highlight a word.
      *
-     * @param $min
+     * @param int $min The minimum length.
+     *
+     * @throws \RuntimeException Thrown if $min is less than 1.
      */
-    public function setMinsearchword($min)
+    public function setMinSearchWord($min = 1)
     {
-        $min = (int)$min;
+        $min = (int) $min;
 
         if ($min < 1) {
-            throw new RuntimeException("Minsearchword needsd to be at least '1'");
+            throw new \RuntimeException("Minsearchword needsd to be at least '1'");
         }
 
         $this->minsearchword = $min;

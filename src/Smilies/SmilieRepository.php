@@ -23,15 +23,6 @@ class SmilieRepository implements ISmilieRepository
     /**
      * @return array
      */
-    private function get()
-    {
-        $db = $this->app->make('db');
-        return $db->table('parser_smilies')->orderBy('disporder')->get(['sid', 'find', 'image']);
-    }
-
-    /**
-     * @return array
-     */
     public function getParsableSmilies()
     {
         $smilies = $this->get();
@@ -59,19 +50,18 @@ class SmilieRepository implements ISmilieRepository
     }
 
     /**
-     * @param $image
-     * @param $id
-     * @param string $alt
-     * @return string
+     * @return array
      */
-    private function getSmilieCode($image, $id, $alt = '')
+    private function get()
     {
-        $code = '<img src=":image" alt=":alt" title=":alt" class="smilie smilie_:id">';
-        return str_replace([':image', ':alt', ':id'], [$image, $alt, $id], $code);
+        $db = $this->app->make('db');
+
+        return $db->table('parser_smilies')->orderBy('disporder')->get(['sid', 'find', 'image']);
     }
 
     /**
      * @param $message
+     *
      * @return string
      */
     private function filterHtml($message)
@@ -79,6 +69,21 @@ class SmilieRepository implements ISmilieRepository
         $message = preg_replace("#&(?!\#[0-9]+;)#si", "&amp;", $message); // fix & but allow unicode
         $message = str_replace("<", "&lt;", $message);
         $message = str_replace(">", "&gt;", $message);
+
         return $message;
+    }
+
+    /**
+     * @param        $image
+     * @param        $id
+     * @param string $alt
+     *
+     * @return string
+     */
+    private function getSmilieCode($image, $id, $alt = '')
+    {
+        $code = '<img src=":image" alt=":alt" title=":alt" class="smilie smilie_:id">';
+
+        return str_replace([':image', ':alt', ':id'], [$image, $alt, $id], $code);
     }
 }

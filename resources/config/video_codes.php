@@ -1,7 +1,8 @@
 <?php
 
 /**
- * This file contains a list of embed codes for supported sites. Note that adding a new one here doesn't work as the parser isn't smooth enough to detect it manually - yet.
+ * This file contains a list of embed codes for supported sites. Note that adding a new one here doesn't work as the
+ * parser isn't smooth enough to detect it manually - yet.
  *
  * :id will be replaced by the video id
  * :title will be replaced by the htmlspecialchar'd video title

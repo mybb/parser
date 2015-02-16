@@ -2,7 +2,6 @@
 
 namespace MyBB\Parser\Parser\CustomCodes;
 
-
 use Illuminate\Contracts\Foundation\Application;
 
 class CustomMyCodeRepository implements ICustomCodeRepository
@@ -23,15 +22,6 @@ class CustomMyCodeRepository implements ICustomCodeRepository
     /**
      * @return array
      */
-    private function get()
-    {
-        $db = $this->app->make('db');
-        return $db->table('parser_mycode')->orderBy('parseorder')->get(['regex', 'replacement']);
-    }
-
-    /**
-     * @return array
-     */
     public function getParsableCodes()
     {
         $codes = $this->get();
@@ -41,5 +31,15 @@ class CustomMyCodeRepository implements ICustomCodeRepository
         }
 
         return $prepared;
+    }
+
+    /**
+     * @return array
+     */
+    private function get()
+    {
+        $db = $this->app->make('db');
+
+        return $db->table('parser_mycode')->orderBy('parseorder')->get(['regex', 'replacement']);
     }
 }

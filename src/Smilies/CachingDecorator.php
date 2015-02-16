@@ -13,7 +13,7 @@ class CachingDecorator implements ISmilieRepository
 
     /**
      * @param ISmilieRepository $decorated
-     * @param CacheRepository $cache
+     * @param CacheRepository   $cache
      */
     public function __construct(ISmilieRepository $decorated, CacheRepository $cache)
     {
@@ -30,6 +30,7 @@ class CachingDecorator implements ISmilieRepository
             $smilies = $this->decoratedRepository->getParsableSmilies();
             $this->cache->forever('parser.smilies', $smilies);
         }
+
         return $smilies;
     }
 }

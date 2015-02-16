@@ -1,21 +1,36 @@
-<?php namespace MyBB\Parser\Parser;
+<?php
+
+namespace MyBB\Parser\Parser;
+
+use League\CommonMark\CommonMarkConverter;
 
 class Markdown implements IParser
 {
-    // TODO: search a good markdown package and implement it. No need to write our own
-    // **Bold** is supported atm for test purposes
+    /** @var CommonMarkConverter $converter */
+    private $converter;
+
     /**
-     * @param $message
-     * @param $allowHTML
+     * @param CommonMarkConverter $converter
+     */
+    public function __construct(CommonMarkConverter $converter)
+    {
+        $this->converter = $converter;
+    }
+
+    /**
+     * @param string $message
+     * @param bool   $allowHTML
+     *
      * @return string
      */
     public function parse($message, $allowHTML)
     {
-        return preg_replace("#\*\*(.*?)\*\*#si", "<b>$1</b>", $message);
+        return $this->converter->convertToHtml($message);
     }
 
     /**
      * @param $message
+     *
      * @return string
      */
     public function parsePlain($message)
@@ -114,7 +129,7 @@ class Markdown implements IParser
     /**
      * @param bool $on
      */
-    public function useNofollow($on = true)
+    public function useNoFollow($on = true)
     {
         // TODO: Implement useNofollow() method.
     }
