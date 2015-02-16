@@ -1,15 +1,20 @@
 {
-    "name": "mybb/parser",
-    "description": "The parser used by MyBB 2. Supports BBCode, Markdown and HTML",
-	"keywords": ["mybb", "forum", "laravel"],
-	"license": "LGPL3",
-    "require": {
-        "illuminate/support": "~5.0"
-    },
-    "autoload": {
-        "psr-0": {
-            "MyBB\\Parser": "src/"
-        }
-    },
-    "minimum-stability": "dev"
+  "name": "mybb/parser",
+  "description": "The parser used by MyBB 2. Supports BBCode, Markdown and HTML",
+  "keywords": [
+    "mybb",
+    "forum",
+    "laravel"
+  ],
+  "license": "LGPL3",
+  "require": {
+    "illuminate/support": "~5.0",
+    "ezyang/htmlpurifier": "~4.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "MyBB\\Parser": "src/"
+    }
+  },
+  "minimum-stability": "dev"
 }
