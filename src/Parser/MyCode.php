@@ -93,6 +93,22 @@ class MyCode implements IParser
     public function __construct(ICustomCodeRepository $customCodeRepository)
     {
         $this->customCodeRepository = $customCodeRepository;
+
+        $this->allowbasicmycode  = config('parser.allowbasicmycode');
+        $this->allowsymbolmycode = config('parser.allowsymbolmycode');
+        $this->allowlinkmycode   = config('parser.allowlinkmycode');
+        $this->allowemailmycode  = config('parser.allowemailmycode');
+        $this->allowcolormycode  = config('parser.allowcolormycode');
+        $this->allowsizemycode   = config('parser.allowsizemycode');
+        $this->allowfontmycode   = config('parser.allowfontmycode');
+        $this->allowalignmycode  = config('parser.allowalignmycode');
+        $this->allowlistmycode   = config('parser.allowlistmycode');
+        $this->allowimgcode      = config('parser.allowimgcode');
+        $this->allowvideocode    = config('parser.allowvideocode');
+        $this->shorten_urls      = config('parser.shorten_urls');
+        $this->nofollow_on       = config('parser.nofollow_on');
+        $this->dateFormat        = config('parser.dateFormat');
+        $this->postURL           = config('parser.postURL');
     }
 
     /**

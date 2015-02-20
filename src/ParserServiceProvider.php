@@ -20,6 +20,10 @@ class ParserServiceProvider extends ServiceProvider
             __DIR__ . '/../resources/config/video_codes.php', 'video_codes'
         );
 
+        $this->mergeConfigFrom(
+            __DIR__ . '/../resources/config/parser.php', 'parser'
+        );
+
         // Bind a default instance of the HTMLPurifier and set the encoding to UTF-8 which shouldn't be a problem in most cases
         $this->app->bind(
             '\HTMLPurifier',
@@ -74,5 +78,9 @@ class ParserServiceProvider extends ServiceProvider
         $this->publishes([
                              __DIR__ . '/../resources/migrations/' => base_path('/database/migrations')
                          ], 'migrations');
+
+        $this->publishes([
+                           __DIR__ . '/../resources/config/parser.php' => config_path('parser.php')
+                        ], 'config');
     }
 }
