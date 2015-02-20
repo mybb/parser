@@ -431,20 +431,20 @@ class MyCode implements IParser
         }
         if ($this->allowlinkmycode) {
             $callback_mycode['url_simple']['regex'] = "#\[url\]([a-z]+?://)([^\r\n\"<]+?)\[/url\]#si";
-            $callback_mycode['url_simple']['replacement'] = array($this, 'mycode_parse_url_callback1');
+            $callback_mycode['url_simple']['replacement'] = array($this, 'ParseUrlCallback1');
             $callback_mycode['url_simple2']['regex'] = "#\[url\]([^\r\n\"<]+?)\[/url\]#i";
-            $callback_mycode['url_simple2']['replacement'] = array($this, 'mycode_parse_url_callback2');
+            $callback_mycode['url_simple2']['replacement'] = array($this, 'ParseUrlCallback2');
             $callback_mycode['url_complex']['regex'] = "#\[url=([a-z]+?://)([^\r\n\"<]+?)\](.+?)\[/url\]#si";
-            $callback_mycode['url_complex']['replacement'] = array($this, 'mycode_parse_url_callback1');
+            $callback_mycode['url_complex']['replacement'] = array($this, 'ParseUrlCallback1');
             $callback_mycode['url_complex2']['regex'] = "#\[url=([^\r\n\"<&\(\)]+?)\](.+?)\[/url\]#si";
-            $callback_mycode['url_complex2']['replacement'] = array($this, 'mycode_parse_url_callback2');
+            $callback_mycode['url_complex2']['replacement'] = array($this, 'ParseUrlCallback2');
             ++$callback_count;
         }
         if ($this->allowemailmycode) {
             $callback_mycode['email_simple']['regex'] = "#\[email\](.*?)\[/email\]#i";
-            $callback_mycode['email_simple']['replacement'] = array($this, 'mycode_parse_email_callback');
+            $callback_mycode['email_simple']['replacement'] = array($this, 'ParseEmailCallback');
             $callback_mycode['email_complex']['regex'] = "#\[email=(.*?)\](.*?)\[/email\]#i";
-            $callback_mycode['email_complex']['replacement'] = array($this, 'mycode_parse_email_callback');
+            $callback_mycode['email_complex']['replacement'] = array($this, 'ParseEmailCallback');
             ++$callback_count;
         }
         if ($this->allowcolormycode) {
@@ -456,7 +456,7 @@ class MyCode implements IParser
             $nestable_mycode['size']['regex'] = "#\[size=(xx-small|x-small|small|medium|large|x-large|xx-large)\](.*?)\[/size\]#si";
             $nestable_mycode['size']['replacement'] = "<span style=\"font-size: $1;\">$2</span>";
             $callback_mycode['size_int']['regex'] = "#\[size=([0-9\+\-]+?)\](.*?)\[/size\]#si";
-            $callback_mycode['size_int']['replacement'] = array($this, 'mycode_handle_size_callback');
+            $callback_mycode['size_int']['replacement'] = array($this, 'HandleSizeCallback');
             ++$nestable_count;
             ++$callback_count;
         }
@@ -515,10 +515,10 @@ class MyCode implements IParser
         $quote = trans('parser::parser.quote');
         if ($text_only == false) {
             $replace = "<blockquote><cite>$quote</cite>$1</blockquote>\n";
-            $replace_callback = array($this, 'mycode_parse_post_quotes_callback1');
+            $replace_callback = array($this, 'ParsePostQuotesCallback1');
         } else {
             $replace = "\n{$quote}\n--\n$1\n--\n";
-            $replace_callback = array($this, 'mycode_parse_post_quotes_callback2');
+            $replace_callback = array($this, 'ParsePostQuotesCallback2');
         }
         do {
             // preg_replace has erased the message? Restore it...
@@ -675,6 +675,15 @@ class MyCode implements IParser
     }
 
     /**
+     * @param $matches
+     * @return string
+     */
+    private function HandleSizeCallback($matches)
+    {
+        return $this->MyCodeHandleSize($matches[1], $matches[2]);
+    }
+
+    /**
      * @param $size
      * @param $text
      *
@@ -689,6 +698,24 @@ class MyCode implements IParser
         $text = "<span style=\"font-size: {$size}pt;\">" . str_replace("\'", "'", $text) . "</span>";
 
         return $text;
+    }
+
+    /**
+     * @param $matches
+     * @return string
+     */
+    private function ParsePostQuotesCallback1($matches)
+    {
+        return $this->ParsePostQuotes($matches[4], $matches[2] . $matches[3]);
+    }
+
+    /**
+     * @param $matches
+     * @return string
+     */
+    private function ParsePostQuotesCallback2($matches)
+    {
+        return $this->ParsePostQuotes($matches[4], $matches[2] . $matches[3], true);
     }
 
     /**
@@ -903,6 +930,29 @@ class MyCode implements IParser
     }
 
     /**
+     * @param $matches
+     * @return string
+     */
+    private function ParseUrlCallback1($matches)
+    {
+        if (!isset($matches[3])) {
+            $matches[3] = '';
+        }
+        return $this->ParseUrl($matches[1] . $matches[2], $matches[3]);
+    }
+    /**
+     * @param $matches
+     * @return string
+     */
+    private function ParseUrlCallback2($matches)
+    {
+        if (!isset($matches[2])) {
+            $matches[2] = '';
+        }
+        return $this->ParseUrl($matches[1], $matches[2]);
+    }
+
+    /**
      * @param        $url
      * @param string $name
      *
@@ -981,6 +1031,18 @@ class MyCode implements IParser
     private function parseImageDisabledCallback4($matches)
     {
         return $this->ParseImageDisabled($matches[5]);
+    }
+
+    /**
+     * @param $matches
+     * @return string
+     */
+    private function ParseEmailCallback($matches)
+    {
+        if (!isset($matches[2])) {
+            $matches[2] = '';
+        }
+        return $this->parseEmail($matches[1], $matches[2]);
     }
 
     /**

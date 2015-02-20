@@ -52,7 +52,7 @@ class ParserServiceProvider extends ServiceProvider
         );
 
         // Bind the CustomMyCode Repository to the BBCode Parser
-        $this->app->when('MyBB\Parser\Parser\Bbcode')
+        $this->app->when('MyBB\Parser\Parser\Mycode')
                   ->needs('MyBB\Parser\Parser\CustomCodes\ICustomCodeRepository')
                   ->give(function (Application $app) {
                       $repository = $app->make('MyBB\Parser\Parser\CustomCodes\CustomMyCodeRepository');
