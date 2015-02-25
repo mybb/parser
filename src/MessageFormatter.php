@@ -101,7 +101,7 @@ class MessageFormatter
         $message = $this->fixJavascript($message);
 
         if (!empty($options[static::ME_USERNAME])) {
-            $slapUsername = preg_quote($options[static::ME_USERNAME], '#');
+            $slapUsername = $options[static::ME_USERNAME];
             $message = preg_replace('#(>|^|\r|\n)/me ([^\r\n<]*)#i',
                                     "\\1<span style=\"color: red;\">* {$slapUsername} \\2</span>", $message);
             $slap = trans('parser::parser.slap');
