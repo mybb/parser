@@ -3,6 +3,7 @@
 namespace MyBB\Parser;
 
 use MyBB\Parser\Badwords\IBadwordRepository;
+use MyBB\Parser\Exceptions\ParserSearchWordMinimumException;
 use MyBB\Parser\Parser\IParser;
 use MyBB\Parser\Smilies\ISmilieRepository;
 
@@ -392,14 +393,14 @@ class MessageFormatter
      *
      * @param int $min The minimum length.
      *
-     * @throws \RuntimeException Thrown if $min is less than 1.
+     * @throws ParserSearchWordMinimumException Thrown if $min is less than 1.
      */
     public function setMinSearchWord($min = 1)
     {
         $min = (int) $min;
 
         if ($min < 1) {
-            throw new \RuntimeException("Minsearchword needsd to be at least '1'");
+            throw new ParserSearchWordMinimumException;
         }
 
         $this->minsearchword = $min;
