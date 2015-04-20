@@ -4,8 +4,8 @@ namespace MyBB\Parser\Parser\CustomCodes;
 
 interface ICustomCodeRepository
 {
-    /**
-     * @return array
-     */
-    public function getParsableCodes();
+	/**
+	 * @return array
+	 */
+	public function getParsableCodes();
 }

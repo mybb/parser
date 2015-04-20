@@ -4,8 +4,8 @@ namespace MyBB\Parser\Badwords;
 
 interface IBadwordRepository
 {
-    /**
-     * @return array
-     */
-    public function getAllAsArray();
+	/**
+	 * @return array
+	 */
+	public function getAllAsArray();
 }
