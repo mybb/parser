@@ -829,7 +829,7 @@ class MyCode implements IParser
 				"#(?:&quot;|\"|')? dateline=(?:&quot;|\"|')?[0-9]+(?:&quot;|\"|')?#i",
 				'',
 				$username
-            );
+			);
 			$delete_quote = false;
 		}
 		if ($delete_quote) {
