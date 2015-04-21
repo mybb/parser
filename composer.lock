@@ -179,12 +179,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
-                "reference": "d2d52b318977103cc5a2eda5bcea1d3f1082cc5f"
+                "reference": "37e8c7ef4bde6127b609f1eba13fc27ace01fa75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/container/zipball/d2d52b318977103cc5a2eda5bcea1d3f1082cc5f",
-                "reference": "d2d52b318977103cc5a2eda5bcea1d3f1082cc5f",
+                "url": "https://api.github.com/repos/illuminate/container/zipball/37e8c7ef4bde6127b609f1eba13fc27ace01fa75",
+                "reference": "37e8c7ef4bde6127b609f1eba13fc27ace01fa75",
                 "shasum": ""
             },
             "require": {
@@ -213,7 +213,8 @@
                 }
             ],
             "description": "The Illuminate Container package.",
-            "time": "2015-02-11 15:59:50"
+            "homepage": "http://laravel.com",
+            "time": "2015-03-26 15:22:18"
         },
         {
             "name": "illuminate/contracts",
@@ -221,12 +222,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "e9d98d820300288ac902bd3f6b35a9f5cb7fe2cb"
+                "reference": "715d17b24209cb925628feae02a2025626c45c47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/e9d98d820300288ac902bd3f6b35a9f5cb7fe2cb",
-                "reference": "e9d98d820300288ac902bd3f6b35a9f5cb7fe2cb",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/715d17b24209cb925628feae02a2025626c45c47",
+                "reference": "715d17b24209cb925628feae02a2025626c45c47",
                 "shasum": ""
             },
             "require": {
@@ -254,7 +255,8 @@
                 }
             ],
             "description": "The Illuminate Contracts package.",
-            "time": "2015-01-30 19:09:31"
+            "homepage": "http://laravel.com",
+            "time": "2015-04-11 19:01:42"
         },
         {
             "name": "illuminate/database",
@@ -262,12 +264,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/database.git",
-                "reference": "c24b55af32cbcaaeacac8c11527a5fcb2ab55baf"
+                "reference": "786d25de76f08c3a25e50357201b36b87462910d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/database/zipball/c24b55af32cbcaaeacac8c11527a5fcb2ab55baf",
-                "reference": "c24b55af32cbcaaeacac8c11527a5fcb2ab55baf",
+                "url": "https://api.github.com/repos/illuminate/database/zipball/786d25de76f08c3a25e50357201b36b87462910d",
+                "reference": "786d25de76f08c3a25e50357201b36b87462910d",
                 "shasum": ""
             },
             "require": {
@@ -305,13 +307,14 @@
                 }
             ],
             "description": "The Illuminate Database package.",
+            "homepage": "http://laravel.com",
             "keywords": [
                 "database",
                 "laravel",
                 "orm",
                 "sql"
             ],
-            "time": "2015-02-16 03:37:10"
+            "time": "2015-04-18 16:59:46"
         },
         {
             "name": "illuminate/support",
@@ -319,12 +322,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "4784b75bd7c0584462155c3722a3897847640be2"
+                "reference": "7cb1a2735cd8684966ad1ce08e6e1ed9bb4bef84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/4784b75bd7c0584462155c3722a3897847640be2",
-                "reference": "4784b75bd7c0584462155c3722a3897847640be2",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/7cb1a2735cd8684966ad1ce08e6e1ed9bb4bef84",
+                "reference": "7cb1a2735cd8684966ad1ce08e6e1ed9bb4bef84",
                 "shasum": ""
             },
             "require": {
@@ -362,20 +365,21 @@
                 }
             ],
             "description": "The Illuminate Support package.",
-            "time": "2015-02-11 16:01:09"
+            "homepage": "http://laravel.com",
+            "time": "2015-04-19 05:05:04"
         },
         {
             "name": "league/commonmark",
-            "version": "dev-master",
+            "version": "0.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "a0869b541c85244c543e52340bc237ef2d4eeeda"
+                "reference": "ad1b89403026158529620e0f6096be0eae96817c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/a0869b541c85244c543e52340bc237ef2d4eeeda",
-                "reference": "a0869b541c85244c543e52340bc237ef2d4eeeda",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/ad1b89403026158529620e0f6096be0eae96817c",
+                "reference": "ad1b89403026158529620e0f6096be0eae96817c",
                 "shasum": ""
             },
             "require": {
@@ -421,24 +425,25 @@
                 "markdown",
                 "parser"
             ],
-            "time": "2015-02-16 16:06:49"
+            "time": "2015-01-25 16:08:20"
         },
         {
             "name": "nesbot/carbon",
-            "version": "1.14.0",
+            "version": "1.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "bb87460c995d97fe55b39e65f6ffb7f64b0a941e"
+                "reference": "99e2f69f7bdc2cc4334b2d00f1e0ba450623ea36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/bb87460c995d97fe55b39e65f6ffb7f64b0a941e",
-                "reference": "bb87460c995d97fe55b39e65f6ffb7f64b0a941e",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/99e2f69f7bdc2cc4334b2d00f1e0ba450623ea36",
+                "reference": "99e2f69f7bdc2cc4334b2d00f1e0ba450623ea36",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=5.3.0",
+                "symfony/translation": "2.6.*"
             },
             "require-dev": {
                 "phpunit/phpunit": "~4.0"
@@ -461,13 +466,72 @@
                 }
             ],
             "description": "A simple API extension for DateTime.",
-            "homepage": "https://github.com/briannesbitt/Carbon",
+            "homepage": "http://carbon.nesbot.com",
             "keywords": [
                 "date",
                 "datetime",
                 "time"
             ],
-            "time": "2015-02-06 05:07:29"
+            "time": "2015-03-26 03:05:57"
+        },
+        {
+            "name": "symfony/translation",
+            "version": "2.6.x-dev",
+            "target-dir": "Symfony/Component/Translation",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Translation.git",
+                "reference": "eb05625d5242718ce695e9b61aca76048203c9b3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Translation/zipball/eb05625d5242718ce695e9b61aca76048203c9b3",
+                "reference": "eb05625d5242718ce695e9b61aca76048203c9b3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "psr/log": "~1.0",
+                "symfony/config": "~2.3,>=2.3.12",
+                "symfony/intl": "~2.3",
+                "symfony/phpunit-bridge": "~2.7",
+                "symfony/yaml": "~2.2"
+            },
+            "suggest": {
+                "psr/log": "To use logging capability in translator",
+                "symfony/config": "",
+                "symfony/yaml": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Translation\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Symfony Translation Component",
+            "homepage": "http://symfony.com",
+            "time": "2015-04-19 13:17:37"
         }
     ],
     "packages-dev": [],
