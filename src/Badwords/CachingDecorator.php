@@ -4,33 +4,37 @@ namespace MyBB\Parser\Badwords;
 
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
-class CachingDecorator implements IBadwordRepository
+class CachingDecorator implements BadwordRepositoryInterface
 {
-    /** @var IBadwordRepository */
-    private $decoratedRepository;
-    /** @var CacheRepository $cache */
-    private $cache;
+	/**
+	 * @var BadwordRepositoryInterface
+	 */
+	private $decoratedRepository;
+	/**
+	 * @var CacheRepository
+	 */
+	private $cache;
 
-    /**
-     * @param IBadwordRepository $decorated
-     * @param CacheRepository    $cache
-     */
-    public function __construct(IBadwordRepository $decorated, CacheRepository $cache)
-    {
-        $this->decoratedRepository = $decorated;
-        $this->cache = $cache;
-    }
+	/**
+	 * @param BadwordRepositoryInterface $decorated
+	 * @param CacheRepository            $cache
+	 */
+	public function __construct(BadwordRepositoryInterface $decorated, CacheRepository $cache)
+	{
+		$this->decoratedRepository = $decorated;
+		$this->cache = $cache;
+	}
 
-    /**
-     * @return array
-     */
-    public function getAllAsArray()
-    {
-        if (($badwords = $this->cache->get('parser.badwords')) == null) {
-            $badwords = $this->decoratedRepository->getAllAsArray();
-            $this->cache->forever('parser.badwords', $badwords);
-        }
+	/**
+	 * @return array
+	 */
+	public function getAllAsArray()
+	{
+		if (($badwords = $this->cache->get('parser.badwords')) == null) {
+			$badwords = $this->decoratedRepository->getAllAsArray();
+			$this->cache->forever('parser.badwords', $badwords);
+		}
 
-        return $badwords;
-    }
+		return $badwords;
+	}
 }
