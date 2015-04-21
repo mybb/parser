@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<ruleset name="MyBB 2.0 Parser">
+	<description>Configuration for MyBB 2.0 Parser package</description>
+
+	<file>resources</file>
+	<file>src</file>
+	<file>tests</file>
+
+	<rule ref="../../../MyBB2"/>
+
+	<rule ref="Generic.Files.LineLength">
+		<exclude-pattern>*/resources/*</exclude-pattern>
+	</rule>
+
+	<rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
+		<exclude-pattern>*/resources/migrations/*</exclude-pattern>
+		<exclude-pattern>*/tests/*</exclude-pattern>
+	</rule>
+
+</ruleset>

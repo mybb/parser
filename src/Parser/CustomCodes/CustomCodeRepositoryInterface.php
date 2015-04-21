@@ -2,7 +2,7 @@
 
 namespace MyBB\Parser\Parser\CustomCodes;
 
-interface ICustomCodeRepository
+interface CustomCodeRepositoryInterface
 {
 	/**
 	 * @return array

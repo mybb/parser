@@ -4,7 +4,7 @@ namespace MyBB\Parser\Badwords;
 
 use Illuminate\Contracts\Foundation\Application;
 
-class BadwordRepository implements IBadwordRepository
+class BadwordRepository implements BadwordRepositoryInterface
 {
 	/**
 	 * @var Application

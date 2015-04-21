@@ -4,7 +4,7 @@ namespace MyBB\Parser\Parser\CustomCodes;
 
 use Illuminate\Contracts\Foundation\Application;
 
-class CustomMyCodeRepository implements ICustomCodeRepository
+class CustomMyCodeRepository implements CustomCodeRepositoryInterface
 {
 	/**
 	 * @var Application

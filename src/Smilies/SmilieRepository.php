@@ -4,7 +4,7 @@ namespace MyBB\Parser\Smilies;
 
 use Illuminate\Contracts\Foundation\Application;
 
-class SmilieRepository implements ISmilieRepository
+class SmilieRepository implements SmilieRepositoryInterface
 {
 	/**
 	 * @var Application
@@ -59,7 +59,7 @@ class SmilieRepository implements ISmilieRepository
 	}
 
 	/**
-	 * @param $message
+	 * @param string $message
 	 *
 	 * @return string
 	 */
@@ -73,8 +73,8 @@ class SmilieRepository implements ISmilieRepository
 	}
 
 	/**
-	 * @param        $image
-	 * @param        $id
+	 * @param string $image
+	 * @param int    $id
 	 * @param string $alt
 	 *
 	 * @return string

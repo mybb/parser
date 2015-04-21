@@ -2,45 +2,57 @@
 
 namespace MyBB\Parser;
 
-use MyBB\Parser\Badwords\IBadwordRepository;
-use MyBB\Parser\Parser\IParser;
-use MyBB\Parser\Smilies\ISmilieRepository;
+use MyBB\Parser\Badwords\BadwordRepositoryInterface;
+use MyBB\Parser\Parser\ParserInterface;
+use MyBB\Parser\Smilies\SmilieRepositoryInterface;
 
 class MessageFormatter
 {
-	/** @var IParser */
+	/**
+	 * @var ParserInterface
+	 */
 	private $parser;
-	/** @var \HtmlPurifier */
+	/**
+	 * @var \HTMLPurifier
+	 */
 	private $htmlPurifier;
-	/** @var ISmilieRepository */
+	/**
+	 * @var SmilieRepositoryInterface
+	 */
 	private $smilies;
-	/** @var IBadwordRepository */
+	/**
+	 * @var BadwordRepositoryInterface
+	 */
 	private $badwords;
-	/** @var array */
+	/**
+	 * @var array
+	 */
 	private $highlight_cache = array();
-	/** @var Integer */
+	/**
+	 * @var integer
+	 */
 	private $minsearchword = 3;
 
-	const ENABLE_SMILIES  = 'enable_smilies';
-	const ENABLE_MYCODE   = 'enable_mycode';
-	const ALLOW_HTML      = 'allow_html';
+	const ENABLE_SMILIES = 'enable_smilies';
+	const ENABLE_MYCODE = 'enable_mycode';
+	const ALLOW_HTML = 'allow_html';
 	const FILTER_BADWORDS = 'filter_badwords';
-	const FILTER_CDATA    = 'filter_cdata';
-	const ME_USERNAME     = 'me_username';
-	const HIGHLIGHT       = 'highlight';
-	const NL2BR           = 'nl2br';
+	const FILTER_CDATA = 'filter_cdata';
+	const ME_USERNAME = 'me_username';
+	const HIGHLIGHT = 'highlight';
+	const NL2BR = 'nl2br';
 
 	/**
-	 * @param IParser            $parser
-	 * @param \HTMLPurifier      $htmlPurifier
-	 * @param ISmilieRepository  $smilies
-	 * @param IBadwordRepository $badwords
+	 * @param ParserInterface            $parser
+	 * @param \HTMLPurifier              $htmlPurifier
+	 * @param SmilieRepositoryInterface  $smilies
+	 * @param BadwordRepositoryInterface $badwords
 	 */
 	public function __construct(
-		IParser $parser,
+		ParserInterface $parser,
 		\HTMLPurifier $htmlPurifier,
-		ISmilieRepository $smilies,
-		IBadwordRepository $badwords
+		SmilieRepositoryInterface $smilies,
+		BadwordRepositoryInterface $badwords
 	) {
 		$this->parser = $parser;
 		$this->htmlPurifier = $htmlPurifier;
@@ -51,8 +63,8 @@ class MessageFormatter
 	/**
 	 * Parse the message with the given options
 	 *
-	 * @param       $message
-	 * @param array $options
+	 * @param string $message
+	 * @param array  $options
 	 *
 	 * @return string
 	 */
@@ -60,15 +72,15 @@ class MessageFormatter
 	{
 		$options = array_merge(
 			[
-								   static::ENABLE_SMILIES => true,
-								   static::ENABLE_MYCODE => true,
-								   static::ALLOW_HTML => false,
-								   static::FILTER_BADWORDS => true,
-								   static::FILTER_CDATA => false,
-								   static::ME_USERNAME => "",
-								   static::HIGHLIGHT => "",
-								   static::NL2BR => true,
-							   ],
+				static::ENABLE_SMILIES => true,
+				static::ENABLE_MYCODE => true,
+				static::ALLOW_HTML => false,
+				static::FILTER_BADWORDS => true,
+				static::FILTER_CDATA => false,
+				static::ME_USERNAME => "",
+				static::HIGHLIGHT => "",
+				static::NL2BR => true,
+			],
 			$options
 		);
 
@@ -161,7 +173,7 @@ class MessageFormatter
 	 * parsePlain *should* strip any codes and should return a plain text message
 	 * However due some historic reasons not all codes are properly removed
 	 *
-	 * @param $message
+	 * @param string $message
 	 *
 	 * @return string
 	 */
@@ -173,7 +185,7 @@ class MessageFormatter
 	}
 
 	/**
-	 * @param $message
+	 * @param string $message
 	 *
 	 * @return string
 	 */
@@ -218,7 +230,7 @@ class MessageFormatter
 	}
 
 	/**
-	 * @param $message
+	 * @param string $message
 	 *
 	 * @return string
 	 */
@@ -232,8 +244,8 @@ class MessageFormatter
 	}
 
 	/**
-	 * @param      $message
-	 * @param bool $stripTags
+	 * @param string $message
+	 * @param bool   $stripTags
 	 *
 	 * @return string
 	 */
@@ -264,7 +276,7 @@ class MessageFormatter
 	}
 
 	/**
-	 * @param $message
+	 * @param string $message
 	 *
 	 * @return string
 	 */
@@ -274,7 +286,7 @@ class MessageFormatter
 	}
 
 	/**
-	 * @param $message
+	 * @param string $message
 	 *
 	 * @return string
 	 */
@@ -308,15 +320,15 @@ class MessageFormatter
 	}
 
 	/**
-	 * @param $message
-	 * @param $highlight
+	 * @param string $message
+	 * @param string $highlight
 	 *
 	 * @return string
 	 */
 	private function highlight($message, $highlight)
 	{
 		if (empty($this->highlight_cache)) {
-			$this->highlight_cache = $this->build_highlight_array($highlight);
+			$this->highlight_cache = $this->buildHighlightArray($highlight);
 		}
 		if (is_array($this->highlight_cache) && !empty($this->highlight_cache)) {
 			$message = preg_replace(array_keys($this->highlight_cache), $this->highlight_cache, $message);
@@ -326,11 +338,11 @@ class MessageFormatter
 	}
 
 	/**
-	 * @param $terms
+	 * @param string|array $terms
 	 *
 	 * @return array|bool
 	 */
-	private function build_highlight_array($terms)
+	private function buildHighlightArray($terms)
 	{
 		if (is_array($terms)) {
 			$terms = implode(' ', $terms);
@@ -389,7 +401,8 @@ class MessageFormatter
 		$highlight_cache = array();
 
 		// Sort the word array by length. Largest terms go first and work their way down to the smallest term.
-		// This resolves problems like "test tes" where "tes" will be highlighted first, then "test" can't be highlighted because of the changed html
+		// This resolves problems like "test tes" where "tes" will be highlighted first,
+		// then "test" can't be highlighted because of the changed html
 		usort($words, create_function('$a,$b', 'return strlen($b) - strlen($a);'));
 		// Loop through our words to build the PREG compatible strings
 		foreach ($words as $word) {
@@ -417,7 +430,7 @@ class MessageFormatter
 	 */
 	public function setMinSearchWord($min = 1)
 	{
-		$min = (int) $min;
+		$min = (int)$min;
 
 		if ($min < 1) {
 			throw new \RuntimeException("Minsearchword needsd to be at least '1'");

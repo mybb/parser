@@ -2,12 +2,12 @@
 
 namespace MyBB\Parser\Parser;
 
-use MyBB\Parser\Parser\CustomCodes\ICustomCodeRepository;
+use MyBB\Parser\Parser\CustomCodes\CustomCodeRepositoryInterface;
 
-class MyCode implements IParser
+class MyCode implements ParserInterface
 {
 	/**
-	 * @var int
+	 * @var integer
 	 */
 	private $mycode_cache = 0;
 	/**
@@ -15,63 +15,63 @@ class MyCode implements IParser
 	 */
 	private $list_elements;
 	/**
-	 * @var int
+	 * @var integer
 	 */
 	private $list_count;
 	/**
-	 * @var bool
+	 * @var boolean
 	 */
 	private $allowbasicmycode = true;
 	/**
-	 * @var bool
+	 * @var boolean
 	 */
 	private $allowsymbolmycode = true;
 	/**
-	 * @var bool
+	 * @var boolean
 	 */
 	private $allowlinkmycode = true;
 	/**
-	 * @var bool
+	 * @var boolean
 	 */
 	private $allowemailmycode = true;
 	/**
-	 * @var bool
+	 * @var boolean
 	 */
 	private $allowcolormycode = true;
 	/**
-	 * @var bool
+	 * @var boolean
 	 */
 	private $allowsizemycode = true;
 	/**
-	 * @var bool
+	 * @var boolean
 	 */
 	private $allowfontmycode = true;
 	/**
-	 * @var bool
+	 * @var boolean
 	 */
 	private $allowalignmycode = true;
 	/**
-	 * @var bool
+	 * @var boolean
 	 */
 	private $allowlistmycode = true;
 	/**
-	 * @var bool
+	 * @var boolean
 	 */
 	private $allowimgcode = true;
 	/**
-	 * @var bool
+	 * @var boolean
 	 */
 	private $allowvideocode = true;
 	/**
-	 * @var bool
+	 * @var boolean
 	 */
 	private $shorten_urls = false;
 	/**
-	 * @var bool
+	 * @var boolean
 	 */
 	private $nofollow_on = false;
 	/**
-	 * @var bool
+	 * @var boolean
 	 */
 	private $allowHtml = false;
 	/**
@@ -83,39 +83,39 @@ class MyCode implements IParser
 	 */
 	private $postURL = '';
 	/**
-	 * @var ICustomCodeRepository
+	 * @var CustomCodeRepositoryInterface
 	 */
 	private $customCodeRepository;
 
 	/**
-	 * @param ICustomCodeRepository $customCodeRepository
+	 * @param CustomCodeRepositoryInterface $customCodeRepository
 	 */
-	public function __construct(ICustomCodeRepository $customCodeRepository)
+	public function __construct(CustomCodeRepositoryInterface $customCodeRepository)
 	{
 		$this->customCodeRepository = $customCodeRepository;
 
-		$this->allowbasicmycode  = config('parser.allowbasicmycode');
+		$this->allowbasicmycode = config('parser.allowbasicmycode');
 		$this->allowsymbolmycode = config('parser.allowsymbolmycode');
-		$this->allowlinkmycode   = config('parser.allowlinkmycode');
-		$this->allowemailmycode  = config('parser.allowemailmycode');
-		$this->allowcolormycode  = config('parser.allowcolormycode');
-		$this->allowsizemycode   = config('parser.allowsizemycode');
-		$this->allowfontmycode   = config('parser.allowfontmycode');
-		$this->allowalignmycode  = config('parser.allowalignmycode');
-		$this->allowlistmycode   = config('parser.allowlistmycode');
-		$this->allowimgcode      = config('parser.allowimgcode');
-		$this->allowvideocode    = config('parser.allowvideocode');
-		$this->shorten_urls      = config('parser.shorten_urls');
-		$this->nofollow_on       = config('parser.nofollow_on');
-		$this->dateFormat        = config('parser.dateFormat');
-		$this->postURL           = config('parser.postURL');
+		$this->allowlinkmycode = config('parser.allowlinkmycode');
+		$this->allowemailmycode = config('parser.allowemailmycode');
+		$this->allowcolormycode = config('parser.allowcolormycode');
+		$this->allowsizemycode = config('parser.allowsizemycode');
+		$this->allowfontmycode = config('parser.allowfontmycode');
+		$this->allowalignmycode = config('parser.allowalignmycode');
+		$this->allowlistmycode = config('parser.allowlistmycode');
+		$this->allowimgcode = config('parser.allowimgcode');
+		$this->allowvideocode = config('parser.allowvideocode');
+		$this->shorten_urls = config('parser.shorten_urls');
+		$this->nofollow_on = config('parser.nofollow_on');
+		$this->dateFormat = config('parser.dateFormat');
+		$this->postURL = config('parser.postURL');
 	}
 
 	/**
 	 * Parse a message into a HTML string ready for display.
 	 *
 	 * @param string $message   The message to parse.
-	 * @param bool   $allowHTML Whether to allow HTML in the message.
+	 * @param bool   $allowHtml Whether to allow HTML in the message.
 	 *
 	 * @return string
 	 */
@@ -150,15 +150,15 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param       $message
-	 * @param array $options
+	 * @param string $message
+	 * @param array  $options
 	 *
 	 * @return string
 	 */
 	public function parsePlain($message, $options = array())
 	{
 		// Parse quotes first
-		$message = $this->ParseQuotes($message, true);
+		$message = $this->parseQuotes($message, true);
 		$message = preg_replace_callback(
 			"#\[php\](.*?)\[/php\](\r\n?|\n?)#is",
 			array($this, 'parsePhpCallback'),
@@ -198,9 +198,9 @@ class MyCode implements IParser
 			$message = preg_replace_callback(
 				"#\s?\[list(=(a|A|i|I|1))?&{$i}\](.*?)(\[/list&{$i}\]|$)(\r\n?|\n?)#si",
 				array(
-												 $this,
-												 'parseListCallback'
-											 ),
+					$this,
+					'parseListCallback'
+				),
 				$message,
 				1
 			);
@@ -322,7 +322,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $message
+	 * @param string $message
 	 *
 	 * @return string
 	 */
@@ -334,7 +334,7 @@ class MyCode implements IParser
 		}
 
 		// Parse quotes first
-		$message = $this->ParseQuotes($message);
+		$message = $this->parseQuotes($message);
 		$message = $this->autoUrl($message);
 		$message = str_replace('$', '&#36;', $message);
 		// Replace the rest
@@ -374,9 +374,9 @@ class MyCode implements IParser
 				$message = preg_replace_callback(
 					"#\s?\[list(=(a|A|i|I|1))?&{$i}\](.*?)(\[/list&{$i}\]|$)(\r\n?|\n?)#si",
 					array(
-													 $this,
-													 'parseListCallback'
-												 ),
+						$this,
+						'parseListCallback'
+					),
 					$message,
 					1
 				);
@@ -391,27 +391,27 @@ class MyCode implements IParser
 			$message = preg_replace_callback(
 				"#\[img=([0-9]{1,3})x([0-9]{1,3})\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
 				array(
-												 $this,
-												 'parseImageCallback2'
-											 ),
+					$this,
+					'parseImageCallback2'
+				),
 				$message
 			);
-											 $message = preg_replace_callback(
-												 "#\[img align=([a-z]+)\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
-												 array(
-												 $this,
-												 'parseImageCallback3'
-												 ),
-												 $message
-											 );
-											 $message = preg_replace_callback(
-												 "#\[img=([0-9]{1,3})x([0-9]{1,3}) align=([a-z]+)\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
-												 array(
-												 $this,
-												 'parseImageCallback4'
-												 ),
-												 $message
-											 );
+			$message = preg_replace_callback(
+				"#\[img align=([a-z]+)\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
+				array(
+					$this,
+					'parseImageCallback3'
+				),
+				$message
+			);
+			$message = preg_replace_callback(
+				"#\[img=([0-9]{1,3})x([0-9]{1,3}) align=([a-z]+)\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
+				array(
+					$this,
+					'parseImageCallback4'
+				),
+				$message
+			);
 		} else {
 			$message = preg_replace_callback("#\[img\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is", array(
 				$this,
@@ -420,27 +420,27 @@ class MyCode implements IParser
 			$message = preg_replace_callback(
 				"#\[img=([0-9]{1,3})x([0-9]{1,3})\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
 				array(
-												 $this,
-												 'parseImageDisabledCallback2'
-											 ),
+					$this,
+					'parseImageDisabledCallback2'
+				),
 				$message
 			);
-											 $message = preg_replace_callback(
-												 "#\[img align=([a-z]+)\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
-												 array(
-												 $this,
-												 'parseImageDisabledCallback3'
-												 ),
-												 $message
-											 );
-											 $message = preg_replace_callback(
-												 "#\[img=([0-9]{1,3})x([0-9]{1,3}) align=([a-z]+)\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
-												 array(
-												 $this,
-												 'parseImageDisabledCallback4'
-												 ),
-												 $message
-											 );
+			$message = preg_replace_callback(
+				"#\[img align=([a-z]+)\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
+				array(
+					$this,
+					'parseImageDisabledCallback3'
+				),
+				$message
+			);
+			$message = preg_replace_callback(
+				"#\[img=([0-9]{1,3})x([0-9]{1,3}) align=([a-z]+)\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
+				array(
+					$this,
+					'parseImageDisabledCallback4'
+				),
+				$message
+			);
 		}
 		// Convert videos when allow.
 		if ($this->allowvideocode) {
@@ -491,32 +491,34 @@ class MyCode implements IParser
 		}
 		if ($this->allowlinkmycode) {
 			$callback_mycode['url_simple']['regex'] = "#\[url\]([a-z]+?://)([^\r\n\"<]+?)\[/url\]#si";
-			$callback_mycode['url_simple']['replacement'] = array($this, 'ParseUrlCallback1');
+			$callback_mycode['url_simple']['replacement'] = array($this, 'parseUrlCallback1');
 			$callback_mycode['url_simple2']['regex'] = "#\[url\]([^\r\n\"<]+?)\[/url\]#i";
-			$callback_mycode['url_simple2']['replacement'] = array($this, 'ParseUrlCallback2');
+			$callback_mycode['url_simple2']['replacement'] = array($this, 'parseUrlCallback2');
 			$callback_mycode['url_complex']['regex'] = "#\[url=([a-z]+?://)([^\r\n\"<]+?)\](.+?)\[/url\]#si";
-			$callback_mycode['url_complex']['replacement'] = array($this, 'ParseUrlCallback1');
+			$callback_mycode['url_complex']['replacement'] = array($this, 'parseUrlCallback1');
 			$callback_mycode['url_complex2']['regex'] = "#\[url=([^\r\n\"<&\(\)]+?)\](.+?)\[/url\]#si";
-			$callback_mycode['url_complex2']['replacement'] = array($this, 'ParseUrlCallback2');
+			$callback_mycode['url_complex2']['replacement'] = array($this, 'parseUrlCallback2');
 			++$callback_count;
 		}
 		if ($this->allowemailmycode) {
 			$callback_mycode['email_simple']['regex'] = "#\[email\](.*?)\[/email\]#i";
-			$callback_mycode['email_simple']['replacement'] = array($this, 'ParseEmailCallback');
+			$callback_mycode['email_simple']['replacement'] = array($this, 'parseEmailCallback');
 			$callback_mycode['email_complex']['regex'] = "#\[email=(.*?)\](.*?)\[/email\]#i";
-			$callback_mycode['email_complex']['replacement'] = array($this, 'ParseEmailCallback');
+			$callback_mycode['email_complex']['replacement'] = array($this, 'parseEmailCallback');
 			++$callback_count;
 		}
 		if ($this->allowcolormycode) {
-			$nestable_mycode['color']['regex'] = "#\[color=([a-zA-Z]*|\#?[\da-fA-F]{3}|\#?[\da-fA-F]{6})](.*?)\[/color\]#si";
+			$nestable_mycode['color']['regex'] =
+				"#\[color=([a-zA-Z]*|\#?[\da-fA-F]{3}|\#?[\da-fA-F]{6})](.*?)\[/color\]#si";
 			$nestable_mycode['color']['replacement'] = "<span style=\"color: $1;\">$2</span>";
 			++$nestable_count;
 		}
 		if ($this->allowsizemycode) {
-			$nestable_mycode['size']['regex'] = "#\[size=(xx-small|x-small|small|medium|large|x-large|xx-large)\](.*?)\[/size\]#si";
+			$nestable_mycode['size']['regex'] =
+				"#\[size=(xx-small|x-small|small|medium|large|x-large|xx-large)\](.*?)\[/size\]#si";
 			$nestable_mycode['size']['replacement'] = "<span style=\"font-size: $1;\">$2</span>";
 			$callback_mycode['size_int']['regex'] = "#\[size=([0-9\+\-]+?)\](.*?)\[/size\]#si";
-			$callback_mycode['size_int']['replacement'] = array($this, 'HandleSizeCallback');
+			$callback_mycode['size_int']['replacement'] = array($this, 'handleSizeCallback');
 			++$nestable_count;
 			++$callback_count;
 		}
@@ -562,12 +564,12 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param      $message
-	 * @param bool $text_only
+	 * @param string $message
+	 * @param bool   $text_only
 	 *
 	 * @return string
 	 */
-	private function ParseQuotes($message, $text_only = false)
+	private function parseQuotes($message, $text_only = false)
 	{
 		// Assign pattern and replace values.
 		$pattern = "#\[quote\](.*?)\[\/quote\](\r\n?|\n?)#si";
@@ -575,10 +577,10 @@ class MyCode implements IParser
 		$quote = trans('parser::parser.quote');
 		if ($text_only == false) {
 			$replace = "<blockquote><cite>$quote</cite>$1</blockquote>\n";
-			$replace_callback = array($this, 'ParsePostQuotesCallback1');
+			$replace_callback = array($this, 'parsePostQuotesCallback1');
 		} else {
 			$replace = "\n{$quote}\n--\n$1\n--\n";
-			$replace_callback = array($this, 'ParsePostQuotesCallback2');
+			$replace_callback = array($this, 'parsePostQuotesCallback2');
 		}
 		do {
 			// preg_replace has erased the message? Restore it...
@@ -606,7 +608,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $message
+	 * @param string $message
 	 *
 	 * @return string
 	 */
@@ -617,26 +619,26 @@ class MyCode implements IParser
 		$message = preg_replace_callback(
 			"#([\>\s\(\)])(http|https|ftp|news|irc|ircs|irc6){1}://([^\/\"\s\<\[\.]+\.([^\/\"\s\<\[\.]+\.)*[\w]+(:[0-9]+)?(/([^\"\s<\[]|\[\])*)?([\w\/\)]))#iu",
 			array(
-											 $this,
-											 'autoUrlCallback'
-										 ),
+				$this,
+				'autoUrlCallback'
+			),
 			$message
 		);
-										 $message = preg_replace_callback(
-											 "#([\>\s\(\)])(www|ftp)\.(([^\/\"\s\<\[\.]+\.)*[\w]+(:[0-9]+)?(/([^\"\s<\[]|\[\])*)?([\w\/\)]))#iu",
-											 array(
-											 $this,
-											 'autoUrlCallback'
-											 ),
-											 $message
-										 );
-										 $message = substr($message, 1);
+		$message = preg_replace_callback(
+			"#([\>\s\(\)])(www|ftp)\.(([^\/\"\s\<\[\.]+\.)*[\w]+(:[0-9]+)?(/([^\"\s<\[]|\[\])*)?([\w\/\)]))#iu",
+			array(
+				$this,
+				'autoUrlCallback'
+			),
+			$message
+		);
+		$message = substr($message, 1);
 
-										 return $message;
+		return $message;
 	}
 
 	/**
-	 * @param $message
+	 * @param string $message
 	 *
 	 * @return string
 	 */
@@ -650,8 +652,8 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param      $code
-	 * @param bool $text_only
+	 * @param string $code
+	 * @param bool   $text_only
 	 *
 	 * @return string
 	 */
@@ -674,13 +676,15 @@ class MyCode implements IParser
 		$code = str_replace("\t", '&nbsp;&nbsp;&nbsp;&nbsp;', $code);
 		$code = str_replace("  ", '&nbsp;&nbsp;', $code);
 
-		return "<div class=\"codeblock\">\n<div class=\"title\">" . $lcode . "\n</div><div class=\"body\" dir=\"ltr\"><code>" . $code . "</code></div></div>\n";
+		return "<div class=\"codeblock\">\n<div class=\"title\">" .
+		$lcode . "\n</div><div class=\"body\" dir=\"ltr\"><code>" .
+		$code . "</code></div></div>\n";
 	}
 
 	/**
-	 * @param      $str
-	 * @param bool $bare_return
-	 * @param bool $text_only
+	 * @param string $str
+	 * @param bool   $bare_return
+	 * @param bool   $text_only
 	 *
 	 * @return string
 	 */
@@ -740,27 +744,30 @@ class MyCode implements IParser
 		}
 
 		// Send back the code all nice and pretty
-		return "<div class=\"codeblock phpcodeblock\"><div class=\"title\">$php_code\n</div><div class=\"body\">" . $code . "</div></div>\n";
+		return "<div class=\"codeblock phpcodeblock\"><div class=\"title\">" .
+		$php_code . "\n</div><div class=\"body\">" .
+		$code . "</div></div>\n";
 	}
 
 	/**
-	 * @param $matches
-	 * @return string
-	 */
-	private function HandleSizeCallback($matches)
-	{
-		return $this->MyCodeHandleSize($matches[1], $matches[2]);
-	}
-
-	/**
-	 * @param $size
-	 * @param $text
+	 * @param array $matches
 	 *
 	 * @return string
 	 */
-	private function MyCodeHandleSize($size, $text)
+	private function handleSizeCallback($matches)
 	{
-		$size = (int) $size + 10;
+		return $this->myCodeHandleSize($matches[1], $matches[2]);
+	}
+
+	/**
+	 * @param int    $size
+	 * @param string $text
+	 *
+	 * @return string
+	 */
+	private function myCodeHandleSize($size, $text)
+	{
+		$size = (int)$size + 10;
 		if ($size > 50) {
 			$size = 50;
 		}
@@ -770,31 +777,33 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $matches
-	 * @return string
-	 */
-	private function ParsePostQuotesCallback1($matches)
-	{
-		return $this->ParsePostQuotes($matches[4], $matches[2] . $matches[3]);
-	}
-
-	/**
-	 * @param $matches
-	 * @return string
-	 */
-	private function ParsePostQuotesCallback2($matches)
-	{
-		return $this->ParsePostQuotes($matches[4], $matches[2] . $matches[3], true);
-	}
-
-	/**
-	 * @param      $message
-	 * @param      $username
-	 * @param bool $text_only
+	 * @param array $matches
 	 *
 	 * @return string
 	 */
-	private function ParsePostQuotes($message, $username, $text_only = false)
+	private function parsePostQuotesCallback1($matches)
+	{
+		return $this->parsePostQuotes($matches[4], $matches[2] . $matches[3]);
+	}
+
+	/**
+	 * @param array $matches
+	 *
+	 * @return string
+	 */
+	private function parsePostQuotesCallback2($matches)
+	{
+		return $this->parsePostQuotes($matches[4], $matches[2] . $matches[3], true);
+	}
+
+	/**
+	 * @param string $message
+	 * @param string $username
+	 * @param bool   $text_only
+	 *
+	 * @return string
+	 */
+	private function parsePostQuotes($message, $username, $text_only = false)
 	{
 		$linkback = $date = "";
 		$message = trim($message);
@@ -806,8 +815,8 @@ class MyCode implements IParser
 		$delete_quote = true;
 		if (!empty($this->postURL)) {
 			preg_match("#pid=(?:&quot;|\"|')?([0-9]+)[\"']?(?:&quot;|\"|')?#i", $username, $match);
-			if (isset($match[1]) && (int) $match[1]) {
-				$pid = (int) $match[1];
+			if (isset($match[1]) && (int)$match[1]) {
+				$pid = (int)$match[1];
 				$url = $this->getPostURL($pid);
 				$linkback = " <a href=\"{$url}\" class=\"quote_linkback\">[ -> ]</a>";
 				$username = preg_replace(
@@ -820,9 +829,9 @@ class MyCode implements IParser
 			unset($match);
 		}
 		preg_match("#dateline=(?:&quot;|\"|')?([0-9]+)(?:&quot;|\"|')?#i", $username, $match);
-		if (isset($match[1]) && (int) $match[1]) {
+		if (isset($match[1]) && (int)$match[1]) {
 			if ($match[1] < time()) {
-				$postdate = $this->parseDate((int) $match[1]);
+				$postdate = $this->parseDate((int)$match[1]);
 				$date = " ({$postdate})";
 			}
 			$username = preg_replace(
@@ -853,7 +862,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $pid
+	 * @param int $pid
 	 *
 	 * @return string
 	 */
@@ -867,7 +876,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $time
+	 * @param int $time
 	 *
 	 * @return string
 	 */
@@ -881,7 +890,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $matches
+	 * @param array $matches
 	 *
 	 * @return string
 	 */
@@ -891,7 +900,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $matches
+	 * @param array $matches
 	 *
 	 * @return string
 	 */
@@ -901,7 +910,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $matches
+	 * @param array $matches
 	 *
 	 * @return string
 	 */
@@ -911,7 +920,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param        $url
+	 * @param string $url
 	 * @param array  $dimensions
 	 * @param string $align
 	 *
@@ -949,7 +958,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $matches
+	 * @param array $matches
 	 *
 	 * @return string
 	 */
@@ -959,7 +968,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $matches
+	 * @param array $matches
 	 *
 	 * @return string
 	 */
@@ -969,7 +978,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $matches
+	 * @param array $matches
 	 *
 	 * @return string
 	 */
@@ -979,21 +988,21 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $matches
+	 * @param array $matches
 	 *
 	 * @return string
 	 */
 	private function parseImageDisabledCallback($matches)
 	{
-		return $this->ParseImageDisabled($matches[2]);
+		return $this->parseImageDisabled($matches[2]);
 	}
 
 	/**
-	 * @param $url
+	 * @param string $url
 	 *
 	 * @return string
 	 */
-	private function ParseImageDisabled($url)
+	private function parseImageDisabled($url)
 	{
 		$url = trim($url);
 		$url = str_replace("\n", "", $url);
@@ -1005,30 +1014,35 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $matches
+	 * @param array $matches
+	 *
 	 * @return string
 	 */
-	private function ParseUrlCallback1($matches)
+	private function parseUrlCallback1($matches)
 	{
 		if (!isset($matches[3])) {
 			$matches[3] = '';
 		}
+
 		return $this->ParseUrl($matches[1] . $matches[2], $matches[3]);
 	}
+
 	/**
-	 * @param $matches
+	 * @param array $matches
+	 *
 	 * @return string
 	 */
-	private function ParseUrlCallback2($matches)
+	private function parseUrlCallback2($matches)
 	{
 		if (!isset($matches[2])) {
 			$matches[2] = '';
 		}
+
 		return $this->ParseUrl($matches[1], $matches[2]);
 	}
 
 	/**
-	 * @param        $url
+	 * @param string $url
 	 * @param string $name
 	 *
 	 * @return string
@@ -1079,49 +1093,51 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $matches
+	 * @param array $matches
 	 *
 	 * @return string
 	 */
 	private function parseImageDisabledCallback2($matches)
 	{
-		return $this->ParseImageDisabled($matches[4]);
+		return $this->parseImageDisabled($matches[4]);
 	}
 
 	/**
-	 * @param $matches
+	 * @param array $matches
 	 *
 	 * @return string
 	 */
 	private function parseImageDisabledCallback3($matches)
 	{
-		return $this->ParseImageDisabled($matches[3]);
+		return $this->parseImageDisabled($matches[3]);
 	}
 
 	/**
-	 * @param $matches
+	 * @param array $matches
 	 *
 	 * @return string
 	 */
 	private function parseImageDisabledCallback4($matches)
 	{
-		return $this->ParseImageDisabled($matches[5]);
+		return $this->parseImageDisabled($matches[5]);
 	}
 
 	/**
-	 * @param $matches
+	 * @param array $matches
+	 *
 	 * @return string
 	 */
-	private function ParseEmailCallback($matches)
+	private function parseEmailCallback($matches)
 	{
 		if (!isset($matches[2])) {
 			$matches[2] = '';
 		}
+
 		return $this->parseEmail($matches[1], $matches[2]);
 	}
 
 	/**
-	 * @param        $email
+	 * @param string $email
 	 * @param string $name
 	 *
 	 * @return string
@@ -1141,7 +1157,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $matches
+	 * @param array $matches
 	 *
 	 * @return string
 	 */
@@ -1151,8 +1167,8 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $video
-	 * @param $url
+	 * @param string $video
+	 * @param string $url
 	 *
 	 * @return string
 	 */
@@ -1237,7 +1253,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $matches
+	 * @param array $matches
 	 *
 	 * @return string
 	 */
@@ -1247,7 +1263,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $url
+	 * @param string $url
 	 *
 	 * @return string
 	 */
@@ -1263,7 +1279,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $matches
+	 * @param array $matches
 	 *
 	 * @return string
 	 */
@@ -1294,7 +1310,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $matches
+	 * @param array $matches
 	 *
 	 * @return string
 	 */
@@ -1304,7 +1320,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param        $message
+	 * @param string $message
 	 * @param string $type
 	 *
 	 * @return string
@@ -1328,7 +1344,7 @@ class MyCode implements IParser
 	}
 
 	/**
-	 * @param $matches
+	 * @param array $matches
 	 *
 	 * @return string
 	 */

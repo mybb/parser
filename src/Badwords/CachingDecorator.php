@@ -4,18 +4,22 @@ namespace MyBB\Parser\Badwords;
 
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
-class CachingDecorator implements IBadwordRepository
+class CachingDecorator implements BadwordRepositoryInterface
 {
-	/** @var IBadwordRepository */
+	/**
+	 * @var BadwordRepositoryInterface
+	 */
 	private $decoratedRepository;
-	/** @var CacheRepository $cache */
+	/**
+	 * @var CacheRepository
+	 */
 	private $cache;
 
 	/**
-	 * @param IBadwordRepository $decorated
-	 * @param CacheRepository    $cache
+	 * @param BadwordRepositoryInterface $decorated
+	 * @param CacheRepository            $cache
 	 */
-	public function __construct(IBadwordRepository $decorated, CacheRepository $cache)
+	public function __construct(BadwordRepositoryInterface $decorated, CacheRepository $cache)
 	{
 		$this->decoratedRepository = $decorated;
 		$this->cache = $cache;

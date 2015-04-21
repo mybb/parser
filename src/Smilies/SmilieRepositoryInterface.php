@@ -2,7 +2,7 @@
 
 namespace MyBB\Parser\Smilies;
 
-interface ISmilieRepository
+interface SmilieRepositoryInterface
 {
 	/**
 	 * @return array

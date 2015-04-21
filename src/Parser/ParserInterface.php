@@ -1,6 +1,6 @@
 <?php namespace MyBB\Parser\Parser;
 
-interface IParser
+interface ParserInterface
 {
 	/**
 	 * Parse a message into a HTML string ready for display.
@@ -13,7 +13,7 @@ interface IParser
 	public function parse($message, $allowHTML);
 
 	/**
-	 * @param $message
+	 * @param string $message
 	 *
 	 * @return string
 	 */
@@ -80,12 +80,12 @@ interface IParser
 	public function useNoFollow($on = true);
 
 	/**
-	 * @param $format
+	 * @param string|callable $format
 	 */
 	public function setDateFormatting($format);
 
 	/**
-	 * @param $url
+	 * @param string|callable $url
 	 */
 	public function setPostURL($url);
 }

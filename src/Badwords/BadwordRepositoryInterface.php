@@ -2,7 +2,7 @@
 
 namespace MyBB\Parser\Badwords;
 
-interface IBadwordRepository
+interface BadwordRepositoryInterface
 {
 	/**
 	 * @return array

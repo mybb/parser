@@ -15,7 +15,8 @@ class ParserServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-		// Using mergeConfig and don't publish the video codes config as it normally isn't necessary to edit the embed codes
+		// Using mergeConfig and don't publish the video codes config
+		// as it normally isn't necessary to edit the embed codes
 		$this->mergeConfigFrom(
 			__DIR__ . '/../resources/config/video_codes.php',
 			'video_codes'
@@ -26,7 +27,8 @@ class ParserServiceProvider extends ServiceProvider
 			'parser'
 		);
 
-		// Bind a default instance of the HTMLPurifier and set the encoding to UTF-8 which shouldn't be a problem in most cases
+		// Bind a default instance of the HTMLPurifier and set the encoding to UTF-8
+		// which shouldn't be a problem in most cases
 		$this->app->bind(
 			'\HTMLPurifier',
 			function () {
@@ -38,7 +40,7 @@ class ParserServiceProvider extends ServiceProvider
 		);
 
 		$this->app->bind(
-			'MyBB\Parser\Badwords\IBadwordRepository',
+			'MyBB\Parser\Badwords\BadwordRepositoryInterface',
 			function (Application $app) {
 				$repository = $app->make('MyBB\Parser\Badwords\BadwordRepository');
 				$cache = $app->make('Illuminate\Contracts\Cache\Repository');
@@ -48,7 +50,7 @@ class ParserServiceProvider extends ServiceProvider
 		);
 
 		$this->app->bind(
-			'MyBB\Parser\Smilies\ISmilieRepository',
+			'MyBB\Parser\Smilies\SmilieRepositoryInterface',
 			function (Application $app) {
 				$repository = $app->make('MyBB\Parser\Smilies\SmilieRepository');
 				$cache = $app->make('Illuminate\Contracts\Cache\Repository');
@@ -59,7 +61,7 @@ class ParserServiceProvider extends ServiceProvider
 
 		// Bind the CustomMyCode Repository to the BBCode Parser
 		$this->app->when('MyBB\Parser\Parser\Mycode')
-				  ->needs('MyBB\Parser\Parser\CustomCodes\ICustomCodeRepository')
+				  ->needs('MyBB\Parser\Parser\CustomCodes\CustomCodeRepositoryInterface')
 				  ->give(function (Application $app) {
 					  $repository = $app->make('MyBB\Parser\Parser\CustomCodes\CustomMyCodeRepository');
 					  $cache = $app->make('Illuminate\Contracts\Cache\Repository');

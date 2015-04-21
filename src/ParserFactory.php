@@ -2,14 +2,14 @@
 
 namespace MyBB\Parser;
 
-use MyBB\Parser\Parser\IParser;
+use MyBB\Parser\Parser\ParserInterface;
 
 class ParserFactory
 {
 	/**
-	 * @param $parser string
+	 * @param string $parser
 	 *
-	 * @return \MyBB\Parser\Parser\IParser
+	 * @return \MyBB\Parser\Parser\ParserInterface
 	 *
 	 * @throws \RuntimeException Thrown if the specified parser could not be loaded.
 	 */
@@ -18,7 +18,7 @@ class ParserFactory
 		$class = "MyBB\\Parser\\Parser\\" . ucfirst($parser);
 		$instance = app()->make($class);
 
-		if (!$instance || !($instance instanceof IParser)) {
+		if (!$instance || !($instance instanceof ParserInterface)) {
 			throw new \RuntimeException("Couldn't load parser {$class}");
 		}
 

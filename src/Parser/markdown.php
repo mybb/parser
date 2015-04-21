@@ -4,9 +4,11 @@ namespace MyBB\Parser\Parser;
 
 use League\CommonMark\CommonMarkConverter;
 
-class Markdown implements IParser
+class Markdown implements ParserInterface
 {
-	/** @var CommonMarkConverter $converter */
+	/**
+	 * @var CommonMarkConverter
+	 */
 	private $converter;
 
 	/**
@@ -29,7 +31,7 @@ class Markdown implements IParser
 	}
 
 	/**
-	 * @param $message
+	 * @param string $message
 	 *
 	 * @return string
 	 */
@@ -135,7 +137,7 @@ class Markdown implements IParser
 	}
 
 	/**
-	 * @param $format
+	 * @param string|callable $format
 	 */
 	public function setDateFormatting($format)
 	{
@@ -143,7 +145,7 @@ class Markdown implements IParser
 	}
 
 	/**
-	 * @param $url
+	 * @param string|callable $url
 	 */
 	public function setPostURL($url)
 	{
