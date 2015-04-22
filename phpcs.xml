@@ -10,6 +10,8 @@
 
 	<rule ref="Generic.Files.LineLength">
 		<exclude-pattern>*/resources/*</exclude-pattern>
+		<exclude-pattern>*/src/MessageFormatter.php</exclude-pattern>
+		<exclude-pattern>*/src/Parser/MyCode.php</exclude-pattern>
 	</rule>
 
 	<rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
