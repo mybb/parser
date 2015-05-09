@@ -7,6 +7,11 @@
  * :id will be replaced by the video id
  * :title will be replaced by the htmlspecialchar'd video title
  * :local will be replaced by the local subdomain (atm only used by yahoo)
+ *
+ * @author  MyBB Group
+ * @version 2.0.0
+ * @package mybb/auth
+ * @license http://www.mybb.com/licenses/bsd3 BSD-3
  */
 
 return [
