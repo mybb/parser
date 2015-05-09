@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file contains a list of embed codes for supported sites. Note that adding a new one here doesn't work as the
  * parser isn't smooth enough to detect it manually - yet.
@@ -10,7 +9,7 @@
  *
  * @author  MyBB Group
  * @version 2.0.0
- * @package mybb/auth
+ * @package mybb/parser
  * @license http://www.mybb.com/licenses/bsd3 BSD-3
  */
 
