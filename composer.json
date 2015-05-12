@@ -8,9 +8,9 @@
   ],
   "license": "BSD-3",
   "require": {
-    "illuminate/support": "~5.0",
+    "illuminate/support": "5.0.*|5.1.*",
     "ezyang/htmlpurifier": "~4.6",
-    "illuminate/database": "~5.0",
+    "illuminate/database": "5.0.*|5.1.*",
     "league/commonmark": "0.6.*@dev"
   },
   "autoload": {
