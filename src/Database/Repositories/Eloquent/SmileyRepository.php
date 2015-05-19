@@ -1,6 +1,6 @@
 <?php
 /**
- * Default smilie parser
+ * Smilie repository using Eloquent to retrieve smilies from the database.
  *
  * @author  MyBB Group
  * @version 2.0.0
@@ -8,29 +8,31 @@
  * @license http://www.mybb.com/licenses/bsd3 BSD-3
  */
 
-namespace MyBB\Parser\Smilies;
+namespace MyBB\Parser\Database\Repositories\Eloquent;
 
-use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Collection;
+use Mybb\Parser\Database\Models\Smiley;
+use Mybb\Parser\Database\Repositories\SmileyRepositoryInterface;
 
-class SmilieRepository implements SmilieRepositoryInterface
+class SmileyRepository implements SmileyRepositoryInterface
 {
 	/**
-	 * @var Application
+	 * @var Smiley $model
 	 */
-	private $app;
+	protected $model;
 
 	/**
-	 * @param Application $app
+	 * @param Smiley $model The smiley model to use.
 	 */
-	public function __construct(Application $app)
+	public function __construct(Smiley $model)
 	{
-		$this->app = $app;
+		$this->model = $model;
 	}
 
 	/**
 	 * @return array
 	 */
-	public function getParsableSmilies()
+	public function getParseableSmileys()
 	{
 		$smilies = $this->get();
 		$prepared = array();
@@ -46,8 +48,8 @@ class SmilieRepository implements SmilieRepositoryInterface
 				if ($s[0] == ";") {
 					$prepared += array(
 						"&amp$s" => "&amp$s",
-						"&lt$s" => "&lt$s",
-						"&gt$s" => "&gt$s",
+						"&lt$s"  => "&lt$s",
+						"&gt$s"  => "&gt$s",
 					);
 				}
 			}
@@ -92,5 +94,15 @@ class SmilieRepository implements SmilieRepositoryInterface
 		$code = '<img src=":image" alt=":alt" title=":alt" class="smilie smilie_:id">';
 
 		return str_replace([':image', ':alt', ':id'], [$image, $alt, $id], $code);
+	}
+
+	/**
+	 * Get all defined smileys.
+	 *
+	 * @return Collection
+	 */
+	public function getAll()
+	{
+		return $this->model->orderBy('disporder')->all();
 	}
 }

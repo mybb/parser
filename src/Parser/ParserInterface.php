@@ -1,6 +1,6 @@
 <?php
 /**
- * General parser interface
+ * General parser interface.
  *
  * @author  MyBB Group
  * @version 2.0.0

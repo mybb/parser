@@ -1,6 +1,6 @@
 <?php
 /**
- * Parser Factory
+ * Parser factory, used to create a parser instance.
  *
  * @author  MyBB Group
  * @version 2.0.0

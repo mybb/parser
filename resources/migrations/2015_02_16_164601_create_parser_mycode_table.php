@@ -21,7 +21,7 @@ class CreateParserMycodeTable extends Migration
 	public function up()
 	{
 		Schema::create('parser_mycode', function (Blueprint $table) {
-			$table->increments('cid');
+			$table->increments('id');
 			$table->text('regex');
 			$table->text('replacement');
 			$table->smallInteger('parseorder', false, true);

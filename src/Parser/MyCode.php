@@ -1,6 +1,6 @@
 <?php
 /**
- * MyCode/BBCode parser
+ * MyCode/BBCode parser.
  *
  * @author  MyBB Group
  * @version 2.0.0
@@ -10,7 +10,7 @@
 
 namespace MyBB\Parser\Parser;
 
-use MyBB\Parser\Parser\CustomCodes\CustomCodeRepositoryInterface;
+use MyBB\Parser\Database\Repositories\CustomMyCodeRepositoryInterface;
 
 class MyCode implements ParserInterface
 {
@@ -91,16 +91,16 @@ class MyCode implements ParserInterface
 	 */
 	private $postURL = '';
 	/**
-	 * @var CustomCodeRepositoryInterface
+	 * @var CustomMyCodeRepositoryInterface $customMyCodeRepository
 	 */
-	private $customCodeRepository;
+	private $customMyCodeRepository;
 
 	/**
-	 * @param CustomCodeRepositoryInterface $customCodeRepository
+	 * @param CustomMyCodeRepositoryInterface $customCodeRepository
 	 */
-	public function __construct(CustomCodeRepositoryInterface $customCodeRepository)
+	public function __construct(CustomMyCodeRepositoryInterface $customCodeRepository)
 	{
-		$this->customCodeRepository = $customCodeRepository;
+		$this->customMyCodeRepository = $customCodeRepository;
 
 		$this->allowbasicmycode = config('parser.allowbasicmycode');
 		$this->allowsymbolmycode = config('parser.allowsymbolmycode');
@@ -392,10 +392,14 @@ class MyCode implements ParserInterface
 		}
 		// Convert images when allowed.
 		if ($this->allowimgcode) {
-			$message = preg_replace_callback("#\[img\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is", array(
-				$this,
-				'parseImageCallback'
-			), $message);
+			$message = preg_replace_callback(
+				"#\[img\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
+				array(
+					$this,
+					'parseImageCallback'
+				),
+				$message
+			);
 			$message = preg_replace_callback(
 				"#\[img=([0-9]{1,3})x([0-9]{1,3})\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
 				array(
@@ -421,10 +425,14 @@ class MyCode implements ParserInterface
 				$message
 			);
 		} else {
-			$message = preg_replace_callback("#\[img\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is", array(
-				$this,
-				'parseImageDisabledCallback'
-			), $message);
+			$message = preg_replace_callback(
+				"#\[img\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
+				array(
+					$this,
+					'parseImageDisabledCallback'
+				),
+				$message
+			);
 			$message = preg_replace_callback(
 				"#\[img=([0-9]{1,3})x([0-9]{1,3})\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
 				array(
@@ -458,10 +466,14 @@ class MyCode implements ParserInterface
 				$message
 			);
 		} else {
-			$message = preg_replace_callback("#\[video=(.*?)\](.*?)\[/video\]#i", array(
-				$this,
-				'parseVideoDisabledCallback'
-			), $message);
+			$message = preg_replace_callback(
+				"#\[video=(.*?)\](.*?)\[/video\]#i",
+				array(
+					$this,
+					'parseVideoDisabledCallback'
+				),
+				$message
+			);
 		}
 
 		return $message;
@@ -541,7 +553,7 @@ class MyCode implements ParserInterface
 			++$nestable_count;
 		}
 
-		$custom_mycode = $this->customCodeRepository->getParsableCodes();
+		$custom_mycode = $this->customMyCodeRepository->getParsableCodes();
 		// If there is custom MyCode, load it.
 		if (is_array($custom_mycode)) {
 			foreach ($custom_mycode as $key => $mycode) {
@@ -775,7 +787,7 @@ class MyCode implements ParserInterface
 	 */
 	private function myCodeHandleSize($size, $text)
 	{
-		$size = (int)$size + 10;
+		$size = (int) $size + 10;
 		if ($size > 50) {
 			$size = 50;
 		}
@@ -823,8 +835,8 @@ class MyCode implements ParserInterface
 		$delete_quote = true;
 		if (!empty($this->postURL)) {
 			preg_match("#pid=(?:&quot;|\"|')?([0-9]+)[\"']?(?:&quot;|\"|')?#i", $username, $match);
-			if (isset($match[1]) && (int)$match[1]) {
-				$pid = (int)$match[1];
+			if (isset($match[1]) && (int) $match[1]) {
+				$pid = (int) $match[1];
 				$url = $this->getPostURL($pid);
 				$linkback = " <a href=\"{$url}\" class=\"quote_linkback\">[ -> ]</a>";
 				$username = preg_replace(
@@ -837,9 +849,9 @@ class MyCode implements ParserInterface
 			unset($match);
 		}
 		preg_match("#dateline=(?:&quot;|\"|')?([0-9]+)(?:&quot;|\"|')?#i", $username, $match);
-		if (isset($match[1]) && (int)$match[1]) {
+		if (isset($match[1]) && (int) $match[1]) {
 			if ($match[1] < time()) {
-				$postdate = $this->parseDate((int)$match[1]);
+				$postdate = $this->parseDate((int) $match[1]);
 				$date = " ({$postdate})";
 			}
 			$username = preg_replace(
@@ -1080,18 +1092,18 @@ class MyCode implements ParserInterface
 		}
 		// Fix some entities in URLs
 		$entities = array(
-			'$' => '%24',
+			'$'     => '%24',
 			'&#36;' => '%24',
-			'^' => '%5E',
-			'`' => '%60',
-			'[' => '%5B',
-			']' => '%5D',
-			'{' => '%7B',
-			'}' => '%7D',
-			'"' => '%22',
-			'<' => '%3C',
-			'>' => '%3E',
-			' ' => '%20'
+			'^'     => '%5E',
+			'`'     => '%60',
+			'['     => '%5B',
+			']'     => '%5D',
+			'{'     => '%7B',
+			'}'     => '%7D',
+			'"'     => '%22',
+			'<'     => '%3C',
+			'>'     => '%3E',
+			' '     => '%20'
 		);
 		$fullurl = str_replace(array_keys($entities), array_values($entities), $fullurl);
 		$name = preg_replace("#&amp;\#([0-9]+);#si", "&#$1;", $name); // Fix & but allow unicode

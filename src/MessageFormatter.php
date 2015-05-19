@@ -10,10 +10,10 @@
 
 namespace MyBB\Parser;
 
-use MyBB\Parser\Badwords\BadwordRepositoryInterface;
+use MyBB\Parser\Database\Repositories\BadWordRepositoryInterface;
+use MyBB\Parser\Database\Repositories\SmileyRepositoryInterface;
 use MyBB\Parser\Exceptions\ParserSearchWordMinimumException;
 use MyBB\Parser\Parser\ParserInterface;
-use MyBB\Parser\Smilies\SmilieRepositoryInterface;
 
 class MessageFormatter
 {
@@ -26,13 +26,13 @@ class MessageFormatter
 	 */
 	private $htmlPurifier;
 	/**
-	 * @var SmilieRepositoryInterface
+	 * @var SmileyRepositoryInterface
 	 */
-	private $smilies;
+	private $smileys;
 	/**
-	 * @var BadwordRepositoryInterface
+	 * @var BadWordRepositoryInterface
 	 */
-	private $badwords;
+	private $badWords;
 	/**
 	 * @var array
 	 */
@@ -40,33 +40,33 @@ class MessageFormatter
 	/**
 	 * @var integer
 	 */
-	private $minsearchword = 3;
+	private $minSearchWord = 3;
 
-	const ENABLE_SMILIES = 'enable_smilies';
-	const ENABLE_MYCODE = 'enable_mycode';
-	const ALLOW_HTML = 'allow_html';
-	const FILTER_BADWORDS = 'filter_badwords';
-	const FILTER_CDATA = 'filter_cdata';
-	const ME_USERNAME = 'me_username';
-	const HIGHLIGHT = 'highlight';
-	const NL2BR = 'nl2br';
+	const ENABLE_SMILEYS   = 'enable_smilies';
+	const ENABLE_MYCODE    = 'enable_mycode';
+	const ALLOW_HTML       = 'allow_html';
+	const FILTER_BAD_WORDS = 'filter_badwords';
+	const FILTER_CDATA     = 'filter_cdata';
+	const ME_USERNAME      = 'me_username';
+	const HIGHLIGHT        = 'highlight';
+	const NL2BR            = 'nl2br';
 
 	/**
 	 * @param ParserInterface            $parser
 	 * @param \HTMLPurifier              $htmlPurifier
-	 * @param SmilieRepositoryInterface  $smilies
-	 * @param BadwordRepositoryInterface $badwords
+	 * @param SmileyRepositoryInterface  $smileys
+	 * @param BadWordRepositoryInterface $badWords
 	 */
 	public function __construct(
 		ParserInterface $parser,
 		\HTMLPurifier $htmlPurifier,
-		SmilieRepositoryInterface $smilies,
-		BadwordRepositoryInterface $badwords
+		SmileyRepositoryInterface $smileys,
+		BadWordRepositoryInterface $badWords
 	) {
 		$this->parser = $parser;
 		$this->htmlPurifier = $htmlPurifier;
-		$this->smilies = $smilies;
-		$this->badwords = $badwords;
+		$this->smileys = $smileys;
+		$this->badWords = $badWords;
 	}
 
 	/**
@@ -81,19 +81,19 @@ class MessageFormatter
 	{
 		$options = array_merge(
 			[
-				static::ENABLE_SMILIES => true,
-				static::ENABLE_MYCODE => true,
-				static::ALLOW_HTML => false,
-				static::FILTER_BADWORDS => true,
-				static::FILTER_CDATA => false,
-				static::ME_USERNAME => "",
-				static::HIGHLIGHT => "",
-				static::NL2BR => true,
+				static::ENABLE_SMILEYS   => true,
+				static::ENABLE_MYCODE    => true,
+				static::ALLOW_HTML       => false,
+				static::FILTER_BAD_WORDS => true,
+				static::FILTER_CDATA     => false,
+				static::ME_USERNAME      => "",
+				static::HIGHLIGHT        => "",
+				static::NL2BR            => true,
 			],
 			$options
 		);
 
-		if ($options[static::FILTER_BADWORDS]) {
+		if ($options[static::FILTER_BAD_WORDS]) {
 			$message = $this->filterBadwords($message);
 		}
 
@@ -138,7 +138,7 @@ class MessageFormatter
 			);
 		}
 
-		if ($options[static::ENABLE_SMILIES]) {
+		if ($options[static::ENABLE_SMILEYS]) {
 			$message = $this->replaceSmilies($message);
 		}
 
@@ -200,7 +200,7 @@ class MessageFormatter
 	 */
 	private function replaceSmilies($message)
 	{
-		$smilies = $this->smilies->getParsableSmilies();
+		$smilies = $this->smileys->getParsableSmilies();
 
 		if (empty($smilies)) {
 			return $message;
@@ -260,7 +260,7 @@ class MessageFormatter
 	 */
 	public function filterBadwords($message, $stripTags = false)
 	{
-		$badwords = $this->badwords->getAllAsArray();
+		$badwords = $this->badWords->getAllAsArray();
 		if (!empty($badwords) && is_array(($badwords))) {
 			reset($badwords);
 			foreach ($badwords as $find => $replace) {
@@ -381,7 +381,7 @@ class MessageFormatter
 							continue;
 						}
 						foreach ($split_words as $word) {
-							if (!$word || strlen($word) < $this->minsearchword) {
+							if (!$word || strlen($word) < $this->minSearchWord) {
 								continue;
 							}
 							$words[] = trim($word);
@@ -396,7 +396,7 @@ class MessageFormatter
 			$split_words = preg_split("#\s{1,}#", $terms, -1);
 			if (is_array($split_words)) {
 				foreach ($split_words as $word) {
-					if (!$word || strlen($word) < $this->minsearchword) {
+					if (!$word || strlen($word) < $this->minSearchWord) {
 						continue;
 					}
 					$words[] = trim($word);
@@ -439,12 +439,12 @@ class MessageFormatter
 	 */
 	public function setMinSearchWord($min = 1)
 	{
-		$min = (int)$min;
+		$min = (int) $min;
 
 		if ($min < 1) {
 			throw new ParserSearchWordMinimumException;
 		}
 
-		$this->minsearchword = $min;
+		$this->minSearchWord = $min;
 	}
 }

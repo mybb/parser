@@ -21,7 +21,7 @@ class CreateParserBadwordsTable extends Migration
 	public function up()
 	{
 		Schema::create('parser_badwords', function (Blueprint $table) {
-			$table->increments('bid');
+			$table->increments('id');
 			$table->string('find', 100);
 			$table->string('replace', 100)->nullable();
 		});

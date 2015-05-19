@@ -1,6 +1,6 @@
 <?php
 /**
- * Cache custom codes
+ * Repository decorator to cache retrieved MyCode.
  *
  * @author  MyBB Group
  * @version 2.0.0
@@ -8,14 +8,15 @@
  * @license http://www.mybb.com/licenses/bsd3 BSD-3
  */
 
-namespace MyBB\Parser\Parser\CustomCodes;
+namespace MyBB\Parser\Database\Repositories\Decorators;
 
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
+use MyBB\Parser\Database\Repositories\CustomMyCodeRepositoryInterface;
 
-class CachingDecorator implements CustomCodeRepositoryInterface
+class CustomMyMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
 {
 	/**
-	 * @var CustomCodeRepositoryInterface
+	 * @var CustomMyCodeRepositoryInterface
 	 */
 	private $decoratedRepository;
 	/**
@@ -24,10 +25,10 @@ class CachingDecorator implements CustomCodeRepositoryInterface
 	private $cache;
 
 	/**
-	 * @param CustomCodeRepositoryInterface $decorated
-	 * @param CacheRepository               $cache
+	 * @param CustomMyCodeRepositoryInterface $decorated
+	 * @param CacheRepository                 $cache
 	 */
-	public function __construct(CustomCodeRepositoryInterface $decorated, CacheRepository $cache)
+	public function __construct(CustomMyCodeRepositoryInterface $decorated, CacheRepository $cache)
 	{
 		$this->decoratedRepository = $decorated;
 		$this->cache = $cache;
@@ -36,12 +37,12 @@ class CachingDecorator implements CustomCodeRepositoryInterface
 	/**
 	 * @return array
 	 */
-	public function getParsableCodes()
+	public function getParseableCodes()
 	{
 		// TODO: the cache doesn't work if more than one parser is used.
 		// The cache should be named something like "parser.codes.[bbcode|markdown]"
 		if (($smilies = $this->cache->get('parser.codes')) == null) {
-			$smilies = $this->decoratedRepository->getParsableCodes();
+			$smilies = $this->decoratedRepository->getParseableCodes();
 			$this->cache->forever('parser.codes', $smilies);
 		}
 

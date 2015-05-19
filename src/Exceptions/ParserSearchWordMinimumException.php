@@ -10,7 +10,7 @@
 
 namespace MyBB\Parser\Exceptions;
 
-use \RuntimeException;
+use RuntimeException;
 
 class ParserSearchWordMinimumException extends RuntimeException
 {
