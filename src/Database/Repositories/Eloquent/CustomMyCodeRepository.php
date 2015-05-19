@@ -36,7 +36,10 @@ class CustomMyMyCodeRepository implements CustomMyCodeRepositoryInterface
 		$codes = $this->get();
 		$prepared = array();
 		foreach ($codes as $code) {
-			$prepared[] = ['regex' => $code->regex, 'replacement' => $code->replacement];
+			$prepared[] = [
+				'regex' => $code->regex,
+				'replacement' => $code->replacement
+			];
 		}
 
 		return $prepared;
@@ -47,6 +50,8 @@ class CustomMyMyCodeRepository implements CustomMyCodeRepositoryInterface
 	 */
 	private function get()
 	{
-		return $this->model->orderBy('parseorder')->get(['regex', 'replacement']);
+		return $this->model->orderBy('parseorder')->get(
+			['regex', 'replacement']
+		);
 	}
 }

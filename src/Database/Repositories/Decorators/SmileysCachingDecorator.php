@@ -29,8 +29,10 @@ class SmileysCachingDecorator implements SmileyRepositoryInterface
 	 * @param SmileyRepositoryInterface $decorated
 	 * @param CacheRepository           $cache
 	 */
-	public function __construct(SmileyRepositoryInterface $decorated, CacheRepository $cache)
-	{
+	public function __construct(
+		SmileyRepositoryInterface $decorated,
+		CacheRepository $cache
+	) {
 		$this->decoratedRepository = $decorated;
 		$this->cache = $cache;
 	}
@@ -40,7 +42,10 @@ class SmileysCachingDecorator implements SmileyRepositoryInterface
 	 */
 	public function getParseableSmileys()
 	{
-		if (($smileys = $this->cache->get('parser.parseable_smileys')) == null) {
+		if (($smileys = $this->cache->get(
+				'parser.parseable_smileys'
+			)) == null
+		) {
 			$smileys = $this->decoratedRepository->getParseableSmileys();
 			$this->cache->forever('parser.parseable_smileys', $smileys);
 		}

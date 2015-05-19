@@ -20,7 +20,8 @@ class ParserFactory
 	 *
 	 * @return \MyBB\Parser\Parser\ParserInterface
 	 *
-	 * @throws ParserInvalidClassException($class) Thrown if the specified parser could not be loaded.
+	 * @throws ParserInvalidClassException($class) Thrown if the specified
+	 *                                             parser could not be loaded.
 	 */
 	public static function make($parser)
 	{

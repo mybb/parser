@@ -52,7 +52,9 @@ class ParserServiceProvider extends ServiceProvider
 		$this->app->bind(
 			'MyBB\Parser\Database\Repositories\BadWordRepositoryInterface',
 			function (Application $app) {
-				$repository = $app->make('MyBB\Parser\Database\Repositories\Eloquent\BadWordRepository');
+				$repository = $app->make(
+					'MyBB\Parser\Database\Repositories\Eloquent\BadWordRepository'
+				);
 				$cache = $app->make('Illuminate\Contracts\Cache\Repository');
 
 				return new BadWordCachingDecorator($repository, $cache);
@@ -62,7 +64,9 @@ class ParserServiceProvider extends ServiceProvider
 		$this->app->bind(
 			'MyBB\Parser\Database\Repositories\SmileyRepositoryInterface',
 			function (Application $app) {
-				$repository = $app->make('MyBB\Parser\Database\Repositories\Eloquent\SmileyRepository');
+				$repository = $app->make(
+					'MyBB\Parser\Database\Repositories\Eloquent\SmileyRepository'
+				);
 				$cache = $app->make('Illuminate\Contracts\Cache\Repository');
 
 				return new SmileysCachingDecorator($repository, $cache);
@@ -71,13 +75,22 @@ class ParserServiceProvider extends ServiceProvider
 
 		// Bind the CustomMyCode Repository to the BBCode Parser
 		$this->app->when('MyBB\Parser\Parser\MyCode')
-		          ->needs('MyBB\Parser\Database\Repositories\CustomMyCodeRepositoryInterface')
+		          ->needs(
+			          'MyBB\Parser\Database\Repositories\CustomMyCodeRepositoryInterface'
+		          )
 		          ->give(
 			          function (Application $app) {
-				          $repository = $app->make('MyBB\Parser\Database\Repositories\Eloquent\CustomMyCodeRepository');
-				          $cache = $app->make('Illuminate\Contracts\Cache\Repository');
+				          $repository = $app->make(
+					          'MyBB\Parser\Database\Repositories\Eloquent\CustomMyCodeRepository'
+				          );
+				          $cache = $app->make(
+					          'Illuminate\Contracts\Cache\Repository'
+				          );
 
-				          return new CustomMyMyCodeCachingDecorator($repository, $cache);
+				          return new CustomMyMyCodeCachingDecorator(
+					          $repository,
+					          $cache
+				          );
 			          }
 		          );
 	}
@@ -93,14 +106,18 @@ class ParserServiceProvider extends ServiceProvider
 
 		$this->publishes(
 			[
-				__DIR__ . '/../resources/migrations/' => base_path('/database/migrations')
+				__DIR__ . '/../resources/migrations/' => base_path(
+					'/database/migrations'
+				)
 			],
 			'migrations'
 		);
 
 		$this->publishes(
 			[
-				__DIR__ . '/../resources/config/parser.php' => config_path('parser.php')
+				__DIR__ . '/../resources/config/parser.php' => config_path(
+					'parser.php'
+				)
 			],
 			'config'
 		);

@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Smiley extends Model
 {
+	// @codingStandardsIgnoreStart
+
 	/**
 	 * The table associated with the model.
 	 *
@@ -30,7 +32,7 @@ class Smiley extends Model
 	/**
 	 * Indicates if the model should be timestamped.
 	 *
-	 * @var bool
+	 * @var boolean
 	 */
 	public $timestamps = false;
 
@@ -40,4 +42,6 @@ class Smiley extends Model
 	 * @var array
 	 */
 	protected $guarded = [];
+
+	// @codingStandardsIgnoreEnd
 }

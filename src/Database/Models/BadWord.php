@@ -19,6 +19,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class BadWord extends Model
 {
+	// @codingStandardsIgnoreStart
+
 	/**
 	 * The table associated with the model.
 	 *
@@ -29,7 +31,7 @@ class BadWord extends Model
 	/**
 	 * Indicates if the model should be timestamped.
 	 *
-	 * @var bool
+	 * @var boolean
 	 */
 	public $timestamps = false;
 
@@ -39,4 +41,6 @@ class BadWord extends Model
 	 * @var array
 	 */
 	protected $guarded = [];
+
+	// @codingStandardsIgnoreEnd
 }

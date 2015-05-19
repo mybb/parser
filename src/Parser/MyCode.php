@@ -98,8 +98,9 @@ class MyCode implements ParserInterface
 	/**
 	 * @param CustomMyCodeRepositoryInterface $customCodeRepository
 	 */
-	public function __construct(CustomMyCodeRepositoryInterface $customCodeRepository)
-	{
+	public function __construct(
+		CustomMyCodeRepositoryInterface $customCodeRepository
+	) {
 		$this->customMyCodeRepository = $customCodeRepository;
 
 		$this->allowbasicmycode = config('parser.allowbasicmycode');
@@ -132,8 +133,17 @@ class MyCode implements ParserInterface
 		$this->allowHtml = $allowHtml;
 
 		// If MyCode needs to be replaced, first filter out [code] and [php] tags.
-		preg_match_all("#\[(code|php)\](.*?)\[/\\1\](\r\n?|\n?)#si", $message, $code_matches, PREG_SET_ORDER);
-		$message = preg_replace("#\[(code|php)\](.*?)\[/\\1\](\r\n?|\n?)#si", "<mybb-code>\n", $message);
+		preg_match_all(
+			"#\[(code|php)\](.*?)\[/\\1\](\r\n?|\n?)#si",
+			$message,
+			$code_matches,
+			PREG_SET_ORDER
+		);
+		$message = preg_replace(
+			"#\[(code|php)\](.*?)\[/\\1\](\r\n?|\n?)#si",
+			"<mybb-code>\n",
+			$message
+		);
 
 		$message = $this->parseMyCode($message);
 
@@ -150,7 +160,12 @@ class MyCode implements ParserInterface
 				} elseif (strtolower($text[1]) == "php") {
 					$code = $this->parsePhp($text[2]);
 				}
-				$message = preg_replace("#\<mybb-code>\n?#", $code, $message, 1);
+				$message = preg_replace(
+					"#\<mybb-code>\n?#",
+					$code,
+					$message,
+					1
+				);
 			}
 		}
 
@@ -355,14 +370,22 @@ class MyCode implements ParserInterface
 		}
 		if ($this->mycode_cache['callback_count'] > 0) {
 			foreach ($this->mycode_cache['callback'] as $replace) {
-				$message = preg_replace_callback($replace['find'], $replace['replacement'], $message);
+				$message = preg_replace_callback(
+					$replace['find'],
+					$replace['replacement'],
+					$message
+				);
 			}
 		}
 		// Replace the nestable mycode's
 		if ($this->mycode_cache['nestable_count'] > 0) {
 			foreach ($this->mycode_cache['nestable'] as $mycode) {
 				while (preg_match($mycode['find'], $message)) {
-					$message = preg_replace($mycode['find'], $mycode['replacement'], $message);
+					$message = preg_replace(
+						$mycode['find'],
+						$mycode['replacement'],
+						$message
+					);
 				}
 			}
 		}
@@ -511,20 +534,38 @@ class MyCode implements ParserInterface
 		}
 		if ($this->allowlinkmycode) {
 			$callback_mycode['url_simple']['regex'] = "#\[url\]([a-z]+?://)([^\r\n\"<]+?)\[/url\]#si";
-			$callback_mycode['url_simple']['replacement'] = array($this, 'parseUrlCallback1');
+			$callback_mycode['url_simple']['replacement'] = array(
+				$this,
+				'parseUrlCallback1'
+			);
 			$callback_mycode['url_simple2']['regex'] = "#\[url\]([^\r\n\"<]+?)\[/url\]#i";
-			$callback_mycode['url_simple2']['replacement'] = array($this, 'parseUrlCallback2');
+			$callback_mycode['url_simple2']['replacement'] = array(
+				$this,
+				'parseUrlCallback2'
+			);
 			$callback_mycode['url_complex']['regex'] = "#\[url=([a-z]+?://)([^\r\n\"<]+?)\](.+?)\[/url\]#si";
-			$callback_mycode['url_complex']['replacement'] = array($this, 'parseUrlCallback1');
+			$callback_mycode['url_complex']['replacement'] = array(
+				$this,
+				'parseUrlCallback1'
+			);
 			$callback_mycode['url_complex2']['regex'] = "#\[url=([^\r\n\"<&\(\)]+?)\](.+?)\[/url\]#si";
-			$callback_mycode['url_complex2']['replacement'] = array($this, 'parseUrlCallback2');
+			$callback_mycode['url_complex2']['replacement'] = array(
+				$this,
+				'parseUrlCallback2'
+			);
 			++$callback_count;
 		}
 		if ($this->allowemailmycode) {
 			$callback_mycode['email_simple']['regex'] = "#\[email\](.*?)\[/email\]#i";
-			$callback_mycode['email_simple']['replacement'] = array($this, 'parseEmailCallback');
+			$callback_mycode['email_simple']['replacement'] = array(
+				$this,
+				'parseEmailCallback'
+			);
 			$callback_mycode['email_complex']['regex'] = "#\[email=(.*?)\](.*?)\[/email\]#i";
-			$callback_mycode['email_complex']['replacement'] = array($this, 'parseEmailCallback');
+			$callback_mycode['email_complex']['replacement'] = array(
+				$this,
+				'parseEmailCallback'
+			);
 			++$callback_count;
 		}
 		if ($this->allowcolormycode) {
@@ -538,7 +579,10 @@ class MyCode implements ParserInterface
 				"#\[size=(xx-small|x-small|small|medium|large|x-large|xx-large)\](.*?)\[/size\]#si";
 			$nestable_mycode['size']['replacement'] = "<span style=\"font-size: $1;\">$2</span>";
 			$callback_mycode['size_int']['regex'] = "#\[size=([0-9\+\-]+?)\](.*?)\[/size\]#si";
-			$callback_mycode['size_int']['replacement'] = array($this, 'handleSizeCallback');
+			$callback_mycode['size_int']['replacement'] = array(
+				$this,
+				'handleSizeCallback'
+			);
 			++$nestable_count;
 			++$callback_count;
 		}
@@ -572,11 +616,17 @@ class MyCode implements ParserInterface
 		}
 		// Assign the nestable MyCode to the cache.
 		foreach ($nestable_mycode as $code) {
-			$this->mycode_cache['nestable'][] = array('find' => $code['regex'], 'replacement' => $code['replacement']);
+			$this->mycode_cache['nestable'][] = array(
+				'find'        => $code['regex'],
+				'replacement' => $code['replacement']
+			);
 		}
 		// Assign the nestable MyCode to the cache.
 		foreach ($callback_mycode as $code) {
-			$this->mycode_cache['callback'][] = array('find' => $code['regex'], 'replacement' => $code['replacement']);
+			$this->mycode_cache['callback'][] = array(
+				'find'        => $code['regex'],
+				'replacement' => $code['replacement']
+			);
 		}
 		$this->mycode_cache['standard_count'] = $standard_count;
 		$this->mycode_cache['callback_count'] = $callback_count;
@@ -606,7 +656,13 @@ class MyCode implements ParserInterface
 			// preg_replace has erased the message? Restore it...
 			$previous_message = $message;
 			$message = preg_replace($pattern, $replace, $message, -1, $count);
-			$message = preg_replace_callback($pattern_callback, $replace_callback, $message, -1, $count_callback);
+			$message = preg_replace_callback(
+				$pattern_callback,
+				$replace_callback,
+				$message,
+				-1,
+				$count_callback
+			);
 			if (!$message) {
 				$message = $previous_message;
 				break;
@@ -664,7 +720,11 @@ class MyCode implements ParserInterface
 	 */
 	private function fixHtml($message)
 	{
-		$message = preg_replace("#&(?!\#[0-9]+;)#si", "&amp;", $message); // fix & but allow unicode
+		$message = preg_replace(
+			"#&(?!\#[0-9]+;)#si",
+			"&amp;",
+			$message
+		); // fix & but allow unicode
 		$message = str_replace("<", "&lt;", $message);
 		$message = str_replace(">", "&gt;", $message);
 
@@ -737,9 +797,17 @@ class MyCode implements ParserInterface
 		}
 		$code = @highlight_string($str, true);
 		// Do the actual replacing.
-		$code = preg_replace('#<code>\s*<span style="color: \#000000">\s*#i', "<code>", $code);
+		$code = preg_replace(
+			'#<code>\s*<span style="color: \#000000">\s*#i',
+			"<code>",
+			$code
+		);
 		$code = preg_replace("#</span>\s*</code>#", "</code>", $code);
-		$code = preg_replace("#</span>(\r\n?|\n?)</code>#", "</span></code>", $code);
+		$code = preg_replace(
+			"#</span>(\r\n?|\n?)</code>#",
+			"</span></code>",
+			$code
+		);
 		$code = str_replace("\\", '&#092;', $code);
 		$code = str_replace('$', '&#36;', $code);
 		$code = preg_replace("#&amp;\#([0-9]+);#si", "&#$1;", $code);
@@ -755,7 +823,11 @@ class MyCode implements ParserInterface
 			// Wait a minute. It fails highlighting? Stupid highlighter.
 			$code = str_replace("?&gt;</code>", "</code>", $code);
 		}
-		$code = preg_replace("#<span style=\"color: \#([A-Z0-9]{6})\"></span>#", "", $code);
+		$code = preg_replace(
+			"#<span style=\"color: \#([A-Z0-9]{6})\"></span>#",
+			"",
+			$code
+		);
 		$code = str_replace("<code>", "<div dir=\"ltr\"><code>", $code);
 		$code = str_replace("</code>", "</code></div>", $code);
 		$code = preg_replace("# *$#", "", $code);
@@ -791,7 +863,11 @@ class MyCode implements ParserInterface
 		if ($size > 50) {
 			$size = 50;
 		}
-		$text = "<span style=\"font-size: {$size}pt;\">" . str_replace("\'", "'", $text) . "</span>";
+		$text = "<span style=\"font-size: {$size}pt;\">" . str_replace(
+				"\'",
+				"'",
+				$text
+			) . "</span>";
 
 		return $text;
 	}
@@ -813,7 +889,11 @@ class MyCode implements ParserInterface
 	 */
 	private function parsePostQuotesCallback2($matches)
 	{
-		return $this->parsePostQuotes($matches[4], $matches[2] . $matches[3], true);
+		return $this->parsePostQuotes(
+			$matches[4],
+			$matches[2] . $matches[3],
+			true
+		);
 	}
 
 	/**
@@ -827,14 +907,22 @@ class MyCode implements ParserInterface
 	{
 		$linkback = $date = "";
 		$message = trim($message);
-		$message = preg_replace("#(^<br(\s?)(\/?)>|<br(\s?)(\/?)>$)#i", "", $message);
+		$message = preg_replace(
+			"#(^<br(\s?)(\/?)>|<br(\s?)(\/?)>$)#i",
+			"",
+			$message
+		);
 		if (!$message) {
 			return '';
 		}
 		$username .= "'";
 		$delete_quote = true;
 		if (!empty($this->postURL)) {
-			preg_match("#pid=(?:&quot;|\"|')?([0-9]+)[\"']?(?:&quot;|\"|')?#i", $username, $match);
+			preg_match(
+				"#pid=(?:&quot;|\"|')?([0-9]+)[\"']?(?:&quot;|\"|')?#i",
+				$username,
+				$match
+			);
 			if (isset($match[1]) && (int) $match[1]) {
 				$pid = (int) $match[1];
 				$url = $this->getPostURL($pid);
@@ -848,7 +936,11 @@ class MyCode implements ParserInterface
 			}
 			unset($match);
 		}
-		preg_match("#dateline=(?:&quot;|\"|')?([0-9]+)(?:&quot;|\"|')?#i", $username, $match);
+		preg_match(
+			"#dateline=(?:&quot;|\"|')?([0-9]+)(?:&quot;|\"|')?#i",
+			$username,
+			$match
+		);
 		if (isset($match[1]) && (int) $match[1]) {
 			if ($match[1] < time()) {
 				$postdate = $this->parseDate((int) $match[1]);
@@ -1004,7 +1096,11 @@ class MyCode implements ParserInterface
 	 */
 	private function parseImageCallback4($matches)
 	{
-		return $this->parseImage($matches[5], array($matches[1], $matches[2]), $matches[3]);
+		return $this->parseImage(
+			$matches[5],
+			array($matches[1], $matches[2]),
+			$matches[3]
+		);
 	}
 
 	/**
@@ -1028,7 +1124,10 @@ class MyCode implements ParserInterface
 		$url = str_replace("\n", "", $url);
 		$url = str_replace("\r", "", $url);
 		$url = str_replace("\'", "'", $url);
-		$image = trans('parser::parser.posted_image', ['alt' => $this->parseUrl($url)]);
+		$image = trans(
+			'parser::parser.posted_image',
+			['alt' => $this->parseUrl($url)]
+		);
 
 		return $image;
 	}
@@ -1105,8 +1204,16 @@ class MyCode implements ParserInterface
 			'>'     => '%3E',
 			' '     => '%20'
 		);
-		$fullurl = str_replace(array_keys($entities), array_values($entities), $fullurl);
-		$name = preg_replace("#&amp;\#([0-9]+);#si", "&#$1;", $name); // Fix & but allow unicode
+		$fullurl = str_replace(
+			array_keys($entities),
+			array_values($entities),
+			$fullurl
+		);
+		$name = preg_replace(
+			"#&amp;\#([0-9]+);#si",
+			"&#$1;",
+			$name
+		); // Fix & but allow unicode
 		$link = "<a href=\"$fullurl\" target=\"_blank\"{$nofollow}>$name</a>";
 
 		return $link;
@@ -1167,10 +1274,18 @@ class MyCode implements ParserInterface
 		if (!$name) {
 			$name = $email;
 		}
-		if (preg_match("/^([a-zA-Z0-9-_\+\.]+?)@[a-zA-Z0-9-]+\.[a-zA-Z0-9\.-]+$/si", $email)) {
+		if (preg_match(
+			"/^([a-zA-Z0-9-_\+\.]+?)@[a-zA-Z0-9-]+\.[a-zA-Z0-9\.-]+$/si",
+			$email
+		)) {
 			return "<a href=\"mailto:$email\">" . $name . "</a>";
-		} elseif (preg_match("/^([a-zA-Z0-9-_\+\.]+?)@[a-zA-Z0-9-]+\.[a-zA-Z0-9\.-]+\?(.*?)$/si", $email)) {
-			return "<a href=\"mailto:" . htmlspecialchars($email) . "\">" . $name . "</a>";
+		} elseif (preg_match(
+			"/^([a-zA-Z0-9-_\+\.]+?)@[a-zA-Z0-9-]+\.[a-zA-Z0-9\.-]+\?(.*?)$/si",
+			$email
+		)) {
+			return "<a href=\"mailto:" . htmlspecialchars(
+				$email
+			) . "\">" . $name . "</a>";
 		} else {
 			return $email;
 		}
@@ -1220,14 +1335,20 @@ class MyCode implements ParserInterface
 		$local = $title = '';
 		switch ($video) {
 			case "dailymotion":
-				list($id,) = explode("_", $path[2], 1); // http://www.dailymotion.com/video/fds123_title-goes-here
+				list($id,) = explode(
+					"_",
+					$path[2],
+					1
+				); // http://www.dailymotion.com/video/fds123_title-goes-here
 				break;
 			case "metacafe":
 				$id = $path[2]; // http://www.metacafe.com/watch/fds123/title_goes_here/
 				$title = htmlspecialchars($path[3]);
 				break;
 			case "myspacetv":
-				$title = htmlspecialchars($path[3]); // http://www.myspace.com/channel/video/fds/123
+				$title = htmlspecialchars(
+					$path[3]
+				); // http://www.myspace.com/channel/video/fds/123
 				$id = $path[4];
 				break;
 			case "facebook":
@@ -1243,7 +1364,11 @@ class MyCode implements ParserInterface
 				$id = $path[1]; // http://xy.screen.yahoo.com/fds-123.html
 				// Support for localized portals
 				$domain = explode('.', $parsed_url['host']);
-				if ($domain[0] != 'screen' && preg_match('#^([a-z-]+)$#', $domain[0])) {
+				if ($domain[0] != 'screen' && preg_match(
+						'#^([a-z-]+)$#',
+						$domain[0]
+					)
+				) {
 					$local = "{$domain[0]}.";
 				}
 				break;
@@ -1252,7 +1377,11 @@ class MyCode implements ParserInterface
 				break;
 			case "youtube":
 				if (!empty($fragments[0])) {
-					$id = str_replace('!v=', '', $fragments[0]); // http://www.youtube.com/watch#!v=fds123
+					$id = str_replace(
+						'!v=',
+						'',
+						$fragments[0]
+					); // http://www.youtube.com/watch#!v=fds123
 				} elseif (!empty($input['v'])) {
 					$id = $input['v']; // http://www.youtube.com/watch?v=fds123
 				} else {
@@ -1267,7 +1396,11 @@ class MyCode implements ParserInterface
 		}
 		$id = htmlspecialchars($id);
 		$code = config('video_codes.' . $video);
-		$code = str_replace([':id', ':local', ':title'], [$id, $local, $title], $code);
+		$code = str_replace(
+			[':id', ':local', ':title'],
+			[$id, $local, $title],
+			$code
+		);
 
 		return $code;
 	}
@@ -1293,7 +1426,10 @@ class MyCode implements ParserInterface
 		$url = str_replace("\n", "", $url);
 		$url = str_replace("\r", "", $url);
 		$url = str_replace("\'", "'", $url);
-		$video = trans('parser::parser.posted_video', ['alt' => $this->parseUrl($url)]);
+		$video = trans(
+			'parser::parser.posted_video',
+			['alt' => $this->parseUrl($url)]
+		);
 
 		return $video;
 	}
@@ -1308,7 +1444,11 @@ class MyCode implements ParserInterface
 		$external = '';
 		// Allow links like http://en.wikipedia.org/wiki/PHP_(disambiguation) but detect mismatching braces
 		while (substr($matches[3], -1) == ')') {
-			if (substr_count($matches[3], ')') > substr_count($matches[3], '(')) {
+			if (substr_count($matches[3], ')') > substr_count(
+					$matches[3],
+					'('
+				)
+			) {
 				$matches[3] = substr($matches[3], 0, -1);
 				$external = ')' . $external;
 			} else {
@@ -1358,7 +1498,11 @@ class MyCode implements ParserInterface
 		} else {
 			$list = "<ul>$message</ul>\n";
 		}
-		$list = preg_replace("#<(ol type=\"$type\"|ul)>\s*</li>#", "<$1>", $list);
+		$list = preg_replace(
+			"#<(ol type=\"$type\"|ul)>\s*</li>#",
+			"<$1>",
+			$list
+		);
 
 		return $list;
 	}

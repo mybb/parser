@@ -42,7 +42,11 @@ class SmileyRepository implements SmileyRepositoryInterface
 			foreach ($smilie->find as $s) {
 				$s = $this->filterHtml($s);
 
-				$prepared[$s] = $this->getSmilieCode($smilie->image, $smilie->sid, $s);
+				$prepared[$s] = $this->getSmilieCode(
+					$smilie->image,
+					$smilie->sid,
+					$s
+				);
 
 				// workaround for smilies starting with ;
 				if ($s[0] == ";") {
@@ -65,7 +69,9 @@ class SmileyRepository implements SmileyRepositoryInterface
 	{
 		$db = $this->app->make('db');
 
-		return $db->table('parser_smilies')->orderBy('disporder')->get(['sid', 'find', 'image']);
+		return $db->table('parser_smilies')->orderBy('disporder')->get(
+			['sid', 'find', 'image']
+		);
 	}
 
 	/**
@@ -75,7 +81,11 @@ class SmileyRepository implements SmileyRepositoryInterface
 	 */
 	private function filterHtml($message)
 	{
-		$message = preg_replace("#&(?!\#[0-9]+;)#si", "&amp;", $message); // fix & but allow unicode
+		$message = preg_replace(
+			"#&(?!\#[0-9]+;)#si",
+			"&amp;",
+			$message
+		); // fix & but allow unicode
 		$message = str_replace("<", "&lt;", $message);
 		$message = str_replace(">", "&gt;", $message);
 
@@ -93,7 +103,11 @@ class SmileyRepository implements SmileyRepositoryInterface
 	{
 		$code = '<img src=":image" alt=":alt" title=":alt" class="smilie smilie_:id">';
 
-		return str_replace([':image', ':alt', ':id'], [$image, $alt, $id], $code);
+		return str_replace(
+			[':image', ':alt', ':id'],
+			[$image, $alt, $id],
+			$code
+		);
 	}
 
 	/**

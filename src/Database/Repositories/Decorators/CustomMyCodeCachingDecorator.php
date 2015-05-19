@@ -28,8 +28,10 @@ class CustomMyMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
 	 * @param CustomMyCodeRepositoryInterface $decorated
 	 * @param CacheRepository                 $cache
 	 */
-	public function __construct(CustomMyCodeRepositoryInterface $decorated, CacheRepository $cache)
-	{
+	public function __construct(
+		CustomMyCodeRepositoryInterface $decorated,
+		CacheRepository $cache
+	) {
 		$this->decoratedRepository = $decorated;
 		$this->cache = $cache;
 	}
