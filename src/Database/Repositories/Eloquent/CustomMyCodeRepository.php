@@ -10,6 +10,7 @@
 
 namespace MyBB\Parser\Database\Repositories\Eloquent;
 
+use Illuminate\Support\Collection;
 use MyBB\Parser\Database\Models\MyCode;
 use MyBB\Parser\Database\Repositories\CustomMyCodeRepositoryInterface;
 
@@ -29,29 +30,22 @@ class CustomMyMyCodeRepository implements CustomMyCodeRepositoryInterface
 	}
 
 	/**
+	 * Get all of the custom MyCodes, in the form [find => replace].
+	 *
 	 * @return array
 	 */
 	public function getParseableCodes()
 	{
-		$codes = $this->get();
-		$prepared = array();
-		foreach ($codes as $code) {
-			$prepared[] = [
-				'regex' => $code->regex,
-				'replacement' => $code->replacement
-			];
-		}
-
-		return $prepared;
+		return $this->model->orderBy('parseorder')->lists('replacement', 'regex');
 	}
 
 	/**
-	 * @return array
+	 * Get all of the custom MyCodes.
+	 *
+	 * @return Collection
 	 */
-	private function get()
+	public function getAll()
 	{
-		return $this->model->orderBy('parseorder')->get(
-			['regex', 'replacement']
-		);
+		return $this->model->all();
 	}
 }

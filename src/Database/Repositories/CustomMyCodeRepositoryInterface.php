@@ -10,10 +10,21 @@
 
 namespace MyBB\Parser\Database\Repositories;
 
+use Illuminate\Support\Collection;
+
 interface CustomMyCodeRepositoryInterface
 {
 	/**
+	 * Get all of the custom MyCodes, in the form [find => replace].
+	 *
 	 * @return array
 	 */
 	public function getParseableCodes();
+
+	/**
+	 * Get all of the custom MyCodes.
+	 *
+	 * @return Collection
+	 */
+	public function getAll();
 }

@@ -11,6 +11,7 @@
 namespace MyBB\Parser\Database\Repositories\Decorators;
 
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
+use Illuminate\Support\Collection;
 use MyBB\Parser\Database\Repositories\CustomMyCodeRepositoryInterface;
 
 class CustomMyMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
@@ -37,17 +38,38 @@ class CustomMyMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
 	}
 
 	/**
+	 * Get all of the custom MyCodes, in the form [find => replace].
+	 *
 	 * @return array
 	 */
 	public function getParseableCodes()
 	{
+		$cacheKey = 'parser.parseable_codes';
+
 		// TODO: the cache doesn't work if more than one parser is used.
 		// The cache should be named something like "parser.codes.[bbcode|markdown]"
-		if (($smilies = $this->cache->get('parser.codes')) == null) {
-			$smilies = $this->decoratedRepository->getParseableCodes();
-			$this->cache->forever('parser.codes', $smilies);
+		if (($myCodes = $this->cache->get($cacheKey)) === null) {
+			$myCodes = $this->decoratedRepository->getParseableCodes();
+			$this->cache->forever($cacheKey, $myCodes);
 		}
 
-		return $smilies;
+		return $myCodes;
+	}
+
+	/**
+	 * Get all of the custom MyCodes.
+	 *
+	 * @return Collection
+	 */
+	public function getAll()
+	{
+		$cacheKey = 'parser.mycodes_all';
+
+		if (($myCodes = $this->cache->get($cacheKey)) === null) {
+			$myCodes = $this->decoratedRepository->getAll();
+			$this->cache->forever($cacheKey, $myCodes);
+		}
+
+		return $myCodes;
 	}
 }
