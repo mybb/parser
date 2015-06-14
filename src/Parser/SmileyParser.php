@@ -10,6 +10,7 @@
 
 namespace MyBB\Parser\Parser;
 
+use Illuminate\Contracts\View\Factory;
 use MyBB\Parser\Database\Repositories\SmileyRepositoryInterface;
 
 class SmileyParser
@@ -30,14 +31,26 @@ class SmileyParser
 	protected $smileyRepository;
 
 	/**
+	 * Factory to load views from.
+	 *
+	 * @var Factory $viewFactory
+	 */
+	protected $viewFactory;
+
+	/**
 	 * Create a new smiley parser.
 	 *
 	 * @param SmileyRepositoryInterface $smileyRepository Repository to load
 	 *                                                    smileys from.
+	 * @param Factory                   $viewFactory      View factory to load
+	 *                                                    views from.
 	 */
-	public function __construct(SmileyRepositoryInterface $smileyRepository)
-	{
+	public function __construct(
+		SmileyRepositoryInterface $smileyRepository,
+		Factory $viewFactory
+	) {
 		$this->smileyRepository = $smileyRepository;
+		$this->viewFactory = $viewFactory;
 	}
 
 	/**
@@ -106,6 +119,13 @@ class SmileyParser
 			$this->smileys = [];
 
 			foreach ($smileys as $search => $replace) {
+				$replacement = $this->viewFactory->make(
+					'parser::smiley',
+					compact(
+						'search',
+						'replace'
+					)
+				)->render();
 				$this->smileys[$search] = $replace;
 			}
 		}

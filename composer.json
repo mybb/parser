@@ -12,7 +12,9 @@
 		"illuminate/support": "5.1.*",
 		"ezyang/htmlpurifier": "~4.6",
 		"illuminate/database": "5.1.*",
-		"league/commonmark": "0.6.*@dev"
+		"league/commonmark": "0.6.*@dev",
+		"illuminate/view": "5.1.*",
+		"rcrowe/twigbridge": "0.7.x"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "4.7.*",

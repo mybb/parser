@@ -103,6 +103,7 @@ class ParserServiceProvider extends ServiceProvider
 	public function boot()
 	{
 		$this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'parser');
+		$this->loadViewsFrom(__DIR__ . '/../resources/views', 'parser');
 
 		$this->publishes(
 			[
@@ -111,6 +112,15 @@ class ParserServiceProvider extends ServiceProvider
 				)
 			],
 			'migrations'
+		);
+
+		$this->publishes(
+			[
+				__DIR__ . '/../resources/views/' => base_path(
+					'resources/views/vendor/parser'
+				),
+			],
+			'views'
 		);
 
 		$this->publishes(

@@ -15,6 +15,23 @@ use MyBB\Parser\Parser\SmileyParser;
 
 class SmileyParserTest extends \PHPUnit_Framework_TestCase
 {
+	private $viewFactoryMock;
+
+	/**
+	 * Sets up the fixture, for example, open a network connection.
+	 * This method is called before a test is executed.
+	 */
+	protected function setUp()
+	{
+		$viewMock = m::mock('\Illuminate\Contracts\View\View');
+		$viewMock->shouldReceive('render')->andReturn(
+			'<img class="smiley" title="{{ find }}" alt="{{ find }}" src="{{ asset(replace) }}">'
+		);
+
+		$this->viewFactoryMock = m::mock('Illuminate\Contracts\View\Factory');
+		$this->viewFactoryMock->shouldReceive('make')->andReturn($viewMock);
+	}
+
 	public function tearDown()
 	{
 		m::close();
@@ -28,15 +45,18 @@ class SmileyParserTest extends \PHPUnit_Framework_TestCase
 		$expected = 'Hello World smile';
 		$message = 'Hello World :)';
 
-		$smileyRepo = m::mock('MyBB\Parser\Database\Repositories\SmileyRepositoryInterface');
+		$smileyRepo = m::mock(
+			'MyBB\Parser\Database\Repositories\SmileyRepositoryInterface'
+		);
 		$smileyRepo->shouldReceive('getParseableSmileys')->andReturn(
 			[
 				':)' => 'smile',
-			    ':(' => 'sad',
+				':(' => 'sad',
 			]
 		);
 
-		$smileyParser = new SmileyParser($smileyRepo);
+
+		$smileyParser = new SmileyParser($smileyRepo, $this->viewFactoryMock);
 
 		$actual = $smileyParser->parse($message);
 
@@ -44,14 +64,17 @@ class SmileyParserTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Slightly more complex tests with a URL in the message, to test the skipping of URLs.
+	 * Slightly more complex tests with a URL in the message, to test the
+	 * skipping of URLs.
 	 */
 	public function testParseWithUrl()
 	{
 		$expected = 'Head to http://mybb.com smile';
 		$message = 'Head to http://mybb.com :)';
 
-		$smileyRepo = m::mock('MyBB\Parser\Database\Repositories\SmileyRepositoryInterface');
+		$smileyRepo = m::mock(
+			'MyBB\Parser\Database\Repositories\SmileyRepositoryInterface'
+		);
 		$smileyRepo->shouldReceive('getParseableSmileys')->andReturn(
 			[
 				':)' => 'smile',
@@ -59,7 +82,7 @@ class SmileyParserTest extends \PHPUnit_Framework_TestCase
 			]
 		);
 
-		$smileyParser = new SmileyParser($smileyRepo);
+		$smileyParser = new SmileyParser($smileyRepo, $this->viewFactoryMock);
 
 		$actual = $smileyParser->parse($message);
 
@@ -84,7 +107,6 @@ In luctus dictum leo in pretium. Vestibulum nibh augue, pellentesque quis consec
 EOT;
 
 
-
 		$message = <<<EOT
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultrices urna lorem, nec ultrices mauris congue vel. Mauris dictum mauris vel lorem sodales lobortis. Nullam gravida blandit vehicula. Quisque eget nisi quis ligula luctus scelerisque at non risus. Proin et lacinia est. Pellentesque ut lectus a est molestie ullamcorper. Sed ultrices est cursus urna imperdiet porta. Fusce in libero nec metus fringilla fermentum. Etiam tincidunt gravida faucibus. Vestibulum dapibus efficitur nisl id egestas. Nunc non massa dui. Sed porttitor metus quis lorem ullamcorper, egestas mollis elit suscipit. Donec tincidunt magna eget purus iaculis molestie. Ut quis augue egestas, egestas velit bibendum, porta mi. Quisque egestas urna leo, sit amet fermentum augue facilisis vitae. Donec rutrum elementum vestibulum.
 
@@ -98,16 +120,18 @@ In luctus dictum leo in pretium. Vestibulum nibh augue, pellentesque quis consec
 EOT;
 
 
-		$smileyRepo = m::mock('MyBB\Parser\Database\Repositories\SmileyRepositoryInterface');
+		$smileyRepo = m::mock(
+			'MyBB\Parser\Database\Repositories\SmileyRepositoryInterface'
+		);
 		$smileyRepo->shouldReceive('getParseableSmileys')->andReturn(
 			[
 				':)' => '<smile>',
 				':/' => '<awkward>',
-			    ':D' => '<laugh>',
+				':D' => '<laugh>',
 			]
 		);
 
-		$smileyParser = new SmileyParser($smileyRepo);
+		$smileyParser = new SmileyParser($smileyRepo, $this->viewFactoryMock);
 
 		$actual = $smileyParser->parse($message);
 
@@ -122,7 +146,9 @@ EOT;
 		$expected = 'Testing µ Ä Á ς:Ðφ smile でした';
 		$message = 'Testing µ Ä Á ς:Ðφ :) でした';
 
-		$smileyRepo = m::mock('MyBB\Parser\Database\Repositories\SmileyRepositoryInterface');
+		$smileyRepo = m::mock(
+			'MyBB\Parser\Database\Repositories\SmileyRepositoryInterface'
+		);
 		$smileyRepo->shouldReceive('getParseableSmileys')->andReturn(
 			[
 				':)' => 'smile',
@@ -130,7 +156,7 @@ EOT;
 			]
 		);
 
-		$smileyParser = new SmileyParser($smileyRepo);
+		$smileyParser = new SmileyParser($smileyRepo, $this->viewFactoryMock);
 
 		$actual = $smileyParser->parse($message);
 
