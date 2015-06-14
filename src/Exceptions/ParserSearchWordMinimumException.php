@@ -10,7 +10,7 @@
 
 namespace MyBB\Parser\Exceptions;
 
-use \RuntimeException;
+use RuntimeException;
 
 class ParserSearchWordMinimumException extends RuntimeException
 {
@@ -24,8 +24,11 @@ class ParserSearchWordMinimumException extends RuntimeException
 	 * @param int        $code
 	 * @param \Exception $previous
 	 */
-	public function __construct($message = null, $code = 0, \Exception $previous = null)
-	{
+	public function __construct(
+		$message = null,
+		$code = 0,
+		\Exception $previous = null
+	) {
 		if ($message === null) {
 			$message = trans($this->message);
 		}

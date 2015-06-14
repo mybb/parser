@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "adbf8a7eb036932813cf71e6daed9810",
+    "hash": "cd5c2558c036dc321db9ed38e43e1c70",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -179,12 +179,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
-                "reference": "37e8c7ef4bde6127b609f1eba13fc27ace01fa75"
+                "reference": "a31c198e297c652c00a3122bfccb4e43d53aa4de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/container/zipball/37e8c7ef4bde6127b609f1eba13fc27ace01fa75",
-                "reference": "37e8c7ef4bde6127b609f1eba13fc27ace01fa75",
+                "url": "https://api.github.com/repos/illuminate/container/zipball/a31c198e297c652c00a3122bfccb4e43d53aa4de",
+                "reference": "a31c198e297c652c00a3122bfccb4e43d53aa4de",
                 "shasum": ""
             },
             "require": {
@@ -222,12 +222,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "715d17b24209cb925628feae02a2025626c45c47"
+                "reference": "80d2f5efe43cbee810e48c6c2c7249fc670bd5c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/715d17b24209cb925628feae02a2025626c45c47",
-                "reference": "715d17b24209cb925628feae02a2025626c45c47",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/80d2f5efe43cbee810e48c6c2c7249fc670bd5c6",
+                "reference": "80d2f5efe43cbee810e48c6c2c7249fc670bd5c6",
                 "shasum": ""
             },
             "require": {
@@ -256,7 +256,7 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "http://laravel.com",
-            "time": "2015-04-11 19:01:42"
+            "time": "2015-04-28 19:05:58"
         },
         {
             "name": "illuminate/database",
@@ -264,12 +264,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/database.git",
-                "reference": "786d25de76f08c3a25e50357201b36b87462910d"
+                "reference": "5b6263c8618f9ac55893b345dbe958a768697764"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/database/zipball/786d25de76f08c3a25e50357201b36b87462910d",
-                "reference": "786d25de76f08c3a25e50357201b36b87462910d",
+                "url": "https://api.github.com/repos/illuminate/database/zipball/5b6263c8618f9ac55893b345dbe958a768697764",
+                "reference": "5b6263c8618f9ac55893b345dbe958a768697764",
                 "shasum": ""
             },
             "require": {
@@ -314,7 +314,7 @@
                 "orm",
                 "sql"
             ],
-            "time": "2015-04-18 16:59:46"
+            "time": "2015-05-18 10:07:24"
         },
         {
             "name": "illuminate/support",
@@ -322,12 +322,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "7cb1a2735cd8684966ad1ce08e6e1ed9bb4bef84"
+                "reference": "a610e57ac204879ef582c4080faed9c75a0eea35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/7cb1a2735cd8684966ad1ce08e6e1ed9bb4bef84",
-                "reference": "7cb1a2735cd8684966ad1ce08e6e1ed9bb4bef84",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/a610e57ac204879ef582c4080faed9c75a0eea35",
+                "reference": "a610e57ac204879ef582c4080faed9c75a0eea35",
                 "shasum": ""
             },
             "require": {
@@ -338,7 +338,8 @@
                 "php": ">=5.4.0"
             },
             "suggest": {
-                "jeremeamia/superclosure": "Required to be able to serialize closures (~2.0)."
+                "jeremeamia/superclosure": "Required to be able to serialize closures (~2.0).",
+                "symfony/var-dumper": "Required to use the dd function (2.7.*)."
             },
             "type": "library",
             "extra": {
@@ -366,7 +367,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "http://laravel.com",
-            "time": "2015-04-19 05:05:04"
+            "time": "2015-05-19 02:06:21"
         },
         {
             "name": "league/commonmark",
@@ -429,21 +430,21 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "1.18.0",
+            "version": "1.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "99e2f69f7bdc2cc4334b2d00f1e0ba450623ea36"
+                "reference": "68868e0b02d2d803d0052a59d4e5003cccf87320"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/99e2f69f7bdc2cc4334b2d00f1e0ba450623ea36",
-                "reference": "99e2f69f7bdc2cc4334b2d00f1e0ba450623ea36",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/68868e0b02d2d803d0052a59d4e5003cccf87320",
+                "reference": "68868e0b02d2d803d0052a59d4e5003cccf87320",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0",
-                "symfony/translation": "2.6.*"
+                "symfony/translation": "~2.6"
             },
             "require-dev": {
                 "phpunit/phpunit": "~4.0"
@@ -472,32 +473,34 @@
                 "datetime",
                 "time"
             ],
-            "time": "2015-03-26 03:05:57"
+            "time": "2015-05-09 03:23:44"
         },
         {
             "name": "symfony/translation",
-            "version": "2.6.x-dev",
-            "target-dir": "Symfony/Component/Translation",
+            "version": "2.8.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Translation.git",
-                "reference": "eb05625d5242718ce695e9b61aca76048203c9b3"
+                "reference": "a0735db452c5e592cb742333a32c6634a6d1ece1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Translation/zipball/eb05625d5242718ce695e9b61aca76048203c9b3",
-                "reference": "eb05625d5242718ce695e9b61aca76048203c9b3",
+                "url": "https://api.github.com/repos/symfony/Translation/zipball/a0735db452c5e592cb742333a32c6634a6d1ece1",
+                "reference": "a0735db452c5e592cb742333a32c6634a6d1ece1",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.3.9"
+            },
+            "conflict": {
+                "symfony/config": "<2.7"
             },
             "require-dev": {
                 "psr/log": "~1.0",
-                "symfony/config": "~2.3,>=2.3.12",
-                "symfony/intl": "~2.3",
-                "symfony/phpunit-bridge": "~2.7",
-                "symfony/yaml": "~2.2"
+                "symfony/config": "~2.7",
+                "symfony/intl": "~2.3|~3.0.0",
+                "symfony/phpunit-bridge": "~2.7|~3.0.0",
+                "symfony/yaml": "~2.2|~3.0.0"
             },
             "suggest": {
                 "psr/log": "To use logging capability in translator",
@@ -507,11 +510,11 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.8-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
+                "psr-4": {
                     "Symfony\\Component\\Translation\\": ""
                 }
             },
@@ -521,17 +524,17 @@
             ],
             "authors": [
                 {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                },
-                {
                     "name": "Fabien Potencier",
                     "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
                 }
             ],
             "description": "Symfony Translation Component",
-            "homepage": "http://symfony.com",
-            "time": "2015-04-19 13:17:37"
+            "homepage": "https://symfony.com",
+            "time": "2015-05-15 14:11:12"
         }
     ],
     "packages-dev": [],
