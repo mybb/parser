@@ -83,7 +83,8 @@ class ParserServiceProvider extends ServiceProvider
 		          ->give(
 			          function (Application $app) {
 				          $repository = $app->make(
-					          'MyBB\Parser\Database\Repositories\Eloquent\CustomMyCodeRepository'
+					          'MyBB\Parser\Database\Repositories\\' .
+					          'Eloquent\CustomMyCodeRepository'
 				          );
 				          $cache = $app->make(
 					          'Illuminate\Contracts\Cache\Repository'
