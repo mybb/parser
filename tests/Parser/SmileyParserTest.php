@@ -15,6 +15,9 @@ use MyBB\Parser\Parser\SmileyParser;
 
 class SmileyParserTest extends \PHPUnit_Framework_TestCase
 {
+	/**
+	 * @var \Illuminate\Contracts\View\Factory $viewFactoryMock
+	 */
 	private $viewFactoryMock;
 
 	/**
