@@ -37,6 +37,8 @@ class ParserServiceProvider extends ServiceProvider
 			'parser'
 		);
 
+		$this->app->singleton('MyBB\Parser\Parser\SmileyParser');
+
 		// Bind a default instance of the HTMLPurifier and set the encoding to UTF-8
 		// which shouldn't be a problem in most cases
 		$this->app->bind(
