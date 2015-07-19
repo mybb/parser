@@ -11,6 +11,7 @@
 namespace MyBB\Parser\Tests\Parser;
 
 use Mockery as m;
+use MyBB\Parser\Parser\Renderers\ViewSmileyRenderer;
 use MyBB\Parser\Parser\SmileyParser;
 
 class SmileyParserTest extends \PHPUnit_Framework_TestCase
@@ -19,6 +20,11 @@ class SmileyParserTest extends \PHPUnit_Framework_TestCase
 	 * @var \Illuminate\Contracts\View\Factory $viewFactoryMock
 	 */
 	private $viewFactoryMock;
+
+	/**
+	 * @var \MyBB\Parser\Parser\Renderers\SmileyRendererInterface $viewRendererMock
+	 */
+	private $viewRenderer;
 
 	/**
 	 * Sets up the fixture, for example, open a network connection.
@@ -33,6 +39,8 @@ class SmileyParserTest extends \PHPUnit_Framework_TestCase
 
 		$this->viewFactoryMock = m::mock('Illuminate\Contracts\View\Factory');
 		$this->viewFactoryMock->shouldReceive('make')->andReturn($viewMock);
+
+		$this->viewRenderer = new ViewSmileyRenderer($this->viewFactoryMock);
 	}
 
 	public function tearDown()
@@ -45,7 +53,7 @@ class SmileyParserTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testParseSimple()
 	{
-		$expected = 'Hello World smile';
+		$expected = 'Hello World <img class="smiley" title="{{ find }}" alt="{{ find }}" src="{{ asset(replace) }}">';
 		$message = 'Hello World :)';
 
 		$smileyRepo = m::mock(
@@ -59,7 +67,7 @@ class SmileyParserTest extends \PHPUnit_Framework_TestCase
 		);
 
 
-		$smileyParser = new SmileyParser($smileyRepo, $this->viewFactoryMock);
+		$smileyParser = new SmileyParser($smileyRepo, $this->viewRenderer);
 
 		$actual = $smileyParser->parse($message);
 
@@ -72,7 +80,7 @@ class SmileyParserTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testParseWithUrl()
 	{
-		$expected = 'Head to http://mybb.com smile';
+		$expected = 'Head to http://mybb.com <img class="smiley" title="{{ find }}" alt="{{ find }}" src="{{ asset(replace) }}">';
 		$message = 'Head to http://mybb.com :)';
 
 		$smileyRepo = m::mock(
@@ -85,7 +93,7 @@ class SmileyParserTest extends \PHPUnit_Framework_TestCase
 			]
 		);
 
-		$smileyParser = new SmileyParser($smileyRepo, $this->viewFactoryMock);
+		$smileyParser = new SmileyParser($smileyRepo, $this->viewRenderer);
 
 		$actual = $smileyParser->parse($message);
 
@@ -100,11 +108,11 @@ class SmileyParserTest extends \PHPUnit_Framework_TestCase
 		$expected = <<<EOT
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultrices urna lorem, nec ultrices mauris congue vel. Mauris dictum mauris vel lorem sodales lobortis. Nullam gravida blandit vehicula. Quisque eget nisi quis ligula luctus scelerisque at non risus. Proin et lacinia est. Pellentesque ut lectus a est molestie ullamcorper. Sed ultrices est cursus urna imperdiet porta. Fusce in libero nec metus fringilla fermentum. Etiam tincidunt gravida faucibus. Vestibulum dapibus efficitur nisl id egestas. Nunc non massa dui. Sed porttitor metus quis lorem ullamcorper, egestas mollis elit suscipit. Donec tincidunt magna eget purus iaculis molestie. Ut quis augue egestas, egestas velit bibendum, porta mi. Quisque egestas urna leo, sit amet fermentum augue facilisis vitae. Donec rutrum elementum vestibulum.
 
-Ut ultricies sem iaculis, lacinia augue congue, rutrum sapien. Ut nec ipsum non arcu convallis aliquam ut vel leo. In vel risus sem. Fusce quis ullamcorper nisi. Nulla facilisi. Maecenas placerat ipsum a nisi interdum molestie. Suspendisse at eros odio <laugh>.
+Ut ultricies sem iaculis, lacinia augue congue, rutrum sapien. Ut nec ipsum non arcu convallis aliquam ut vel leo. In vel risus sem. Fusce quis ullamcorper nisi. Nulla facilisi. Maecenas placerat ipsum a nisi interdum molestie. Suspendisse at eros odio <img class="smiley" title="{{ find }}" alt="{{ find }}" src="{{ asset(replace) }}">.
 
-Mauris dapibus tellus in erat rutrum viverra. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque id facilisis justo. Nunc sit amet lacus tellus. Ut ut pellentesque ex. Fusce quis ex ultrices, consectetur enim at, vulputate dolor. Nullam pharetra, elit ut ullamcorper suscipit, orci tellus suscipit nisi, vel luctus mi orci eget velit. Phasellus ornare ipsum ac elit maximus, sit amet suscipit odio imperdiet. Integer eget vehicula ante. Fusce porttitor aliquet molestie. Nullam pulvinar nisi odio, maximus efficitur libero sagittis a. Sed quis venenatis nunc <smile>.
+Mauris dapibus tellus in erat rutrum viverra. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Pellentesque id facilisis justo. Nunc sit amet lacus tellus. Ut ut pellentesque ex. Fusce quis ex ultrices, consectetur enim at, vulputate dolor. Nullam pharetra, elit ut ullamcorper suscipit, orci tellus suscipit nisi, vel luctus mi orci eget velit. Phasellus ornare ipsum ac elit maximus, sit amet suscipit odio imperdiet. Integer eget vehicula ante. Fusce porttitor aliquet molestie. Nullam pulvinar nisi odio, maximus efficitur libero sagittis a. Sed quis venenatis nunc <img class="smiley" title="{{ find }}" alt="{{ find }}" src="{{ asset(replace) }}">.
 
-Aliquam in sem est. Quisque faucibus condimentum dui, eget volutpat erat porttitor ut. Etiam quis magna odio. Ut sollicitudin rutrum urna ac fringilla. Quisque porta lorem magna, eu malesuada risus volutpat et. Morbi pellentesque a mauris at gravida. Aenean consequat bibendum tempus. Nunc laoreet nisl id sem venenatis hendrerit. Aliquam lacinia nec ante sed venenatis. Ut porttitor ipsum nec maximus faucibus. Quisque non purus vel lacus ultricies aliquet. Donec maximus viverra mi, quis accumsan diam dictum eget. Nam auctor ullamcorper varius. Vivamus libero odio, porttitor quis nisi et, convallis sagittis dui. <awkward> Aenean ante enim, mattis id ligula eleifend, fringilla euismod felis. Aliquam ac ipsum hendrerit, posuere augue vel, gravida turpis.
+Aliquam in sem est. Quisque faucibus condimentum dui, eget volutpat erat porttitor ut. Etiam quis magna odio. Ut sollicitudin rutrum urna ac fringilla. Quisque porta lorem magna, eu malesuada risus volutpat et. Morbi pellentesque a mauris at gravida. Aenean consequat bibendum tempus. Nunc laoreet nisl id sem venenatis hendrerit. Aliquam lacinia nec ante sed venenatis. Ut porttitor ipsum nec maximus faucibus. Quisque non purus vel lacus ultricies aliquet. Donec maximus viverra mi, quis accumsan diam dictum eget. Nam auctor ullamcorper varius. Vivamus libero odio, porttitor quis nisi et, convallis sagittis dui. <img class="smiley" title="{{ find }}" alt="{{ find }}" src="{{ asset(replace) }}"> Aenean ante enim, mattis id ligula eleifend, fringilla euismod felis. Aliquam ac ipsum hendrerit, posuere augue vel, gravida turpis.
 
 In luctus dictum leo in pretium. Vestibulum nibh augue, pellentesque quis consectetur in, commodo et ex. Integer vitae mauris sem. Etiam odio libero, pretium ac pretium vel, commodo et quam. Sed ac sodales justo. Pellentesque nec justo non lectus volutpat mattis ut quis purus. Praesent tincidunt venenatis odio, et blandit ipsum congue eu. Nunc vitae luctus justo. Sed condimentum ligula sed dolor suscipit efficitur. Morbi mattis convallis justo quis laoreet. Donec id ex dapibus, euismod dui vel, eleifend massa. Sed dui nunc, vulputate sit amet rhoncus a, lacinia quis justo. Proin eu ornare lacus.
 EOT;
@@ -134,7 +142,7 @@ EOT;
 			]
 		);
 
-		$smileyParser = new SmileyParser($smileyRepo, $this->viewFactoryMock);
+		$smileyParser = new SmileyParser($smileyRepo, $this->viewRenderer);
 
 		$actual = $smileyParser->parse($message);
 
@@ -146,7 +154,7 @@ EOT;
 	 */
 	public function testWithSpecialCharacters()
 	{
-		$expected = 'Testing µ Ä Á ς:Ðφ smile でした';
+		$expected = 'Testing µ Ä Á ς:Ðφ <img class="smiley" title="{{ find }}" alt="{{ find }}" src="{{ asset(replace) }}"> でした';
 		$message = 'Testing µ Ä Á ς:Ðφ :) でした';
 
 		$smileyRepo = m::mock(
@@ -159,7 +167,7 @@ EOT;
 			]
 		);
 
-		$smileyParser = new SmileyParser($smileyRepo, $this->viewFactoryMock);
+		$smileyParser = new SmileyParser($smileyRepo, $this->viewRenderer);
 
 		$actual = $smileyParser->parse($message);
 

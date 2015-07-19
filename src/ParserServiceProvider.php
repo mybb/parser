@@ -75,6 +75,11 @@ class ParserServiceProvider extends ServiceProvider
 			}
 		);
 
+		$this->app->bind(
+			'MyBB\Parser\Parser\Renderers\SmileyRendererInterface',
+			'MyBB\Parser\Parser\Renderers\ViewSmileyRenderer'
+		);
+
 		// Bind the CustomMyCode Repository to the BBCode Parser
 		$this->app->when('MyBB\Parser\Parser\MyCode')
 		          ->needs(

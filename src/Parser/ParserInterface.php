@@ -15,8 +15,8 @@ interface ParserInterface
 	/**
 	 * Parse a message into a HTML string ready for display.
 	 *
-	 * @param string $message   The message to parse.
-	 * @param bool   $allowHTML Whether to allow HTML in the message.
+	 * @param string $message The message to parse.
+	 * @param bool $allowHTML Whether to allow HTML in the message.
 	 *
 	 * @return string The parsed string.
 	 */
