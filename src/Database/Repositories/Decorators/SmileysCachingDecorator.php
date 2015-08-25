@@ -27,7 +27,7 @@ class SmileysCachingDecorator implements SmileyRepositoryInterface
 
 	/**
 	 * @param SmileyRepositoryInterface $decorated
-	 * @param CacheRepository           $cache
+	 * @param CacheRepository $cache
 	 */
 	public function __construct(
 		SmileyRepositoryInterface $decorated,
