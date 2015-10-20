@@ -11,8 +11,8 @@
 namespace MyBB\Parser\Database\Repositories\Eloquent;
 
 use Illuminate\Support\Collection;
-use Mybb\Parser\Database\Models\Smiley;
-use Mybb\Parser\Database\Repositories\SmileyRepositoryInterface;
+use MyBB\Parser\Database\Models\Smiley;
+use MyBB\Parser\Database\Repositories\SmileyRepositoryInterface;
 
 class SmileyRepository implements SmileyRepositoryInterface
 {

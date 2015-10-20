@@ -12,9 +12,18 @@ namespace MyBB\Parser;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
+use MyBB\Parser\Database\Repositories\BadWordRepositoryInterface;
+use MyBB\Parser\Database\Repositories\CustomMyCodeRepositoryInterface;
 use MyBB\Parser\Database\Repositories\Decorators\BadWordCachingDecorator;
-use MyBB\Parser\Database\Repositories\Decorators\CustomMyMyCodeCachingDecorator;
+use MyBB\Parser\Database\Repositories\Decorators\CustomMyCodeCachingDecorator;
 use MyBB\Parser\Database\Repositories\Decorators\SmileysCachingDecorator;
+use MyBB\Parser\Database\Repositories\Eloquent\BadWordRepository;
+use MyBB\Parser\Database\Repositories\Eloquent\CustomMyCodeRepository;
+use MyBB\Parser\Database\Repositories\Eloquent\SmileyRepository;
+use MyBB\Parser\Database\Repositories\SmileyRepositoryInterface;
+use MyBB\Parser\Parser\MyCode;
+use MyBB\Parser\Parser\Renderers\SmileyRendererInterface;
+use MyBB\Parser\Parser\Renderers\ViewSmileyRenderer;
 
 class ParserServiceProvider extends ServiceProvider
 {
@@ -52,10 +61,10 @@ class ParserServiceProvider extends ServiceProvider
 		);
 
 		$this->app->bind(
-			'MyBB\Parser\Database\Repositories\BadWordRepositoryInterface',
+			BadWordRepositoryInterface::class,
 			function (Application $app) {
 				$repository = $app->make(
-					'MyBB\Parser\Database\Repositories\Eloquent\BadWordRepository'
+					BadWordRepository::class
 				);
 				$cache = $app->make('Illuminate\Contracts\Cache\Repository');
 
@@ -64,10 +73,10 @@ class ParserServiceProvider extends ServiceProvider
 		);
 
 		$this->app->bind(
-			'MyBB\Parser\Database\Repositories\SmileyRepositoryInterface',
+			SmileyRepositoryInterface::class,
 			function (Application $app) {
 				$repository = $app->make(
-					'MyBB\Parser\Database\Repositories\Eloquent\SmileyRepository'
+					SmileyRepository::class
 				);
 				$cache = $app->make('Illuminate\Contracts\Cache\Repository');
 
@@ -76,26 +85,25 @@ class ParserServiceProvider extends ServiceProvider
 		);
 
 		$this->app->bind(
-			'MyBB\Parser\Parser\Renderers\SmileyRendererInterface',
-			'MyBB\Parser\Parser\Renderers\ViewSmileyRenderer'
+			SmileyRendererInterface::class,
+			ViewSmileyRenderer::class
 		);
 
 		// Bind the CustomMyCode Repository to the BBCode Parser
-		$this->app->when('MyBB\Parser\Parser\MyCode')
+		$this->app->when(MyCode::class)
 			->needs(
-				'MyBB\Parser\Database\Repositories\CustomMyCodeRepositoryInterface'
+				CustomMyCodeRepositoryInterface::class
 			)
 			->give(
 				function (Application $app) {
 					$repository = $app->make(
-						'MyBB\Parser\Database\Repositories\\' .
-						'Eloquent\CustomMyCodeRepository'
+						CustomMyCodeRepository::class
 					);
 					$cache = $app->make(
 						'Illuminate\Contracts\Cache\Repository'
 					);
 
-					return new CustomMyMyCodeCachingDecorator(
+					return new CustomMyCodeCachingDecorator(
 						$repository,
 						$cache
 					);
