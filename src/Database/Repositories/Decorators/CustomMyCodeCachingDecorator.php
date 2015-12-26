@@ -14,7 +14,7 @@ use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Support\Collection;
 use MyBB\Parser\Database\Repositories\CustomMyCodeRepositoryInterface;
 
-class CustomMyMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
+class CustomMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
 {
 	/**
 	 * @var CustomMyCodeRepositoryInterface
@@ -27,7 +27,7 @@ class CustomMyMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
 
 	/**
 	 * @param CustomMyCodeRepositoryInterface $decorated
-	 * @param CacheRepository                 $cache
+	 * @param CacheRepository $cache
 	 */
 	public function __construct(
 		CustomMyCodeRepositoryInterface $decorated,

@@ -27,7 +27,7 @@ class BadWordCachingDecorator implements BadWordRepositoryInterface
 
 	/**
 	 * @param BadWordRepositoryInterface $decorated
-	 * @param CacheRepository            $cache
+	 * @param CacheRepository $cache
 	 */
 	public function __construct(
 		BadWordRepositoryInterface $decorated,

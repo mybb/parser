@@ -20,8 +20,8 @@ class ParserSearchWordMinimumException extends RuntimeException
 	protected $message = 'parser::exceptions.search_word_minimum';
 
 	/**
-	 * @param null       $message
-	 * @param int        $code
+	 * @param null $message
+	 * @param int $code
 	 * @param \Exception $previous
 	 */
 	public function __construct(

@@ -13,7 +13,7 @@ namespace MyBB\Parser\Database\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int    id
+ * @property int id
  * @property string find
  * @property string replace
  */
@@ -22,19 +22,17 @@ class BadWord extends Model
 	// @codingStandardsIgnoreStart
 
 	/**
-	 * The table associated with the model.
-	 *
-	 * @var string
-	 */
-	protected $table = 'parser_badwords';
-
-	/**
 	 * Indicates if the model should be timestamped.
 	 *
 	 * @var boolean
 	 */
 	public $timestamps = false;
-
+	/**
+	 * The table associated with the model.
+	 *
+	 * @var string
+	 */
+	protected $table = 'parser_badwords';
 	/**
 	 * The attributes that aren't mass assignable.
 	 *

@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
 use MyBB\Parser\Database\Models\MyCode;
 use MyBB\Parser\Database\Repositories\CustomMyCodeRepositoryInterface;
 
-class CustomMyMyCodeRepository implements CustomMyCodeRepositoryInterface
+class CustomMyCodeRepository implements CustomMyCodeRepositoryInterface
 {
 	/**
 	 * @var MyCode $model

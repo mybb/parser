@@ -13,21 +13,14 @@ namespace MyBB\Parser\Database\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int    id
+ * @property int id
  * @property string regex
  * @property string replacement
- * @property int    parseorder
+ * @property int parseorder
  */
 class MyCode extends Model
 {
 	// @codingStandardsIgnoreStart
-
-	/**
-	 * The table associated with the model.
-	 *
-	 * @var string
-	 */
-	protected $table = 'parser_mycode';
 
 	/**
 	 * Indicates if the model should be timestamped.
@@ -35,7 +28,12 @@ class MyCode extends Model
 	 * @var boolean
 	 */
 	public $timestamps = false;
-
+	/**
+	 * The table associated with the model.
+	 *
+	 * @var string
+	 */
+	protected $table = 'parser_mycode';
 	/**
 	 * The attributes that aren't mass assignable.
 	 *

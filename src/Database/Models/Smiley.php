@@ -13,21 +13,14 @@ namespace MyBB\Parser\Database\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property int    id
+ * @property int id
  * @property string find
  * @property string image
- * @property int    disporder
+ * @property int disporder
  */
 class Smiley extends Model
 {
 	// @codingStandardsIgnoreStart
-
-	/**
-	 * The table associated with the model.
-	 *
-	 * @var string
-	 */
-	protected $table = 'parser_smilies';
 
 	/**
 	 * Indicates if the model should be timestamped.
@@ -35,7 +28,12 @@ class Smiley extends Model
 	 * @var boolean
 	 */
 	public $timestamps = false;
-
+	/**
+	 * The table associated with the model.
+	 *
+	 * @var string
+	 */
+	protected $table = 'parser_smilies';
 	/**
 	 * The attributes that aren't mass assignable.
 	 *

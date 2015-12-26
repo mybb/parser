@@ -29,7 +29,7 @@ class Markdown implements ParserInterface
 
 	/**
 	 * @param string $message
-	 * @param bool   $allowHTML
+	 * @param bool $allowHTML
 	 *
 	 * @return string
 	 */
