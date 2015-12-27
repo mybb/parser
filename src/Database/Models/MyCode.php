@@ -23,19 +23,17 @@ class MyCode extends Model
 	// @codingStandardsIgnoreStart
 
 	/**
-	 * The table associated with the model.
-	 *
-	 * @var string
-	 */
-	protected $table = 'parser_mycode';
-
-	/**
 	 * Indicates if the model should be timestamped.
 	 *
 	 * @var boolean
 	 */
 	public $timestamps = false;
-
+	/**
+	 * The table associated with the model.
+	 *
+	 * @var string
+	 */
+	protected $table = 'parser_mycode';
 	/**
 	 * The attributes that aren't mass assignable.
 	 *

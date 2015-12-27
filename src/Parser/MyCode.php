@@ -174,178 +174,6 @@ class MyCode implements ParserInterface
 
 	/**
 	 * @param string $message
-	 * @param array  $options
-	 *
-	 * @return string
-	 */
-	public function parsePlain($message, $options = array())
-	{
-		// Parse quotes first
-		$message = $this->parseQuotes($message, true);
-		$message = preg_replace_callback(
-			"#\[php\](.*?)\[/php\](\r\n?|\n?)#is",
-			array($this, 'parsePhpCallback'),
-			$message
-		);
-		$message = preg_replace_callback(
-			"#\[code\](.*?)\[/code\](\r\n?|\n?)#is",
-			array($this, 'parseCodeCallback'),
-			$message
-		);
-		$find = array(
-			"#\[(b|u|i|s|url|email|color|img)\](.*?)\[/\\1\]#is",
-			"#\[img=([0-9]{1,3})x([0-9]{1,3})\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
-			"#\[url=([a-z]+?://)([^\r\n\"<]+?)\](.+?)\[/url\]#si",
-			"#\[url=([^\r\n\"<&\(\)]+?)\](.+?)\[/url\]#si",
-		);
-		$replace = array(
-			"$2",
-			"$4",
-			"$3 ($1$2)",
-			"$2 ($1)",
-		);
-		$message = preg_replace($find, $replace, $message);
-
-		// Reset list cache
-		$this->list_elements = array();
-		$this->list_count = 0;
-		// Find all lists
-		$message = preg_replace_callback(
-			"#(\[list(=(a|A|i|I|1))?\]|\[/list\])#si",
-			array($this, 'prepareList'),
-			$message
-		);
-		// Replace all lists
-		for ($i = $this->list_count; $i > 0; $i--) {
-			// Ignores missing end tags
-			$message = preg_replace_callback(
-				"#\s?\[list(=(a|A|i|I|1))?&{$i}\](.*?)(\[/list&{$i}\]|$)(\r\n?|\n?)#si",
-				array(
-					$this,
-					'parseListCallback'
-				),
-				$message,
-				1
-			);
-		}
-
-		return $message;
-	}
-
-	/**
-	 * @param string|callable $format
-	 */
-	public function setDateFormatting($format)
-	{
-		$this->dateFormat = $format;
-	}
-
-	/**
-	 * @param string|callable $url
-	 */
-	public function setPostURL($url)
-	{
-		$this->postURL = $url;
-	}
-
-	/**
-	 * @param bool $allow
-	 */
-	public function allowBasicCode($allow = true)
-	{
-		$this->allowbasicmycode = $allow;
-	}
-
-	/**
-	 * @param bool $allow
-	 */
-	public function allowSymbolCode($allow = true)
-	{
-		$this->allowsymbolmycode = $allow;
-	}
-
-	/**
-	 * @param bool $allow
-	 */
-	public function allowLinkCode($allow = true)
-	{
-		$this->allowlinkmycode = $allow;
-	}
-
-	/**
-	 * @param bool $allow
-	 */
-	public function allowEmailCode($allow = true)
-	{
-		$this->allowemailmycode = $allow;
-	}
-
-	/**
-	 * @param bool $allow
-	 */
-	public function allowColorCode($allow = true)
-	{
-		$this->allowcolormycode = $allow;
-	}
-
-	/**
-	 * @param bool $allow
-	 */
-	public function allowSizeCode($allow = true)
-	{
-		$this->allowsizemycode = $allow;
-	}
-
-	/**
-	 * @param bool $allow
-	 */
-	public function allowFontCode($allow = true)
-	{
-		$this->allowfontmycode = $allow;
-	}
-
-	/**
-	 * @param bool $allow
-	 */
-	public function allowAlignCode($allow = true)
-	{
-		$this->allowalignmycode = $allow;
-	}
-
-	/**
-	 * @param bool $allow
-	 */
-	public function allowImgCode($allow = true)
-	{
-		$this->allowimgcode = $allow;
-	}
-
-	/**
-	 * @param bool $allow
-	 */
-	public function allowVideoCode($allow = true)
-	{
-		$this->allowvideocode = $allow;
-	}
-
-	/**
-	 * @param bool $short
-	 */
-	public function shortenURLs($short = true)
-	{
-		$this->shorten_urls = $short;
-	}
-
-	/**
-	 * @param bool $on
-	 */
-	public function useNoFollow($on = true)
-	{
-		$this->nofollow_on = $on;
-	}
-
-	/**
-	 * @param string $message
 	 *
 	 * @return string
 	 */
@@ -391,12 +219,12 @@ class MyCode implements ParserInterface
 		}
 		// Reset list cache
 		if ($this->allowlistmycode) {
-			$this->list_elements = array();
+			$this->list_elements = [];
 			$this->list_count = 0;
 			// Find all lists
 			$message = preg_replace_callback(
 				"#(\[list(=(a|A|i|I|1))?\]|\[/list\])#si",
-				array($this, 'prepareList'),
+				[$this, 'prepareList'],
 				$message
 			);
 			// Replace all lists
@@ -404,10 +232,10 @@ class MyCode implements ParserInterface
 				// Ignores missing end tags
 				$message = preg_replace_callback(
 					"#\s?\[list(=(a|A|i|I|1))?&{$i}\](.*?)(\[/list&{$i}\]|$)(\r\n?|\n?)#si",
-					array(
+					[
 						$this,
-						'parseListCallback'
-					),
+						'parseListCallback',
+					],
 					$message,
 					1
 				);
@@ -417,67 +245,67 @@ class MyCode implements ParserInterface
 		if ($this->allowimgcode) {
 			$message = preg_replace_callback(
 				"#\[img\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
-				array(
+				[
 					$this,
-					'parseImageCallback'
-				),
+					'parseImageCallback',
+				],
 				$message
 			);
 			$message = preg_replace_callback(
 				"#\[img=([0-9]{1,3})x([0-9]{1,3})\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
-				array(
+				[
 					$this,
-					'parseImageCallback2'
-				),
+					'parseImageCallback2',
+				],
 				$message
 			);
 			$message = preg_replace_callback(
 				"#\[img align=([a-z]+)\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
-				array(
+				[
 					$this,
-					'parseImageCallback3'
-				),
+					'parseImageCallback3',
+				],
 				$message
 			);
 			$message = preg_replace_callback(
 				"#\[img=([0-9]{1,3})x([0-9]{1,3}) align=([a-z]+)\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
-				array(
+				[
 					$this,
-					'parseImageCallback4'
-				),
+					'parseImageCallback4',
+				],
 				$message
 			);
 		} else {
 			$message = preg_replace_callback(
 				"#\[img\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
-				array(
+				[
 					$this,
-					'parseImageDisabledCallback'
-				),
+					'parseImageDisabledCallback',
+				],
 				$message
 			);
 			$message = preg_replace_callback(
 				"#\[img=([0-9]{1,3})x([0-9]{1,3})\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
-				array(
+				[
 					$this,
-					'parseImageDisabledCallback2'
-				),
+					'parseImageDisabledCallback2',
+				],
 				$message
 			);
 			$message = preg_replace_callback(
 				"#\[img align=([a-z]+)\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
-				array(
+				[
 					$this,
-					'parseImageDisabledCallback3'
-				),
+					'parseImageDisabledCallback3',
+				],
 				$message
 			);
 			$message = preg_replace_callback(
 				"#\[img=([0-9]{1,3})x([0-9]{1,3}) align=([a-z]+)\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
-				array(
+				[
 					$this,
-					'parseImageDisabledCallback4'
-				),
+					'parseImageDisabledCallback4',
+				],
 				$message
 			);
 		}
@@ -485,16 +313,16 @@ class MyCode implements ParserInterface
 		if ($this->allowvideocode) {
 			$message = preg_replace_callback(
 				"#\[video=(.*?)\](.*?)\[/video\]#i",
-				array($this, 'parseVideoCallback'),
+				[$this, 'parseVideoCallback'],
 				$message
 			);
 		} else {
 			$message = preg_replace_callback(
 				"#\[video=(.*?)\](.*?)\[/video\]#i",
-				array(
+				[
 					$this,
-					'parseVideoDisabledCallback'
-				),
+					'parseVideoDisabledCallback',
+				],
 				$message
 			);
 		}
@@ -507,8 +335,8 @@ class MyCode implements ParserInterface
 	 */
 	private function cacheMyCode()
 	{
-		$this->mycode_cache = array();
-		$standard_mycode = $callback_mycode = $nestable_mycode = array();
+		$this->mycode_cache = [];
+		$standard_mycode = $callback_mycode = $nestable_mycode = [];
 		$standard_count = $callback_count = $nestable_count = 0;
 		if ($this->allowbasicmycode) {
 			$standard_mycode['b']['regex'] = "#\[b\](.*?)\[/b\]#si";
@@ -534,38 +362,38 @@ class MyCode implements ParserInterface
 		}
 		if ($this->allowlinkmycode) {
 			$callback_mycode['url_simple']['regex'] = "#\[url\]([a-z]+?://)([^\r\n\"<]+?)\[/url\]#si";
-			$callback_mycode['url_simple']['replacement'] = array(
+			$callback_mycode['url_simple']['replacement'] = [
 				$this,
-				'parseUrlCallback1'
-			);
+				'parseUrlCallback1',
+			];
 			$callback_mycode['url_simple2']['regex'] = "#\[url\]([^\r\n\"<]+?)\[/url\]#i";
-			$callback_mycode['url_simple2']['replacement'] = array(
+			$callback_mycode['url_simple2']['replacement'] = [
 				$this,
-				'parseUrlCallback2'
-			);
+				'parseUrlCallback2',
+			];
 			$callback_mycode['url_complex']['regex'] = "#\[url=([a-z]+?://)([^\r\n\"<]+?)\](.+?)\[/url\]#si";
-			$callback_mycode['url_complex']['replacement'] = array(
+			$callback_mycode['url_complex']['replacement'] = [
 				$this,
-				'parseUrlCallback1'
-			);
+				'parseUrlCallback1',
+			];
 			$callback_mycode['url_complex2']['regex'] = "#\[url=([^\r\n\"<&\(\)]+?)\](.+?)\[/url\]#si";
-			$callback_mycode['url_complex2']['replacement'] = array(
+			$callback_mycode['url_complex2']['replacement'] = [
 				$this,
-				'parseUrlCallback2'
-			);
+				'parseUrlCallback2',
+			];
 			++$callback_count;
 		}
 		if ($this->allowemailmycode) {
 			$callback_mycode['email_simple']['regex'] = "#\[email\](.*?)\[/email\]#i";
-			$callback_mycode['email_simple']['replacement'] = array(
+			$callback_mycode['email_simple']['replacement'] = [
 				$this,
-				'parseEmailCallback'
-			);
+				'parseEmailCallback',
+			];
 			$callback_mycode['email_complex']['regex'] = "#\[email=(.*?)\](.*?)\[/email\]#i";
-			$callback_mycode['email_complex']['replacement'] = array(
+			$callback_mycode['email_complex']['replacement'] = [
 				$this,
-				'parseEmailCallback'
-			);
+				'parseEmailCallback',
+			];
 			++$callback_count;
 		}
 		if ($this->allowcolormycode) {
@@ -579,10 +407,10 @@ class MyCode implements ParserInterface
 				"#\[size=(xx-small|x-small|small|medium|large|x-large|xx-large)\](.*?)\[/size\]#si";
 			$nestable_mycode['size']['replacement'] = "<span style=\"font-size: $1;\">$2</span>";
 			$callback_mycode['size_int']['regex'] = "#\[size=([0-9\+\-]+?)\](.*?)\[/size\]#si";
-			$callback_mycode['size_int']['replacement'] = array(
+			$callback_mycode['size_int']['replacement'] = [
 				$this,
-				'handleSizeCallback'
-			);
+				'handleSizeCallback',
+			];
 			++$nestable_count;
 			++$callback_count;
 		}
@@ -616,17 +444,17 @@ class MyCode implements ParserInterface
 		}
 		// Assign the nestable MyCode to the cache.
 		foreach ($nestable_mycode as $code) {
-			$this->mycode_cache['nestable'][] = array(
+			$this->mycode_cache['nestable'][] = [
 				'find'        => $code['regex'],
-				'replacement' => $code['replacement']
-			);
+				'replacement' => $code['replacement'],
+			];
 		}
 		// Assign the nestable MyCode to the cache.
 		foreach ($callback_mycode as $code) {
-			$this->mycode_cache['callback'][] = array(
+			$this->mycode_cache['callback'][] = [
 				'find'        => $code['regex'],
-				'replacement' => $code['replacement']
-			);
+				'replacement' => $code['replacement'],
+			];
 		}
 		$this->mycode_cache['standard_count'] = $standard_count;
 		$this->mycode_cache['callback_count'] = $callback_count;
@@ -647,10 +475,10 @@ class MyCode implements ParserInterface
 		$quote = trans('parser::parser.quote');
 		if ($text_only == false) {
 			$replace = "<blockquote><cite>$quote</cite>$1</blockquote>\n";
-			$replace_callback = array($this, 'parsePostQuotesCallback1');
+			$replace_callback = [$this, 'parsePostQuotesCallback1'];
 		} else {
 			$replace = "\n{$quote}\n--\n$1\n--\n";
-			$replace_callback = array($this, 'parsePostQuotesCallback2');
+			$replace_callback = [$this, 'parsePostQuotesCallback2'];
 		}
 		do {
 			// preg_replace has erased the message? Restore it...
@@ -669,14 +497,14 @@ class MyCode implements ParserInterface
 			}
 		} while ($count || $count_callback);
 		if ($text_only == false) {
-			$find = array(
+			$find = [
 				"#(\r\n*|\n*)<\/cite>(\r\n*|\n*)#",
-				"#(\r\n*|\n*)<\/blockquote>#"
-			);
-			$replace = array(
+				"#(\r\n*|\n*)<\/blockquote>#",
+			];
+			$replace = [
 				"</cite><br />",
-				"</blockquote>"
-			);
+				"</blockquote>",
+			];
 			$message = preg_replace($find, $replace, $message);
 		}
 
@@ -694,18 +522,18 @@ class MyCode implements ParserInterface
 		// Links should end with slashes, numbers, characters and braces but not with dots, commas or question marks
 		$message = preg_replace_callback(
 			"#([\>\s\(\)])(http|https|ftp|news|irc|ircs|irc6){1}://([^\/\"\s\<\[\.]+\.([^\/\"\s\<\[\.]+\.)*[\w]+(:[0-9]+)?(/([^\"\s<\[]|\[\])*)?([\w\/\)]))#iu",
-			array(
+			[
 				$this,
-				'autoUrlCallback'
-			),
+				'autoUrlCallback',
+			],
 			$message
 		);
 		$message = preg_replace_callback(
 			"#([\>\s\(\)])(www|ftp)\.(([^\/\"\s\<\[\.]+\.)*[\w]+(:[0-9]+)?(/([^\"\s<\[]|\[\])*)?([\w\/\)]))#iu",
-			array(
+			[
 				$this,
-				'autoUrlCallback'
-			),
+				'autoUrlCallback',
+			],
 			$message
 		);
 		$message = substr($message, 1);
@@ -842,6 +670,178 @@ class MyCode implements ParserInterface
 	}
 
 	/**
+	 * @param string $message
+	 * @param array  $options
+	 *
+	 * @return string
+	 */
+	public function parsePlain($message, $options = [])
+	{
+		// Parse quotes first
+		$message = $this->parseQuotes($message, true);
+		$message = preg_replace_callback(
+			"#\[php\](.*?)\[/php\](\r\n?|\n?)#is",
+			[$this, 'parsePhpCallback'],
+			$message
+		);
+		$message = preg_replace_callback(
+			"#\[code\](.*?)\[/code\](\r\n?|\n?)#is",
+			[$this, 'parseCodeCallback'],
+			$message
+		);
+		$find = [
+			"#\[(b|u|i|s|url|email|color|img)\](.*?)\[/\\1\]#is",
+			"#\[img=([0-9]{1,3})x([0-9]{1,3})\](\r\n?|\n?)(https?://([^<>\"']+?))\[/img\]#is",
+			"#\[url=([a-z]+?://)([^\r\n\"<]+?)\](.+?)\[/url\]#si",
+			"#\[url=([^\r\n\"<&\(\)]+?)\](.+?)\[/url\]#si",
+		];
+		$replace = [
+			"$2",
+			"$4",
+			"$3 ($1$2)",
+			"$2 ($1)",
+		];
+		$message = preg_replace($find, $replace, $message);
+
+		// Reset list cache
+		$this->list_elements = [];
+		$this->list_count = 0;
+		// Find all lists
+		$message = preg_replace_callback(
+			"#(\[list(=(a|A|i|I|1))?\]|\[/list\])#si",
+			[$this, 'prepareList'],
+			$message
+		);
+		// Replace all lists
+		for ($i = $this->list_count; $i > 0; $i--) {
+			// Ignores missing end tags
+			$message = preg_replace_callback(
+				"#\s?\[list(=(a|A|i|I|1))?&{$i}\](.*?)(\[/list&{$i}\]|$)(\r\n?|\n?)#si",
+				[
+					$this,
+					'parseListCallback',
+				],
+				$message,
+				1
+			);
+		}
+
+		return $message;
+	}
+
+	/**
+	 * @param string|callable $format
+	 */
+	public function setDateFormatting($format)
+	{
+		$this->dateFormat = $format;
+	}
+
+	/**
+	 * @param string|callable $url
+	 */
+	public function setPostURL($url)
+	{
+		$this->postURL = $url;
+	}
+
+	/**
+	 * @param bool $allow
+	 */
+	public function allowBasicCode($allow = true)
+	{
+		$this->allowbasicmycode = $allow;
+	}
+
+	/**
+	 * @param bool $allow
+	 */
+	public function allowSymbolCode($allow = true)
+	{
+		$this->allowsymbolmycode = $allow;
+	}
+
+	/**
+	 * @param bool $allow
+	 */
+	public function allowLinkCode($allow = true)
+	{
+		$this->allowlinkmycode = $allow;
+	}
+
+	/**
+	 * @param bool $allow
+	 */
+	public function allowEmailCode($allow = true)
+	{
+		$this->allowemailmycode = $allow;
+	}
+
+	/**
+	 * @param bool $allow
+	 */
+	public function allowColorCode($allow = true)
+	{
+		$this->allowcolormycode = $allow;
+	}
+
+	/**
+	 * @param bool $allow
+	 */
+	public function allowSizeCode($allow = true)
+	{
+		$this->allowsizemycode = $allow;
+	}
+
+	/**
+	 * @param bool $allow
+	 */
+	public function allowFontCode($allow = true)
+	{
+		$this->allowfontmycode = $allow;
+	}
+
+	/**
+	 * @param bool $allow
+	 */
+	public function allowAlignCode($allow = true)
+	{
+		$this->allowalignmycode = $allow;
+	}
+
+	/**
+	 * @param bool $allow
+	 */
+	public function allowImgCode($allow = true)
+	{
+		$this->allowimgcode = $allow;
+	}
+
+	/**
+	 * @param bool $allow
+	 */
+	public function allowVideoCode($allow = true)
+	{
+		$this->allowvideocode = $allow;
+	}
+
+	/**
+	 * @param bool $short
+	 */
+	public function shortenURLs($short = true)
+	{
+		$this->shorten_urls = $short;
+	}
+
+	/**
+	 * @param bool $on
+	 */
+	public function useNoFollow($on = true)
+	{
+		$this->nofollow_on = $on;
+	}
+
+	/**
 	 * @param array $matches
 	 *
 	 * @return string
@@ -859,7 +859,7 @@ class MyCode implements ParserInterface
 	 */
 	private function myCodeHandleSize($size, $text)
 	{
-		$size = (int) $size + 10;
+		$size = (int)$size + 10;
 		if ($size > 50) {
 			$size = 50;
 		}
@@ -880,20 +880,6 @@ class MyCode implements ParserInterface
 	private function parsePostQuotesCallback1($matches)
 	{
 		return $this->parsePostQuotes($matches[4], $matches[2] . $matches[3]);
-	}
-
-	/**
-	 * @param array $matches
-	 *
-	 * @return string
-	 */
-	private function parsePostQuotesCallback2($matches)
-	{
-		return $this->parsePostQuotes(
-			$matches[4],
-			$matches[2] . $matches[3],
-			true
-		);
 	}
 
 	/**
@@ -923,8 +909,8 @@ class MyCode implements ParserInterface
 				$username,
 				$match
 			);
-			if (isset($match[1]) && (int) $match[1]) {
-				$pid = (int) $match[1];
+			if (isset($match[1]) && (int)$match[1]) {
+				$pid = (int)$match[1];
 				$url = $this->getPostURL($pid);
 				$linkback = " <a href=\"{$url}\" class=\"quote_linkback\">[ -> ]</a>";
 				$username = preg_replace(
@@ -941,9 +927,9 @@ class MyCode implements ParserInterface
 			$username,
 			$match
 		);
-		if (isset($match[1]) && (int) $match[1]) {
+		if (isset($match[1]) && (int)$match[1]) {
 			if ($match[1] < time()) {
-				$postdate = $this->parseDate((int) $match[1]);
+				$postdate = $this->parseDate((int)$match[1]);
 				$date = " ({$postdate})";
 			}
 			$username = preg_replace(
@@ -1006,6 +992,20 @@ class MyCode implements ParserInterface
 	 *
 	 * @return string
 	 */
+	private function parsePostQuotesCallback2($matches)
+	{
+		return $this->parsePostQuotes(
+			$matches[4],
+			$matches[2] . $matches[3],
+			true
+		);
+	}
+
+	/**
+	 * @param array $matches
+	 *
+	 * @return string
+	 */
 	private function parseCodeCallback($matches)
 	{
 		return $this->parseCode($matches[1], true);
@@ -1038,7 +1038,7 @@ class MyCode implements ParserInterface
 	 *
 	 * @return string
 	 */
-	private function parseImage($url, $dimensions = array(), $align = '')
+	private function parseImage($url, $dimensions = [], $align = '')
 	{
 		$url = trim($url);
 		$url = str_replace("\n", "", $url);
@@ -1076,7 +1076,7 @@ class MyCode implements ParserInterface
 	 */
 	private function parseImageCallback2($matches)
 	{
-		return $this->parseImage($matches[4], array($matches[1], $matches[2]));
+		return $this->parseImage($matches[4], [$matches[1], $matches[2]]);
 	}
 
 	/**
@@ -1086,7 +1086,7 @@ class MyCode implements ParserInterface
 	 */
 	private function parseImageCallback3($matches)
 	{
-		return $this->parseImage($matches[3], array(), $matches[1]);
+		return $this->parseImage($matches[3], [], $matches[1]);
 	}
 
 	/**
@@ -1098,7 +1098,7 @@ class MyCode implements ParserInterface
 	{
 		return $this->parseImage(
 			$matches[5],
-			array($matches[1], $matches[2]),
+			[$matches[1], $matches[2]],
 			$matches[3]
 		);
 	}
@@ -1133,34 +1133,6 @@ class MyCode implements ParserInterface
 	}
 
 	/**
-	 * @param array $matches
-	 *
-	 * @return string
-	 */
-	private function parseUrlCallback1($matches)
-	{
-		if (!isset($matches[3])) {
-			$matches[3] = '';
-		}
-
-		return $this->ParseUrl($matches[1] . $matches[2], $matches[3]);
-	}
-
-	/**
-	 * @param array $matches
-	 *
-	 * @return string
-	 */
-	private function parseUrlCallback2($matches)
-	{
-		if (!isset($matches[2])) {
-			$matches[2] = '';
-		}
-
-		return $this->ParseUrl($matches[1], $matches[2]);
-	}
-
-	/**
 	 * @param string $url
 	 * @param string $name
 	 *
@@ -1190,7 +1162,7 @@ class MyCode implements ParserInterface
 			$nofollow = " rel=\"nofollow\"";
 		}
 		// Fix some entities in URLs
-		$entities = array(
+		$entities = [
 			'$'     => '%24',
 			'&#36;' => '%24',
 			'^'     => '%5E',
@@ -1202,8 +1174,8 @@ class MyCode implements ParserInterface
 			'"'     => '%22',
 			'<'     => '%3C',
 			'>'     => '%3E',
-			' '     => '%20'
-		);
+			' '     => '%20',
+		];
 		$fullurl = str_replace(
 			array_keys($entities),
 			array_values($entities),
@@ -1217,6 +1189,34 @@ class MyCode implements ParserInterface
 		$link = "<a href=\"$fullurl\" target=\"_blank\"{$nofollow}>$name</a>";
 
 		return $link;
+	}
+
+	/**
+	 * @param array $matches
+	 *
+	 * @return string
+	 */
+	private function parseUrlCallback1($matches)
+	{
+		if (!isset($matches[3])) {
+			$matches[3] = '';
+		}
+
+		return $this->ParseUrl($matches[1] . $matches[2], $matches[3]);
+	}
+
+	/**
+	 * @param array $matches
+	 *
+	 * @return string
+	 */
+	private function parseUrlCallback2($matches)
+	{
+		if (!isset($matches[2])) {
+			$matches[2] = '';
+		}
+
+		return $this->ParseUrl($matches[1], $matches[2]);
 	}
 
 	/**
@@ -1316,15 +1316,15 @@ class MyCode implements ParserInterface
 		if ($parsed_url == false) {
 			return "[video={$video}]{$url}[/video]";
 		}
-		$fragments = array();
+		$fragments = [];
 		if (isset($parsed_url['fragment'])) {
 			$fragments = explode("&", $parsed_url['fragment']);
 		}
-		$queries = array();
+		$queries = [];
 		if (isset($parsed_url['query'])) {
 			$queries = explode("&", $parsed_url['query']);
 		}
-		$input = array();
+		$input = [];
 		foreach ($queries as $query) {
 			// $value isn't always defined, eg facebook uses "&theater" which would throw an error
 			@list($key, $value) = explode("=", $query);

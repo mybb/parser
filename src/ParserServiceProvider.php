@@ -75,24 +75,24 @@ class ParserServiceProvider extends ServiceProvider
 
 		// Bind the CustomMyCode Repository to the BBCode Parser
 		$this->app->when('MyBB\Parser\Parser\MyCode')
-		          ->needs(
-			          'MyBB\Parser\Database\Repositories\CustomMyCodeRepositoryInterface'
-		          )
-		          ->give(
-			          function (Application $app) {
-				          $repository = $app->make(
-					          'MyBB\Parser\Database\Repositories\Eloquent\CustomMyCodeRepository'
-				          );
-				          $cache = $app->make(
-					          'Illuminate\Contracts\Cache\Repository'
-				          );
+			->needs(
+				'MyBB\Parser\Database\Repositories\CustomMyCodeRepositoryInterface'
+			)
+			->give(
+				function (Application $app) {
+					$repository = $app->make(
+						'MyBB\Parser\Database\Repositories\Eloquent\CustomMyCodeRepository'
+					);
+					$cache = $app->make(
+						'Illuminate\Contracts\Cache\Repository'
+					);
 
-				          return new CustomMyMyCodeCachingDecorator(
-					          $repository,
-					          $cache
-				          );
-			          }
-		          );
+					return new CustomMyMyCodeCachingDecorator(
+						$repository,
+						$cache
+					);
+				}
+			);
 	}
 
 	/**
@@ -108,7 +108,7 @@ class ParserServiceProvider extends ServiceProvider
 			[
 				__DIR__ . '/../resources/migrations/' => base_path(
 					'/database/migrations'
-				)
+				),
 			],
 			'migrations'
 		);
@@ -117,7 +117,7 @@ class ParserServiceProvider extends ServiceProvider
 			[
 				__DIR__ . '/../resources/config/parser.php' => config_path(
 					'parser.php'
-				)
+				),
 			],
 			'config'
 		);

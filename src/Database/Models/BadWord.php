@@ -22,19 +22,17 @@ class BadWord extends Model
 	// @codingStandardsIgnoreStart
 
 	/**
-	 * The table associated with the model.
-	 *
-	 * @var string
-	 */
-	protected $table = 'parser_badwords';
-
-	/**
 	 * Indicates if the model should be timestamped.
 	 *
 	 * @var boolean
 	 */
 	public $timestamps = false;
-
+	/**
+	 * The table associated with the model.
+	 *
+	 * @var string
+	 */
+	protected $table = 'parser_badwords';
 	/**
 	 * The attributes that aren't mass assignable.
 	 *

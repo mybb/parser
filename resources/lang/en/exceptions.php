@@ -9,6 +9,6 @@
  */
 
 return [
-	'invalid_class' => "Couldn't load parser ':class'",
-	'search_word_minimum' => "Minsearchword needs to be at least '1'"
+	'invalid_class'       => "Couldn't load parser ':class'",
+	'search_word_minimum' => "Minsearchword needs to be at least '1'",
 ];

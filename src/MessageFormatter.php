@@ -36,20 +36,20 @@ class MessageFormatter
 	/**
 	 * @var array
 	 */
-	private $highlight_cache = array();
+	private $highlight_cache = [];
 	/**
 	 * @var integer
 	 */
 	private $minSearchWord = 3;
 
-	const ENABLE_SMILEYS   = 'enable_smilies';
-	const ENABLE_MYCODE    = 'enable_mycode';
-	const ALLOW_HTML       = 'allow_html';
+	const ENABLE_SMILEYS = 'enable_smilies';
+	const ENABLE_MYCODE = 'enable_mycode';
+	const ALLOW_HTML = 'allow_html';
 	const FILTER_BAD_WORDS = 'filter_badwords';
-	const FILTER_CDATA     = 'filter_cdata';
-	const ME_USERNAME      = 'me_username';
-	const HIGHLIGHT        = 'highlight';
-	const NL2BR            = 'nl2br';
+	const FILTER_CDATA = 'filter_cdata';
+	const ME_USERNAME = 'me_username';
+	const HIGHLIGHT = 'highlight';
+	const NL2BR = 'nl2br';
 
 	/**
 	 * @param ParserInterface            $parser
@@ -321,7 +321,7 @@ class MessageFormatter
 	 */
 	private function fixJavascript($message)
 	{
-		$js_array = array(
+		$js_array = [
 			"#(&\#(0*)106;?|&\#(0*)74;?|&\#x(0*)4a;?|&\#x(0*)6a;?|j)((&\#(0*)97;?|&\#(0*)65;?|a)(&\#(0*)118;?|&\#(0*)86;?|v)(&\#(0*)97;?|&\#(0*)65;?|a)(\s)?(&\#(0*)115;?|&\#(0*)83;?|s)(&\#(0*)99;?|&\#(0*)67;?|c)(&\#(0*)114;?|&\#(0*)82;?|r)(&\#(0*)105;?|&\#(0*)73;?|i)(&\#112;?|&\#(0*)80;?|p)(&\#(0*)116;?|&\#(0*)84;?|t)(&\#(0*)58;?|\:))#i",
 			"#(o)(nmouseover\s?=)#i",
 			"#(o)(nmouseout\s?=)#i",
@@ -340,8 +340,8 @@ class MessageFormatter
 			"#(o)(nkeypress\s?=)#i",
 			"#(o)(nerror\s?=)#i",
 			"#(o)(nreset\s?=)#i",
-			"#(o)(nabort\s?=)#i"
-		);
+			"#(o)(nabort\s?=)#i",
+		];
 
 		$message = preg_replace($js_array, "$1<strong></strong>$2$6", $message);
 
@@ -384,19 +384,19 @@ class MessageFormatter
 			$terms = implode(' ', $terms);
 		}
 		// Strip out any characters that shouldn't be included
-		$bad_characters = array(
+		$bad_characters = [
 			"(",
 			")",
 			"+",
 			"-",
-			"~"
-		);
+			"~",
+		];
 		$terms = str_replace($bad_characters, '', $terms);
 		// Check if this is a "series of words" - should be treated as an EXACT match
 		if (strpos($terms, "\"") !== false) {
 			$inquote = false;
 			$terms = explode("\"", $terms);
-			$words = array();
+			$words = [];
 			foreach ($terms as $phrase) {
 				$phrase = e($phrase);
 				if ($phrase != "") {
@@ -437,7 +437,7 @@ class MessageFormatter
 			return false;
 		}
 
-		$highlight_cache = array();
+		$highlight_cache = [];
 
 		// Sort the word array by length. Largest terms go first and work their way down to the smallest term.
 		// This resolves problems like "test tes" where "tes" will be highlighted first,
@@ -472,7 +472,7 @@ class MessageFormatter
 	 */
 	public function setMinSearchWord($min = 1)
 	{
-		$min = (int) $min;
+		$min = (int)$min;
 
 		if ($min < 1) {
 			throw new ParserSearchWordMinimumException;
