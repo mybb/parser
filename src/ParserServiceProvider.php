@@ -14,7 +14,7 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use MyBB\Parser\Database\Repositories\Decorators\BadWordCachingDecorator;
-use MyBB\Parser\Database\Repositories\Decorators\CustomMyMyCodeCachingDecorator;
+use MyBB\Parser\Database\Repositories\Decorators\CustomMyCodeCachingDecorator;
 use MyBB\Parser\Database\Repositories\Decorators\SmileysCachingDecorator;
 
 class ParserServiceProvider extends ServiceProvider
@@ -56,7 +56,7 @@ class ParserServiceProvider extends ServiceProvider
 				$repository = $app->make(
 					Database\Repositories\Eloquent\BadWordRepository::class
 				);
-				$cache = $app->make('Illuminate\Contracts\Cache\Repository');
+				$cache = $app->make(Repository::class);
 
 				return new BadWordCachingDecorator($repository, $cache);
 			}
@@ -82,13 +82,13 @@ class ParserServiceProvider extends ServiceProvider
 			->give(
 				function (Application $app) {
 					$repository = $app->make(
-						Database\Repositories\Eloquent\CustomMyMyCodeRepository::class
+						Database\Repositories\Eloquent\CustomMyCodeRepository::class
 					);
 					$cache = $app->make(
 						Repository::class
 					);
 
-					return new CustomMyMyCodeCachingDecorator(
+					return new CustomMyCodeCachingDecorator(
 						$repository,
 						$cache
 					);
