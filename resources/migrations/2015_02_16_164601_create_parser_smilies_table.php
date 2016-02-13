@@ -22,7 +22,7 @@ class CreateParserSmiliesTable extends Migration
 	{
 		Schema::create('parser_smilies', function (Blueprint $table) {
 			$table->increments('id');
-			$table->text('find')->unique();
+			$table->string('find')->unique();
 			$table->string('image');
 			$table->smallInteger('disporder', false, true);
 		});
