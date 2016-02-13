@@ -204,7 +204,7 @@ class MessageFormatter
 	 */
 	private function replaceSmilies($message)
 	{
-		$smilies = $this->smileys->getParsableSmilies();
+		$smilies = $this->smileys->getParseableSmileys();
 
 		if (empty($smilies)) {
 			return $message;
@@ -268,7 +268,7 @@ class MessageFormatter
 	 */
 	public function filterBadwords($message, $stripTags = false)
 	{
-		$badwords = $this->badWords->getAllAsArray();
+		$badwords = $this->badWords->getAllForParsing();
 		if (!empty($badwords) && is_array(($badwords))) {
 			reset($badwords);
 			foreach ($badwords as $find => $replace) {

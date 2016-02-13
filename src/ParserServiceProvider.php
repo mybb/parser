@@ -10,6 +10,7 @@
 
 namespace MyBB\Parser;
 
+use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use MyBB\Parser\Database\Repositories\Decorators\BadWordCachingDecorator;
@@ -50,10 +51,10 @@ class ParserServiceProvider extends ServiceProvider
 		);
 
 		$this->app->bind(
-			'MyBB\Parser\Database\Repositories\BadWordRepositoryInterface',
+			Database\Repositories\BadWordRepositoryInterface::class,
 			function (Application $app) {
 				$repository = $app->make(
-					'MyBB\Parser\Database\Repositories\Eloquent\BadWordRepository'
+					Database\Repositories\Eloquent\BadWordRepository::class
 				);
 				$cache = $app->make('Illuminate\Contracts\Cache\Repository');
 
@@ -62,29 +63,29 @@ class ParserServiceProvider extends ServiceProvider
 		);
 
 		$this->app->bind(
-			'MyBB\Parser\Database\Repositories\SmileyRepositoryInterface',
+			Database\Repositories\SmileyRepositoryInterface::class,
 			function (Application $app) {
 				$repository = $app->make(
-					'MyBB\Parser\Database\Repositories\Eloquent\SmileyRepository'
+					Database\Repositories\Eloquent\SmileyRepository::class
 				);
-				$cache = $app->make('Illuminate\Contracts\Cache\Repository');
+				$cache = $app->make(Repository::class);
 
 				return new SmileysCachingDecorator($repository, $cache);
 			}
 		);
 
 		// Bind the CustomMyCode Repository to the BBCode Parser
-		$this->app->when('MyBB\Parser\Parser\MyCode')
+		$this->app->when(Parser\MyCode::class)
 			->needs(
-				'MyBB\Parser\Database\Repositories\CustomMyCodeRepositoryInterface'
+				Database\Repositories\CustomMyCodeRepositoryInterface::class
 			)
 			->give(
 				function (Application $app) {
 					$repository = $app->make(
-						'MyBB\Parser\Database\Repositories\Eloquent\CustomMyCodeRepository'
+						Database\Repositories\Eloquent\CustomMyMyCodeRepository::class
 					);
 					$cache = $app->make(
-						'Illuminate\Contracts\Cache\Repository'
+						Repository::class
 					);
 
 					return new CustomMyMyCodeCachingDecorator(

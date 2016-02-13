@@ -38,7 +38,7 @@ class SmileyRepository implements SmileyRepositoryInterface
 	 */
 	public function getParseableSmileys()
 	{
-		return $this->model->orderBy('disporder')->lists('image', 'find');
+		return $this->model->newQuery()->orderBy('disporder')->lists('image', 'find');
 	}
 
 	/**
@@ -48,6 +48,6 @@ class SmileyRepository implements SmileyRepositoryInterface
 	 */
 	public function getAll()
 	{
-		return $this->model->orderBy('disporder')->all();
+		return $this->model->newQuery()->orderBy('disporder')->all();
 	}
 }
