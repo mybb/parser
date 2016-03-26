@@ -425,7 +425,7 @@ class MyCode implements ParserInterface
 			++$nestable_count;
 		}
 
-		$custom_mycode = $this->customMyCodeRepository->getParsableCodes();
+		$custom_mycode = $this->customMyCodeRepository->getParseableCodes();
 		// If there is custom MyCode, load it.
 		if (is_array($custom_mycode)) {
 			foreach ($custom_mycode as $key => $mycode) {
