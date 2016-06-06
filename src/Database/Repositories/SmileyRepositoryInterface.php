@@ -8,7 +8,7 @@
  * @license http://www.mybb.com/licenses/bsd3 BSD-3
  */
 
-namespace MyBB\Parser\Database\Repositories;
+namespace Mybb\Parser\Database\Repositories;
 
 use Illuminate\Support\Collection;
 

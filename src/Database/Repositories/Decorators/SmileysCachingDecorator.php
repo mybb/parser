@@ -8,7 +8,7 @@
  * @license http://www.mybb.com/licenses/bsd3 BSD-3
  */
 
-namespace MyBB\Parser\Database\Repositories\Decorators;
+namespace Mybb\Parser\Database\Repositories\Decorators;
 
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Support\Collection;

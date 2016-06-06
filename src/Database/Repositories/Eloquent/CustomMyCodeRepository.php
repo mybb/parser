@@ -8,7 +8,7 @@
  * @license http://www.mybb.com/licenses/bsd3 BSD-3
  */
 
-namespace MyBB\Parser\Database\Repositories\Eloquent;
+namespace Mybb\Parser\Database\Repositories\Eloquent;
 
 use Illuminate\Support\Collection;
 use MyBB\Parser\Database\Models\MyCode;
