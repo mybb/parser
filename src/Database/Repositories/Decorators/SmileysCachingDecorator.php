@@ -40,17 +40,11 @@ class SmileysCachingDecorator implements SmileyRepositoryInterface
 	/**
 	 * @return array
 	 */
-	public function getParseableSmileys()
+	public function getAllForParsing()
 	{
-		if (($smileys = $this->cache->get(
-				'parser.parseable_smileys'
-			)) == null
-		) {
-			$smileys = $this->decoratedRepository->getParseableSmileys();
-			$this->cache->forever('parser.parseable_smileys', $smileys);
-		}
-
-		return $smileys;
+        return $this->cache->rememberForever('parser.parseable_smileys', function() {
+           return $this->decoratedRepository->getAllForParsing();
+        });
 	}
 
 	/**
@@ -60,12 +54,8 @@ class SmileysCachingDecorator implements SmileyRepositoryInterface
 	 */
 	public function getAll()
 	{
-		if (($smileys = $this->cache->get('parser.all_smileys')) === null) {
-			$smileys = $this->decoratedRepository->getAll();
-
-			$this->cache->forever('parser.all_smileys', $smileys);
-		}
-
-		return $smileys;
+        return $this->cache->rememberForever('parser.all_smileys', function() {
+           return $this->decoratedRepository->getAll();
+        });
 	}
 }

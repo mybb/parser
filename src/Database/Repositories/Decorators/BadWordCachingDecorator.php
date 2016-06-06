@@ -46,12 +46,9 @@ class BadWordCachingDecorator implements BadWordRepositoryInterface
 	{
 		$cacheKey = 'parser.bad_words_all';
 
-		if (($badWords = $this->cache->get($cacheKey)) === null) {
-			$badWords = $this->decorated->getAll();
-			$this->cache->forever($cacheKey, $badWords);
-		}
-
-		return $badWords;
+        return $this->cache->rememberForever($cacheKey, function() {
+           return $this->decorated->getAll();
+        });
 	}
 
 	/**
@@ -65,11 +62,8 @@ class BadWordCachingDecorator implements BadWordRepositoryInterface
 	{
 		$cacheKey = 'parser.bad_words_all_for_parsing';
 
-		if (($badWords = $this->cache->get($cacheKey)) === null) {
-			$badWords = $this->decorated->getAllForParsing();
-			$this->cache->forever($cacheKey, $badWords);
-		}
-
-		return $badWords;
+        return $this->cache->rememberForever($cacheKey, function() {
+            return $this->decorated->getAllForParsing();
+        });
 	}
 }

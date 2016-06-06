@@ -20,8 +20,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MyCode extends Model
 {
-	// @codingStandardsIgnoreStart
-
 	/**
 	 * Indicates if the model should be timestamped.
 	 *
@@ -40,6 +38,4 @@ class MyCode extends Model
 	 * @var array
 	 */
 	protected $guarded = [];
-
-	// @codingStandardsIgnoreEnd
 }

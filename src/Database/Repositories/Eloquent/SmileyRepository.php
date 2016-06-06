@@ -36,7 +36,7 @@ class SmileyRepository implements SmileyRepositoryInterface
 	 *
 	 * @return array
 	 */
-	public function getParseableSmileys()
+	public function getAllForParsing()
 	{
 		return $this->model->newQuery()->orderBy('disporder')->lists('image', 'find');
 	}

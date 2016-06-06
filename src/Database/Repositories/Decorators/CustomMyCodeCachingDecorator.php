@@ -10,6 +10,7 @@
 
 namespace Mybb\Parser\Database\Repositories\Decorators;
 
+use Illuminate\Config\Repository;
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Support\Collection;
 use MyBB\Parser\Database\Repositories\CustomMyCodeRepositoryInterface;
@@ -24,17 +25,24 @@ class CustomMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
 	 * @var CacheRepository
 	 */
 	private $cache;
+    /**
+     * @var Repository $config
+     */
+    private $config;
 
-	/**
-	 * @param CustomMyCodeRepositoryInterface $decorated
-	 * @param CacheRepository                 $cache
-	 */
+    /**
+     * @param CustomMyCodeRepositoryInterface $decorated
+     * @param CacheRepository $cache
+     * @param Repository $config
+     */
 	public function __construct(
 		CustomMyCodeRepositoryInterface $decorated,
-		CacheRepository $cache
+		CacheRepository $cache,
+        Repository $config
 	) {
 		$this->decoratedRepository = $decorated;
 		$this->cache = $cache;
+        $this->config = $config;
 	}
 
 	/**
@@ -42,19 +50,14 @@ class CustomMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
 	 *
 	 * @return array
 	 */
-	public function getParseableCodes()
+	public function getAllForParsing()
 	{
-		$cacheKey = 'parser.parseable_codes';
+		$cacheKey = 'parser.parseable_codes.' . $this->config->get('parser.formatter_type', 'mycode');
 
-		// TODO: the cache doesn't work if more than one parser is used.
-		// The cache should be named something like "parser.codes.[bbcode|markdown]"
-		if (($myCodes = $this->cache->get($cacheKey)) === null) {
-			$myCodes = $this->decoratedRepository->getParseableCodes();
-			$this->cache->forever($cacheKey, $myCodes);
-		}
-
-		return $myCodes;
-	}
+        return $this->cache->rememberForever($cacheKey, function() {
+            return $this->decoratedRepository->getAllForParsing();
+        });
+    }
 
 	/**
 	 * Get all of the custom MyCodes.
@@ -65,11 +68,8 @@ class CustomMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
 	{
 		$cacheKey = 'parser.mycodes_all';
 
-		if (($myCodes = $this->cache->get($cacheKey)) === null) {
-			$myCodes = $this->decoratedRepository->getAll();
-			$this->cache->forever($cacheKey, $myCodes);
-		}
-
-		return $myCodes;
+        return $this->cache->rememberForever($cacheKey, function() {
+            return $this->decoratedRepository->getAll();
+        });
 	}
 }

@@ -34,7 +34,7 @@ class CustomMyCodeRepository implements CustomMyCodeRepositoryInterface
 	 *
 	 * @return array
 	 */
-	public function getParseableCodes()
+	public function getAllForParsing()
 	{
 		return $this->model->newQuery()->orderBy('parseorder')->lists('replacement', 'regex');
 	}
