@@ -4,7 +4,7 @@ class ParserTests extends PHPUnit_Framework_TestCase
 {
     public function testInitBasicMarkdownParser()
     {
-        $parser = new \Mybb\Parser\Parser(new \s9e\TextFormatter\Configurator(), [
+        $parser = new \MyBB\Parser\Parser(new \s9e\TextFormatter\Configurator(), [
             'formatter_type' => 'markdown',
         ]);
         
