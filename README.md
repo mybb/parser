@@ -1,4 +1,4 @@
-# Parser
+# Parser [![Build Status](https://travis-ci.org/mybb/parser.svg?branch=master)](https://travis-ci.org/mybb/parser)
 The parser used by MyBB 2.0. Supports BBCode, Markdown and HTML
 
 ##MyBB 2.0
