@@ -8,11 +8,11 @@
  * @license http://www.mybb.com/licenses/bsd3 BSD-3
  */
 
-namespace Mybb\Parser\Database\Repositories\Decorators;
+namespace MyBB\Parser\Database\Repositories\Decorators;
 
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Support\Collection;
-use Mybb\Parser\Database\Repositories\SmileyRepositoryInterface;
+use MyBB\Parser\Database\Repositories\SmileyRepositoryInterface;
 
 class SmileysCachingDecorator implements SmileyRepositoryInterface
 {

@@ -8,7 +8,7 @@
  * @license http://www.mybb.com/licenses/bsd3 BSD-3
  */
 
-namespace Mybb\Parser\Database\Models;
+namespace MyBB\Parser\Database\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

@@ -8,7 +8,7 @@
  * @license http://www.mybb.com/licenses/bsd3 BSD-3
  */
 
-namespace Mybb\Parser;
+namespace MyBB\Parser;
 
 use Illuminate\Contracts\Foundation\Application;
 use s9e\TextFormatter\Configurator;
