@@ -16,38 +16,38 @@ use MyBB\Parser\Database\Repositories\SmileyRepositoryInterface;
 
 class SmileyRepository implements SmileyRepositoryInterface
 {
-	/**
-	 * @var Smiley $model
-	 */
-	protected $model;
+    /**
+     * @var Smiley $model
+     */
+    protected $model;
 
-	/**
-	 * @param Smiley $model The smiley model to use.
-	 */
-	public function __construct(Smiley $model)
-	{
-		$this->model = $model;
-	}
+    /**
+     * @param Smiley $model The smiley model to use.
+     */
+    public function __construct(Smiley $model)
+    {
+        $this->model = $model;
+    }
 
-	/**
-	 * Get all of the defined smileys.
-	 *
-	 * Smileys should be returned as an array of ['find' => 'replace'].
-	 *
-	 * @return array
-	 */
-	public function getParseableSmileys()
-	{
-		return $this->model->newQuery()->orderBy('disporder')->lists('image', 'find');
-	}
+    /**
+     * Get all of the defined smileys.
+     *
+     * Smileys should be returned as an array of ['find' => 'replace'].
+     *
+     * @return array
+     */
+    public function getParseableSmileys()
+    {
+        return $this->model->newQuery()->orderBy('disporder')->lists('image', 'find');
+    }
 
-	/**
-	 * Get all defined smileys.
-	 *
-	 * @return Collection
-	 */
-	public function getAll()
-	{
-		return $this->model->newQuery()->orderBy('disporder')->all();
-	}
+    /**
+     * Get all defined smileys.
+     *
+     * @return Collection
+     */
+    public function getAll()
+    {
+        return $this->model->newQuery()->orderBy('disporder')->all();
+    }
 }

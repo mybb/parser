@@ -16,56 +16,56 @@ use Mybb\Parser\Database\Repositories\SmileyRepositoryInterface;
 
 class SmileysCachingDecorator implements SmileyRepositoryInterface
 {
-	/**
-	 * @var SmileyRepositoryInterface
-	 */
-	private $decoratedRepository;
-	/**
-	 * @var CacheRepository
-	 */
-	private $cache;
+    /**
+     * @var SmileyRepositoryInterface
+     */
+    private $decoratedRepository;
+    /**
+     * @var CacheRepository
+     */
+    private $cache;
 
-	/**
-	 * @param SmileyRepositoryInterface $decorated
-	 * @param CacheRepository           $cache
-	 */
-	public function __construct(
-		SmileyRepositoryInterface $decorated,
-		CacheRepository $cache
-	) {
-		$this->decoratedRepository = $decorated;
-		$this->cache = $cache;
-	}
+    /**
+     * @param SmileyRepositoryInterface $decorated
+     * @param CacheRepository           $cache
+     */
+    public function __construct(
+        SmileyRepositoryInterface $decorated,
+        CacheRepository $cache
+    ) {
+        $this->decoratedRepository = $decorated;
+        $this->cache = $cache;
+    }
 
-	/**
-	 * @return array
-	 */
-	public function getParseableSmileys()
-	{
-		if (($smileys = $this->cache->get(
-				'parser.parseable_smileys'
-			)) == null
-		) {
-			$smileys = $this->decoratedRepository->getParseableSmileys();
-			$this->cache->forever('parser.parseable_smileys', $smileys);
-		}
+    /**
+     * @return array
+     */
+    public function getParseableSmileys()
+    {
+        if (($smileys = $this->cache->get(
+            'parser.parseable_smileys'
+        )) == null
+        ) {
+            $smileys = $this->decoratedRepository->getParseableSmileys();
+            $this->cache->forever('parser.parseable_smileys', $smileys);
+        }
 
-		return $smileys;
-	}
+        return $smileys;
+    }
 
-	/**
-	 * Get all defined smileys.
-	 *
-	 * @return Collection
-	 */
-	public function getAll()
-	{
-		if (($smileys = $this->cache->get('parser.all_smileys')) === null) {
-			$smileys = $this->decoratedRepository->getAll();
+    /**
+     * Get all defined smileys.
+     *
+     * @return Collection
+     */
+    public function getAll()
+    {
+        if (($smileys = $this->cache->get('parser.all_smileys')) === null) {
+            $smileys = $this->decoratedRepository->getAll();
 
-			$this->cache->forever('parser.all_smileys', $smileys);
-		}
+            $this->cache->forever('parser.all_smileys', $smileys);
+        }
 
-		return $smileys;
-	}
+        return $smileys;
+    }
 }

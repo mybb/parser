@@ -14,19 +14,19 @@ use Illuminate\Support\Collection;
 
 interface SmileyRepositoryInterface
 {
-	/**
-	 * Get all of the defined smileys.
-	 *
-	 * Smileys should be returned as an array of ['find' => 'replace'].
-	 *
-	 * @return array
-	 */
-	public function getParseableSmileys();
+    /**
+     * Get all of the defined smileys.
+     *
+     * Smileys should be returned as an array of ['find' => 'replace'].
+     *
+     * @return array
+     */
+    public function getParseableSmileys();
 
-	/**
-	 * Get all defined smileys.
-	 *
-	 * @return Collection
-	 */
-	public function getAll();
+    /**
+     * Get all defined smileys.
+     *
+     * @return Collection
+     */
+    public function getAll();
 }

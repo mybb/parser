@@ -16,36 +16,36 @@ use MyBB\Parser\Database\Repositories\CustomMyCodeRepositoryInterface;
 
 class CustomMyCodeRepository implements CustomMyCodeRepositoryInterface
 {
-	/**
-	 * @var MyCode $model
-	 */
-	private $model;
+    /**
+     * @var MyCode $model
+     */
+    private $model;
 
-	/**
-	 * @param MyCode $model
-	 */
-	public function __construct(MyCode $model)
-	{
-		$this->model = $model;
-	}
+    /**
+     * @param MyCode $model
+     */
+    public function __construct(MyCode $model)
+    {
+        $this->model = $model;
+    }
 
-	/**
-	 * Get all of the custom MyCodes, in the form [find => replace].
-	 *
-	 * @return array
-	 */
-	public function getParseableCodes()
-	{
-		return $this->model->newQuery()->orderBy('parseorder')->lists('replacement', 'regex');
-	}
+    /**
+     * Get all of the custom MyCodes, in the form [find => replace].
+     *
+     * @return array
+     */
+    public function getParseableCodes()
+    {
+        return $this->model->newQuery()->orderBy('parseorder')->lists('replacement', 'regex');
+    }
 
-	/**
-	 * Get all of the custom MyCodes.
-	 *
-	 * @return Collection
-	 */
-	public function getAll()
-	{
-		return $this->model->all();
-	}
+    /**
+     * Get all of the custom MyCodes.
+     *
+     * @return Collection
+     */
+    public function getAll()
+    {
+        return $this->model->all();
+    }
 }

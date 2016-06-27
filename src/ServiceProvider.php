@@ -45,9 +45,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom( __DIR__.'/../resources/config/parser.php', 'parser');
+        $this->mergeConfigFrom(__DIR__.'/../resources/config/parser.php', 'parser');
 
-        $this->app->singleton(Parser::class, function(Application $app) {
+        $this->app->singleton(Parser::class, function (Application $app) {
             /** @var \Illuminate\Contracts\Config\Repository $config */
             $config = $app['config'];
             return new Parser($app->make(Configurator::class, $config->get('parser')));

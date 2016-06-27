@@ -12,5 +12,5 @@ return [
     /**
      * The type of the formatter to use - either 'mycode' or 'markdown'.
      */
-	'formatter_type' => 'mycode',
+    'formatter_type' => 'mycode',
 ];
