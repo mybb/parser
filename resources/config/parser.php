@@ -13,4 +13,7 @@ return [
      * The type of the formatter to use - either 'mycode' or 'markdown'.
      */
     'formatter_type' => 'mycode',
+
+    // String or callable
+    'postURL' => ['MyBB\Core\Services\ParserCallbacks', 'getPostLink'],
 ];
