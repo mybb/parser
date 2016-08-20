@@ -10,7 +10,11 @@
 
 namespace MyBB\Parser;
 
+use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Foundation\Application;
+use MyBB\Parser\Database\Repositories\BadWordRepositoryInterface;
+use MyBB\Parser\Database\Repositories\Decorators\BadWordCachingDecorator;
+use MyBB\Parser\Database\Repositories\Eloquent\BadWordRepository;
 use s9e\TextFormatter\Configurator;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
@@ -47,11 +51,22 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../resources/config/parser.php', 'parser');
 
+        $this->app->bind(BadWordRepositoryInterface::class, function(Application $app) {
+           return new BadWordCachingDecorator(
+               $app->make(BadWordRepository::class),
+               $app->make(Repository::class)
+           );
+        });
+
         $this->app->singleton(Parser::class, function (Application $app) {
             /** @var \Illuminate\Contracts\Config\Repository $config */
             $config = $app['config'];
-            $trans = $app['translator'];
-            return new Parser($trans, $app->make(Configurator::class), $config->get('parser'));
+            return new Parser(
+                $app['translator'],
+                $app->make(BadWordRepositoryInterface::class),
+                $app->make(Configurator::class),
+                $config->get('parser')
+            );
         });
     }
 }
