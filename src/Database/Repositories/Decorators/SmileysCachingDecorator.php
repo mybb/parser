@@ -16,6 +16,10 @@ use MyBB\Parser\Database\Repositories\SmileyRepositoryInterface;
 
 class SmileysCachingDecorator implements SmileyRepositoryInterface
 {
+    private const PARSEABLE_SMILEYS = 'parser.parseable_smileys';
+
+    private const ALL_SMILEYS = 'parser.all_smileys';
+
     /**
      * @var SmileyRepositoryInterface
      */
@@ -29,10 +33,8 @@ class SmileysCachingDecorator implements SmileyRepositoryInterface
      * @param SmileyRepositoryInterface $decorated
      * @param CacheRepository           $cache
      */
-    public function __construct(
-        SmileyRepositoryInterface $decorated,
-        CacheRepository $cache
-    ) {
+    public function __construct(SmileyRepositoryInterface $decorated, CacheRepository $cache)
+    {
         $this->decoratedRepository = $decorated;
         $this->cache = $cache;
     }
@@ -42,15 +44,9 @@ class SmileysCachingDecorator implements SmileyRepositoryInterface
      */
     public function getParseableSmileys()
     {
-        if (($smileys = $this->cache->get(
-            'parser.parseable_smileys'
-        )) == null
-        ) {
-            $smileys = $this->decoratedRepository->getParseableSmileys();
-            $this->cache->forever('parser.parseable_smileys', $smileys);
-        }
-
-        return $smileys;
+        return $this->cache->rememberForever(static::PARSEABLE_SMILEYS, function() {
+            return $this->decoratedRepository->getParseableSmileys();
+        });
     }
 
     /**
@@ -60,12 +56,8 @@ class SmileysCachingDecorator implements SmileyRepositoryInterface
      */
     public function getAll()
     {
-        if (($smileys = $this->cache->get('parser.all_smileys')) === null) {
-            $smileys = $this->decoratedRepository->getAll();
-
-            $this->cache->forever('parser.all_smileys', $smileys);
-        }
-
-        return $smileys;
+        return $this->cache->rememberForever(static::ALL_SMILEYS, function() {
+            return $this->decoratedRepository->getAll();
+        });
     }
 }

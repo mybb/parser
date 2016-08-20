@@ -16,6 +16,10 @@ use MyBB\Parser\Database\Repositories\CustomMyCodeRepositoryInterface;
 
 class CustomMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
 {
+    private const PARSEABLE_CODES_KEY = 'parser.parseable_codes';
+
+    private const ALL_CODES_KEY = 'parser.mycodes_all';
+
     /**
      * @var CustomMyCodeRepositoryInterface
      */
@@ -29,10 +33,8 @@ class CustomMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
      * @param CustomMyCodeRepositoryInterface $decorated
      * @param CacheRepository                 $cache
      */
-    public function __construct(
-        CustomMyCodeRepositoryInterface $decorated,
-        CacheRepository $cache
-    ) {
+    public function __construct(CustomMyCodeRepositoryInterface $decorated, CacheRepository $cache)
+    {
         $this->decoratedRepository = $decorated;
         $this->cache = $cache;
     }
@@ -44,16 +46,9 @@ class CustomMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
      */
     public function getParseableCodes()
     {
-        $cacheKey = 'parser.parseable_codes';
-
-        // TODO: the cache doesn't work if more than one parser is used.
-        // The cache should be named something like "parser.codes.[bbcode|markdown]"
-        if (($myCodes = $this->cache->get($cacheKey)) === null) {
-            $myCodes = $this->decoratedRepository->getParseableCodes();
-            $this->cache->forever($cacheKey, $myCodes);
-        }
-
-        return $myCodes;
+        return $this->cache->rememberForever(static::PARSEABLE_CODES_KEY, function() {
+            return $this->decoratedRepository->getParseableCodes();
+        });
     }
 
     /**
@@ -63,13 +58,8 @@ class CustomMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
      */
     public function getAll()
     {
-        $cacheKey = 'parser.mycodes_all';
-
-        if (($myCodes = $this->cache->get($cacheKey)) === null) {
-            $myCodes = $this->decoratedRepository->getAll();
-            $this->cache->forever($cacheKey, $myCodes);
-        }
-
-        return $myCodes;
+        return $this->cache->rememberForever(static::ALL_CODES_KEY, function() {
+            return $this->decoratedRepository->getAll();
+        });
     }
 }

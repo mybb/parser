@@ -16,6 +16,10 @@ use MyBB\Parser\Database\Repositories\BadWordRepositoryInterface;
 
 class BadWordCachingDecorator implements BadWordRepositoryInterface
 {
+    private const ALL_BAD_WORDS_KEY = 'parser.bad_words_all';
+
+    private const ALL_BAD_WORDS_FOR_PARSING_KEY = 'parser.bad_words_all_for_parsing';
+
     /**
      * @var BadWordRepositoryInterface $decorated
      */
@@ -25,14 +29,14 @@ class BadWordCachingDecorator implements BadWordRepositoryInterface
      */
     private $cache;
 
+
+
     /**
      * @param BadWordRepositoryInterface $decorated
      * @param CacheRepository            $cache
      */
-    public function __construct(
-        BadWordRepositoryInterface $decorated,
-        CacheRepository $cache
-    ) {
+    public function __construct(BadWordRepositoryInterface $decorated, CacheRepository $cache)
+    {
         $this->decorated = $decorated;
         $this->cache = $cache;
     }
@@ -44,14 +48,9 @@ class BadWordCachingDecorator implements BadWordRepositoryInterface
      */
     public function getAll()
     {
-        $cacheKey = 'parser.bad_words_all';
-
-        if (($badWords = $this->cache->get($cacheKey)) === null) {
-            $badWords = $this->decorated->getAll();
-            $this->cache->forever($cacheKey, $badWords);
-        }
-
-        return $badWords;
+        return $this->cache->rememberForever(static::ALL_BAD_WORDS_KEY, function() {
+            return $this->decorated->getAll();
+        });
     }
 
     /**
@@ -63,13 +62,8 @@ class BadWordCachingDecorator implements BadWordRepositoryInterface
      */
     public function getAllForParsing()
     {
-        $cacheKey = 'parser.bad_words_all_for_parsing';
-
-        if (($badWords = $this->cache->get($cacheKey)) === null) {
-            $badWords = $this->decorated->getAllForParsing();
-            $this->cache->forever($cacheKey, $badWords);
-        }
-
-        return $badWords;
+        return $this->cache->rememberForever(static::ALL_BAD_WORDS_FOR_PARSING_KEY, function() {
+            return $this->decorated->getAllForParsing();
+        });
     }
 }
