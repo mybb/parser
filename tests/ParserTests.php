@@ -121,7 +121,7 @@ EOT;
             $this->initBadWordsMock(),
             new \s9e\TextFormatter\Configurator(),
             [
-                'formatter_type' => 'markdown',
+                'formatter_type' => 'mycode',
             ]
         );
 
