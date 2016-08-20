@@ -48,6 +48,6 @@ class BadWordRepository implements BadWordRepositoryInterface
      */
     public function getAllForParsing(): array
     {
-        return $this->model->lists('replace', 'find');
+        return $this->model->pluck('replace', 'find')->toArray();
     }
 }
