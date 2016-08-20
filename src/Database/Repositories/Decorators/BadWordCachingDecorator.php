@@ -16,19 +16,19 @@ use MyBB\Parser\Database\Repositories\BadWordRepositoryInterface;
 
 class BadWordCachingDecorator implements BadWordRepositoryInterface
 {
-    private const ALL_BAD_WORDS_KEY = 'parser.bad_words_all';
+    const ALL_BAD_WORDS_KEY = 'parser.bad_words_all';
 
-    private const ALL_BAD_WORDS_FOR_PARSING_KEY = 'parser.bad_words_all_for_parsing';
+    const ALL_BAD_WORDS_FOR_PARSING_KEY = 'parser.bad_words_all_for_parsing';
 
     /**
      * @var BadWordRepositoryInterface $decorated
      */
     private $decorated;
+
     /**
      * @var CacheRepository $cache
      */
     private $cache;
-
 
 
     /**

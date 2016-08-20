@@ -16,14 +16,15 @@ use MyBB\Parser\Database\Repositories\SmileyRepositoryInterface;
 
 class SmileysCachingDecorator implements SmileyRepositoryInterface
 {
-    private const PARSEABLE_SMILEYS = 'parser.parseable_smileys';
+    const ALL_SMILEYS_FOR_PARSING_KEY = 'parser.parseable_smileys';
 
-    private const ALL_SMILEYS = 'parser.all_smileys';
+    const ALL_SMILEYS_KEY = 'parser.all_smileys';
 
     /**
      * @var SmileyRepositoryInterface
      */
     private $decoratedRepository;
+
     /**
      * @var CacheRepository
      */
@@ -44,7 +45,7 @@ class SmileysCachingDecorator implements SmileyRepositoryInterface
      */
     public function getAllForParsing(): array
     {
-        return $this->cache->rememberForever(static::PARSEABLE_SMILEYS, function () {
+        return $this->cache->rememberForever(static::ALL_SMILEYS_FOR_PARSING_KEY, function () {
             return $this->decoratedRepository->getAllForParsing();
         });
     }
@@ -56,7 +57,7 @@ class SmileysCachingDecorator implements SmileyRepositoryInterface
      */
     public function getAll(): Collection
     {
-        return $this->cache->rememberForever(static::ALL_SMILEYS, function () {
+        return $this->cache->rememberForever(static::ALL_SMILEYS_KEY, function () {
             return $this->decoratedRepository->getAll();
         });
     }

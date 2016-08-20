@@ -16,14 +16,15 @@ use MyBB\Parser\Database\Repositories\CustomMyCodeRepositoryInterface;
 
 class CustomMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
 {
-    private const PARSEABLE_CODES_KEY = 'parser.parseable_codes';
+    const ALL_CODES_FOR_PARSING_KEY = 'parser.parseable_codes';
 
-    private const ALL_CODES_KEY = 'parser.mycodes_all';
+    const ALL_CODES_KEY = 'parser.mycodes_all';
 
     /**
      * @var CustomMyCodeRepositoryInterface
      */
     private $decoratedRepository;
+
     /**
      * @var CacheRepository
      */
@@ -46,7 +47,7 @@ class CustomMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
      */
     public function getAllForParsing(): array
     {
-        return $this->cache->rememberForever(static::PARSEABLE_CODES_KEY, function () {
+        return $this->cache->rememberForever(static::ALL_CODES_FOR_PARSING_KEY, function () {
             return $this->decoratedRepository->getAllForParsing();
         });
     }
