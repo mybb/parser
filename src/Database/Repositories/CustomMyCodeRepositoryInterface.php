@@ -19,12 +19,12 @@ interface CustomMyCodeRepositoryInterface
      *
      * @return array
      */
-    public function getParseableCodes();
+    public function getAllForParsing(): array;
 
     /**
      * Get all of the custom MyCodes.
      *
      * @return Collection
      */
-    public function getAll();
+    public function getAll(): Collection;
 }

@@ -14,6 +14,16 @@ return [
      */
     'formatter_type' => 'mycode',
 
+    /**
+     * Whether to enable emoji parsing.
+     */
+    'enable_emoji' => true,
+
+    /**
+     * The emoji source to use - either 'Twemoji' or 'EmojiOne'
+     */
+    'emoji_source' => 'Twemoji',
+
     // String or callable
     'postURL' => ['MyBB\Core\Services\ParserCallbacks', 'getPostLink'],
 ];

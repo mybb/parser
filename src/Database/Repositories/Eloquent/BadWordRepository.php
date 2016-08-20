@@ -34,7 +34,7 @@ class BadWordRepository implements BadWordRepositoryInterface
      *
      * @return Collection
      */
-    public function getAll()
+    public function getAll(): Collection
     {
         return $this->model->all();
     }
@@ -46,7 +46,7 @@ class BadWordRepository implements BadWordRepositoryInterface
      *
      * @return array
      */
-    public function getAllForParsing()
+    public function getAllForParsing(): array
     {
         return $this->model->lists('replace', 'find');
     }

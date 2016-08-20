@@ -19,7 +19,7 @@ interface BadWordRepositoryInterface
      *
      * @return Collection
      */
-    public function getAll();
+    public function getAll(): Collection;
 
     /**
      * Get all of the defined bad words as an array ready for parsing.
@@ -28,5 +28,5 @@ interface BadWordRepositoryInterface
      *
      * @return array
      */
-    public function getAllForParsing();
+    public function getAllForParsing(): array;
 }

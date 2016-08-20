@@ -21,12 +21,12 @@ interface SmileyRepositoryInterface
      *
      * @return array
      */
-    public function getParseableSmileys();
+    public function getAllForParsing(): array;
 
     /**
      * Get all defined smileys.
      *
      * @return Collection
      */
-    public function getAll();
+    public function getAll(): Collection;
 }

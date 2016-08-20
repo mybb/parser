@@ -46,7 +46,7 @@ class BadWordCachingDecorator implements BadWordRepositoryInterface
      *
      * @return Collection
      */
-    public function getAll()
+    public function getAll(): Collection
     {
         return $this->cache->rememberForever(static::ALL_BAD_WORDS_KEY, function () {
             return $this->decorated->getAll();
@@ -60,7 +60,7 @@ class BadWordCachingDecorator implements BadWordRepositoryInterface
      *
      * @return array
      */
-    public function getAllForParsing()
+    public function getAllForParsing(): array
     {
         return $this->cache->rememberForever(static::ALL_BAD_WORDS_FOR_PARSING_KEY, function () {
             return $this->decorated->getAllForParsing();

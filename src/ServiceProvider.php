@@ -50,7 +50,8 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->singleton(Parser::class, function (Application $app) {
             /** @var \Illuminate\Contracts\Config\Repository $config */
             $config = $app['config'];
-            return new Parser($app->make(Configurator::class, $config->get('parser')));
+            $trans = $app['translator'];
+            return new Parser($trans, $app->make(Configurator::class), $config->get('parser'));
         });
     }
 }
