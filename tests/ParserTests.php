@@ -140,6 +140,5 @@ EOT;
         $actual = $parser->parse($myCode);
 
         $this->assertEquals($expected, $actual);
-
     }
 }
