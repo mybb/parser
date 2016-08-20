@@ -44,7 +44,7 @@ class SmileysCachingDecorator implements SmileyRepositoryInterface
      */
     public function getParseableSmileys()
     {
-        return $this->cache->rememberForever(static::PARSEABLE_SMILEYS, function() {
+        return $this->cache->rememberForever(static::PARSEABLE_SMILEYS, function () {
             return $this->decoratedRepository->getParseableSmileys();
         });
     }
@@ -56,7 +56,7 @@ class SmileysCachingDecorator implements SmileyRepositoryInterface
      */
     public function getAll()
     {
-        return $this->cache->rememberForever(static::ALL_SMILEYS, function() {
+        return $this->cache->rememberForever(static::ALL_SMILEYS, function () {
             return $this->decoratedRepository->getAll();
         });
     }

@@ -46,7 +46,7 @@ class CustomMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
      */
     public function getParseableCodes()
     {
-        return $this->cache->rememberForever(static::PARSEABLE_CODES_KEY, function() {
+        return $this->cache->rememberForever(static::PARSEABLE_CODES_KEY, function () {
             return $this->decoratedRepository->getParseableCodes();
         });
     }
@@ -58,7 +58,7 @@ class CustomMyCodeCachingDecorator implements CustomMyCodeRepositoryInterface
      */
     public function getAll()
     {
-        return $this->cache->rememberForever(static::ALL_CODES_KEY, function() {
+        return $this->cache->rememberForever(static::ALL_CODES_KEY, function () {
             return $this->decoratedRepository->getAll();
         });
     }

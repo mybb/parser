@@ -20,26 +20,24 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Smiley extends Model
 {
-	// @codingStandardsIgnoreStart
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var boolean
+     */
+    public $timestamps = false;
 
-	/**
-	 * Indicates if the model should be timestamped.
-	 *
-	 * @var boolean
-	 */
-	public $timestamps = false;
-	/**
-	 * The table associated with the model.
-	 *
-	 * @var string
-	 */
-	protected $table = 'parser_smilies';
-	/**
-	 * The attributes that aren't mass assignable.
-	 *
-	 * @var array
-	 */
-	protected $guarded = [];
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'parser_smilies';
 
-	// @codingStandardsIgnoreEnd
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 }

@@ -19,26 +19,24 @@ use Illuminate\Database\Eloquent\Model;
  */
 class BadWord extends Model
 {
-	// @codingStandardsIgnoreStart
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var boolean
+     */
+    public $timestamps = false;
 
-	/**
-	 * Indicates if the model should be timestamped.
-	 *
-	 * @var boolean
-	 */
-	public $timestamps = false;
-	/**
-	 * The table associated with the model.
-	 *
-	 * @var string
-	 */
-	protected $table = 'parser_badwords';
-	/**
-	 * The attributes that aren't mass assignable.
-	 *
-	 * @var array
-	 */
-	protected $guarded = [];
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'parser_badwords';
 
-	// @codingStandardsIgnoreEnd
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 }
