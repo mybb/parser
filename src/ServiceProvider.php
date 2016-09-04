@@ -51,11 +51,11 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../resources/config/parser.php', 'parser');
 
-        $this->app->bind(BadWordRepositoryInterface::class, function(Application $app) {
-           return new BadWordCachingDecorator(
-               $app->make(BadWordRepository::class),
-               $app->make(Repository::class)
-           );
+        $this->app->bind(BadWordRepositoryInterface::class, function (Application $app) {
+            return new BadWordCachingDecorator(
+                $app->make(BadWordRepository::class),
+                $app->make(Repository::class)
+            );
         });
 
         $this->app->singleton(Parser::class, function (Application $app) {
